@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "Qm0u0qCeicR/8r8eRai/Inq3CUFSLehPAhcUJ/7ytAF1zJZD+yy+xmXbDCbFyHkOxCrvYX0acnF7ufOCMkTVHA==",
+  "dgSpecHash": "yPaWWzxMzKGvtPGPEMHC3/lmdIs9q8ISgQOhJcH2NHD4AWVbjQ0Md+wkBGYF+DaVu/jdeseZXUsDi/i8fK+wOw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\David\\Source\\Repos\\GenericWebApp\\GenericWebApp\\GenericWebApp.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\David\\source\\repos\\GenericWebApp\\GenericWebApp\\GenericWebApp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\David\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.1\\microsoft.netcore.platforms.1.1.1.nupkg.sha512",
+    "C:\\Users\\David\\.nuget\\packages\\microsoft.netcore.targets\\1.1.3\\microsoft.netcore.targets.1.1.3.nupkg.sha512",
+    "C:\\Users\\David\\.nuget\\packages\\system.runtime\\4.3.1\\system.runtime.4.3.1.nupkg.sha512"
+  ],
   "logs": []
 }

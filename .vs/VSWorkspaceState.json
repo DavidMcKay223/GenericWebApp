@@ -1,7 +1,13 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\GenericWebApp",
+    "\\GenericWebApp\\bin\\Debug",
+    "\\GenericWebApp\\bin\\Debug\\net6.0",
+    "\\GenericWebApp\\Views",
+    "\\GenericWebApp\\Views\\Home",
+    "\\GenericWebApp\\Views\\Shared"
   ],
-  "SelectedNode": "\\C:\\Users\\David\\Source\\Repos\\GenericWebApp",
+  "SelectedNode": "\\GenericWebApp",
   "PreviewInSolutionExplorer": false
 }
