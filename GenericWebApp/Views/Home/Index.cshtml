@@ -1,7 +1,25 @@
-﻿@{
+﻿@model Task<List<GenericWebApp.DTO.NPI.Provider>>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
 </div>
+
+<table>
+@{
+    foreach(GenericWebApp.DTO.NPI.Provider provider in await Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(x => provider.NPI)
+            </td>
+            <td>
+                @Html.DisplayFor(x => provider.ProviderName)
+            </td>
+        </tr>
+    }
+}
+</table>

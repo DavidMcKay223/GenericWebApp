@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "zixNlIsTKQxLZlntIwaMZSyuKV+uV5SVUyb+wfnySDTw76KCs3UV9JEeH7Qne0bZoHTk9P6ig+dsmT6/MaQcnA==",
+  "dgSpecHash": "NuzS/K5jnk1+bWV8v3RbVgh9PYf5O5knQ875FJXxZefi8tNcmxgV6y3YUmOwkava7UUtg8rWZTFeY/xUJV+5zQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\David\\source\\repos\\GenericWebApp\\GenericWebApp\\GenericWebApp.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\David\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
   "logs": []
 }

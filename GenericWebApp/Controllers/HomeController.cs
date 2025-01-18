@@ -15,7 +15,7 @@ namespace GenericWebApp.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(GenericWebApp.BLL.NPI.Registry.GetProviderList(new BLL.NPI.RegistrySearchDTO() { state = "CA", city = "LA" }));
         }
 
         public IActionResult Privacy()

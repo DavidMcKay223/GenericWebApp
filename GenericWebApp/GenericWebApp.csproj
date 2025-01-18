@@ -6,4 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GenericWebApp.BLL\GenericWebApp.BLL.csproj" />
+    <ProjectReference Include="..\GenericWebApp.DTO\GenericWebApp.DTO.csproj" />
+  </ItemGroup>
+
 </Project>
