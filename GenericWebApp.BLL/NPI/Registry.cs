@@ -10,36 +10,48 @@ namespace GenericWebApp.BLL.NPI
 {
     public class Registry
     {
-        //TODO: Change this into a DTO { List Provider, String Error }
-        public static async Task<List<DTO.NPI.Provider>> GetProviderList(RegistrySearchDTO searchDTO)
+        public static async Task<DTO.NPI.RegistryResponse> GetProviderList(RegistrySearchDTO searchDTO = null)
         {
-            String myJsonResponse = await "https://npiregistry.cms.hhs.gov/api/".GetUriToJson(searchDTO.GetSearchParameter());
+            DTO.NPI.RegistryResponse myResponse = new DTO.NPI.RegistryResponse();
+
+            if (searchDTO == null) return myResponse;
+
+            String endpoint = "https://npiregistry.cms.hhs.gov/api/";
+
+            String myJsonResponse = await endpoint.GetUriToJson(searchDTO.GetSearchParameter());
 
             GenericWebApp.BLL.NPI.Parser.Root? myRoot = JsonConvert.DeserializeObject<GenericWebApp.BLL.NPI.Parser.Root>(myJsonResponse);
 
-            //TODO: Not throwing Exception for Future it will be in DTO.Error
             if (myRoot != null && myRoot.Errors != null && myRoot.Errors.Count > 0)
             {
-                throw new Exception(String.Join("\r\n", myRoot.Errors.Select(x => x.description)));
+                myResponse.Error = new DTO.NPI.Error() { Message = String.Join("\r\n", myRoot.Errors.Select(x => x.description)) };
             }
-            else if (myRoot != null && myRoot.results != null && myRoot.results.Count > 0)
+            else if (myRoot != null && myRoot.results != null)
             {
                 List<DTO.NPI.Provider> providerList = new List<DTO.NPI.Provider>();
+                myResponse.ProviderList = providerList;
 
-                foreach(Parser.Result myProvider in myRoot.results)
+                foreach (Parser.Result myProvider in myRoot.results)
                 {
-                    //Rough Idea: Extract into a function
-                    providerList.Add(new DTO.NPI.Provider()
-                    {
-                        NPI = myProvider.number,
-                        ProviderName = String.Join(", ", myProvider.basic.first_name, myProvider.basic.last_name)
-                    });
+                    providerList.Add(ParseProvider(myProvider));
                 }
-
-                return providerList;
             }
 
-            return new List<DTO.NPI.Provider>();
+            return myResponse;
+        }
+
+        private static DTO.NPI.Provider ParseProvider(Parser.Result myProvider)
+        {
+            DTO.NPI.Provider npiProvider = new DTO.NPI.Provider() { NPI = myProvider.number };
+            
+            if(myProvider.basic != null)
+            {
+                npiProvider.ProviderFirstName = myProvider.basic.first_name;
+                npiProvider.ProviderLastName = myProvider.basic.last_name;
+                npiProvider.OrganizationName = myProvider.basic.organization_name;
+            }
+
+            return npiProvider;
         }
     }
 

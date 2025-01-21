@@ -1,0 +1,127 @@
+﻿@page "/NPI/"
+
+@using GenericWebApp.BLL.NPI
+
+<PageTitle>NPI Registry</PageTitle>
+
+<h1>NPI Registry</h1>
+
+<EditForm Model="@mySearch">
+    <form>
+        <div class="mb-3">
+            <label for="ddl_state" class="form-label">State</label>
+            <InputSelect id="ddl_state" class="form-select" @bind-Value="mySearch.state">
+                <option value="">Select State</option>
+                @foreach (var myState in myStateList)
+                {
+                    <option value="@myState.Value">@myState.Description</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="mb-3">
+            <label for="text_city" class="form-label">City</label>
+            <InputText id="text_city" class="form-control" @bind-Value="mySearch.city" />
+        </div>
+        <div class="mb-3">
+            <label for="text_postal_code" class="form-label">Zip</label>
+            <InputText id="text_postal_code" class="form-control" @bind-Value="mySearch.postal_code" />
+        </div>
+        <div class="mb-3">
+            <label for="text_first_name" class="form-label">First Name</label>
+            <InputText id="text_first_name" class="form-control" @bind-Value="mySearch.first_name" />
+        </div>
+        <div class="mb-3">
+            <label for="text_last_name" class="form-label">Last Name</label>
+            <InputText id="text_last_name" class="form-control" @bind-Value="mySearch.last_name" />
+        </div>
+        <div class="mb-3">
+            <label for="text_organization_name" class="form-label">Organization Name</label>
+            <InputText id="text_organization_name" class="form-control" @bind-Value="mySearch.organization_name" />
+        </div>
+    </form>
+</EditForm>
+
+<input type="button" value="Search" @onclick="@ButtonSearch" />
+<input type="button" value="Reset" @onclick="@ButtonReset" />
+
+@if (npiReponse == null)
+{
+    <p class="card-text placeholder-glow">
+      <span class="placeholder col-7"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-6"></span>
+      <span class="placeholder col-8"></span>
+      <span class="placeholder col-7"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-6"></span>
+      <span class="placeholder col-8"></span>
+      <span class="placeholder col-7"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-6"></span>
+      <span class="placeholder col-8"></span>
+    </p>
+}
+else if (npiReponse.Error != null)
+{
+    <p style="color:red">@npiReponse.Error.Message</p>
+}
+else if (npiReponse.ProviderList == null)
+{
+    <p>Please fill out the search</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>NPI</th>
+                <th>Provider Name</th>
+                <th>Organization Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var provider in npiReponse.ProviderList)
+            {
+                <tr>
+                    <td>@provider.NPI</td>
+                    <td>@provider.ProviderFirstName, @provider.ProviderLastName</td>
+                    <td>@provider.OrganizationName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private DTO.NPI.RegistryResponse? npiReponse;
+    private List<DTO.Common.ValuePair>? myStateList;
+    private BLL.NPI.RegistrySearchDTO? mySearch;
+
+    protected override void OnInitialized()
+    {
+        myStateList = BLL.Utility.CommonData.GetStateList();
+        mySearch = new RegistrySearchDTO();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        npiReponse = await Registry.GetProviderList();
+    }
+}
+
+@code {
+    async Task ButtonReset()
+    {
+        npiReponse = await Registry.GetProviderList();
+        mySearch = new RegistrySearchDTO();
+    }
+
+    async Task ButtonSearch()
+    {
+        npiReponse = null;
+        npiReponse = await Registry.GetProviderList(mySearch);
+    }
+}
