@@ -10,9 +10,9 @@ namespace GenericWebApp.BLL.NPI
 {
     public class Registry
     {
-        public static async Task<DTO.NPI.RegistryResponse> GetProviderList(RegistrySearchDTO searchDTO = null)
+        public static async Task<DTO.Common.Response<DTO.NPI.Provider>> GetProviderList(RegistrySearchDTO searchDTO = null)
         {
-            DTO.NPI.RegistryResponse myResponse = new DTO.NPI.RegistryResponse();
+            DTO.Common.Response<DTO.NPI.Provider> myResponse = new DTO.Common.Response<DTO.NPI.Provider>();
 
             if (searchDTO == null) return myResponse;
 
@@ -24,12 +24,12 @@ namespace GenericWebApp.BLL.NPI
 
             if (myRoot != null && myRoot.Errors != null && myRoot.Errors.Count > 0)
             {
-                myResponse.Error = new DTO.NPI.Error() { Message = String.Join("\r\n", myRoot.Errors.Select(x => x.description)) };
+                myResponse.Error = new DTO.Common.Error() { Message = String.Join("\r\n", myRoot.Errors.Select(x => x.description)) };
             }
             else if (myRoot != null && myRoot.results != null)
             {
                 List<DTO.NPI.Provider> providerList = new List<DTO.NPI.Provider>();
-                myResponse.ProviderList = providerList;
+                myResponse.List = providerList;
 
                 foreach (Parser.Result myProvider in myRoot.results)
                 {

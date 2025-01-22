@@ -7,8 +7,12 @@
 <h1>NPI Registry</h1>
 
 <EditForm Model="@mySearch">
-    <form>
-        <div class="mb-3">
+    <form class="row g-3">
+        <div class="col-md-4">
+            <label for="text_city" class="form-label">City</label>
+            <InputText id="text_city" class="form-control" @bind-Value="mySearch.city" />
+        </div>
+        <div class="col-md-4">
             <label for="ddl_state" class="form-label">State</label>
             <InputSelect id="ddl_state" class="form-select" @bind-Value="mySearch.state">
                 <option value="">Select State</option>
@@ -18,31 +22,33 @@
                 }
             </InputSelect>
         </div>
-        <div class="mb-3">
-            <label for="text_city" class="form-label">City</label>
-            <InputText id="text_city" class="form-control" @bind-Value="mySearch.city" />
-        </div>
-        <div class="mb-3">
+        <div class="col-md-4">
             <label for="text_postal_code" class="form-label">Zip</label>
             <InputText id="text_postal_code" class="form-control" @bind-Value="mySearch.postal_code" />
         </div>
-        <div class="mb-3">
+        <div class="col-md-6">
+            <label for="text_npi_number" class="form-label">NPI</label>
+            <InputText id="text_npi_number" class="form-control" @bind-Value="mySearch.number" />
+        </div>
+        <div class="col-md-6">
+            <label for="text_organization_name" class="form-label">Organization Name</label>
+            <InputText id="text_organization_name" class="form-control" @bind-Value="mySearch.organization_name" />
+        </div>
+        <div class="col-md-6">
             <label for="text_first_name" class="form-label">First Name</label>
             <InputText id="text_first_name" class="form-control" @bind-Value="mySearch.first_name" />
         </div>
-        <div class="mb-3">
+        <div class="col-md-6">
             <label for="text_last_name" class="form-label">Last Name</label>
             <InputText id="text_last_name" class="form-control" @bind-Value="mySearch.last_name" />
-        </div>
-        <div class="mb-3">
-            <label for="text_organization_name" class="form-label">Organization Name</label>
-            <InputText id="text_organization_name" class="form-control" @bind-Value="mySearch.organization_name" />
         </div>
     </form>
 </EditForm>
 
-<input type="button" value="Search" @onclick="@ButtonSearch" />
-<input type="button" value="Reset" @onclick="@ButtonReset" />
+<br />
+
+<input type="button" value="Search" class="btn btn-primary" @onclick="@ButtonSearch" />
+<input type="button" value="Reset" class="btn btn-danger" @onclick="@ButtonReset" />
 
 @if (npiReponse == null)
 {
@@ -68,7 +74,7 @@ else if (npiReponse.Error != null)
 {
     <p style="color:red">@npiReponse.Error.Message</p>
 }
-else if (npiReponse.ProviderList == null)
+else if (npiReponse.List == null)
 {
     <p>Please fill out the search</p>
 }
@@ -83,7 +89,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var provider in npiReponse.ProviderList)
+            @foreach (var provider in npiReponse.List)
             {
                 <tr>
                     <td>@provider.NPI</td>
@@ -96,7 +102,7 @@ else
 }
 
 @code {
-    private DTO.NPI.RegistryResponse? npiReponse;
+    private DTO.Common.Response<DTO.NPI.Provider>? npiReponse;
     private List<DTO.Common.ValuePair>? myStateList;
     private BLL.NPI.RegistrySearchDTO? mySearch;
 
