@@ -8,6 +8,26 @@ namespace GenericWebApp.BLL.Utility
 {
     public static class CommonData
     {
+        public static List<DTO.Common.NavBarItem> GetNavBarItemList()
+        {
+            List<DTO.Common.NavBarItem> myList = new List<DTO.Common.NavBarItem>();
+
+            myList.Add(new DTO.Common.NavBarItem()
+            {
+                Description = "Home",
+                Class = "oi-home",
+                Href = "",
+                ChildNavBarList = new List<DTO.Common.NavBarItem>()
+                {
+                    new DTO.Common.NavBarItem() { Description = "Music", Class = "oi-musical-note", Href = "music" }
+                }
+            });
+
+            myList.Add(new DTO.Common.NavBarItem() { Description = "NPI Registry", Class = "oi-list-rich", Href = "npi" });
+
+            return myList;
+        }
+
         public static List<DTO.Common.ValuePair> GetStateList()
         {
             List<DTO.Common.ValuePair> myList = new List<DTO.Common.ValuePair>();

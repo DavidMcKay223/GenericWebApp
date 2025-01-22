@@ -1,0 +1,21 @@
+﻿@page "/Music/"
+
+@if (createNewAlbum)
+{
+    <MusicItemComponent DisplayCreate="@ButtonNew"></MusicItemComponent>
+}
+else
+{
+  <h1>Music</h1>
+
+  <input type="button" value="New" class="btn btn-primary" @onclick="@ButtonNew" />
+}
+
+@code {
+    private Boolean createNewAlbum = false;
+
+    async Task ButtonNew()
+    {
+            createNewAlbum = !createNewAlbum;
+    }
+}

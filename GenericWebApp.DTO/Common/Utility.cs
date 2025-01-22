@@ -23,4 +23,12 @@ namespace GenericWebApp.DTO.Common
     {
         public string Message { get; set; }
     }
+
+    public class NavBarItem
+    {
+        public List<NavBarItem> ChildNavBarList { get; set; }
+        public string Description { get; set; }
+        public string Class { get; set; }
+        public string Href { get; set; }
+    }
 }

@@ -1,0 +1,19 @@
+﻿<h3>Music Item</h3>
+
+<input type="button" value="Save" class="btn btn-primary" @onclick="@ButtonSave" />
+<input type="button" value="Cancel" class="btn btn-secondary" @onclick="@ButtonCancel" />
+
+@code {
+    [Parameter]
+    public EventCallback DisplayCreate{ get; set; }
+
+    async Task ButtonSave()
+    {
+        await DisplayCreate.InvokeAsync();
+    }
+
+    async Task ButtonCancel()
+    {
+        await DisplayCreate.InvokeAsync();
+    }
+}
