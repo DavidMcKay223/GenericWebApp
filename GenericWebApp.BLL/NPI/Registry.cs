@@ -42,13 +42,60 @@ namespace GenericWebApp.BLL.NPI
 
         private static DTO.NPI.Provider ParseProvider(Parser.Result myProvider)
         {
+            if(myProvider == null) return null;
+
             DTO.NPI.Provider npiProvider = new DTO.NPI.Provider() { NPI = myProvider.number };
-            
-            if(myProvider.basic != null)
+
+            if (myProvider.addresses != null && myProvider.addresses.Count > 0)
             {
+                Parser.Address tempAddress = myProvider.addresses[0];
+
+                npiProvider.Address1 = tempAddress.address_1;
+                npiProvider.Address2 = tempAddress.address_2;
+                npiProvider.City = tempAddress.city;
+                npiProvider.State = tempAddress.state;
+                npiProvider.Zip = tempAddress.postal_code;
+                npiProvider.Phone = tempAddress.telephone_number;
+                npiProvider.Fax = tempAddress.fax_number;
+            }
+
+            if (myProvider.addresses != null && myProvider.addresses.Count > 1)
+            {
+                Parser.Address tempAddress = myProvider.addresses[1];
+
+                npiProvider.MailingAddress1 = tempAddress.address_1;
+                npiProvider.MailingAddress2 = tempAddress.address_2;
+                npiProvider.MailingCity = tempAddress.city;
+                npiProvider.MailingState = tempAddress.state;
+                npiProvider.MailingZip = tempAddress.postal_code;
+                npiProvider.MailingPhone = tempAddress.telephone_number;
+                npiProvider.MailingFax = tempAddress.fax_number;
+            }
+
+            if (myProvider.basic != null)
+            {
+                npiProvider.Name = myProvider.basic.name;
+                npiProvider.ProviderName = myProvider.basic.last_name + ", " + myProvider.basic.first_name;
                 npiProvider.ProviderFirstName = myProvider.basic.first_name;
                 npiProvider.ProviderLastName = myProvider.basic.last_name;
                 npiProvider.OrganizationName = myProvider.basic.organization_name;
+                npiProvider.ParentOrganizationLegalBusinessName = myProvider.basic.parent_organization_legal_business_name;
+            }
+
+            if (myProvider.other_names != null && myProvider.other_names.Count > 0)
+            {
+                npiProvider.OtherOrganizationName = myProvider.other_names[0].organization_name;
+            }
+
+            if (myProvider.taxonomies != null)
+            {
+                Parser.Taxonomy temp = myProvider.taxonomies.Where(x => x.primary == true).FirstOrDefault();
+
+                if (temp != null)
+                {
+                    npiProvider.PrimaryTaxonomyCode = temp.code;
+                    npiProvider.PrimaryTaxonomyStateLicense = (!String.IsNullOrWhiteSpace(temp.license) ? String.Format("{0}{1}", (temp.license.Contains(temp.state) ? "" : temp.state), temp.license) : "");
+                }
             }
 
             return npiProvider;
@@ -142,6 +189,8 @@ namespace GenericWebApp.BLL.NPI.Parser
         public string sole_proprietor { get; set; }
         public string gender { get; set; }
         public string name_prefix { get; set; }
+        public string parent_organization_legal_business_name { get; internal set; }
+        public string name { get; internal set; }
     }
 
     internal class Endpoint

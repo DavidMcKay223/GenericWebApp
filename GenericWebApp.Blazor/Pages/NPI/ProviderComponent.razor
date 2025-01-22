@@ -1,11 +1,83 @@
-﻿@if(Provider != null)
+﻿@using BLL.Common
+
+@if(Provider != null)
 {
-    <div class="card">
+    <div class="col-md-6 card p-2">
         <div class="card-title">
             <h5>NPI: @Provider.NPI</h5>
         </div>
         <div class="card-body">
-            @Provider.OrganizationName, @Provider.ProviderFirstName, @Provider.ProviderLastName
+            <form class="row g-3">
+                @if (!Provider.ParentOrganizationLegalBusinessName.IsNullOrWhiteSpace())
+                {
+                    <div class="col-md-4">
+                        <label class="form-label">Parent Organization Name:</label>
+                        <label class="form-text">@Provider.ParentOrganizationLegalBusinessName</label>
+                    </div>
+                }
+                @if (!Provider.OrganizationName.IsNullOrWhiteSpace())
+                {
+                    <div class="col-md-4">
+                        <label class="form-label">Organization Name:</label>
+                        <label class="form-text">@Provider.OrganizationName</label>
+                    </div>
+                }
+                @if (!Provider.OtherOrganizationName.IsNullOrWhiteSpace())
+                {
+                    <div class="col-md-4">
+                        <label class="form-label">Other Organization Name:</label>
+                        <label class="form-text">@Provider.OtherOrganizationName</label>
+                    </div>
+                }
+                @if (!Provider.ProviderFirstName.IsNullOrWhiteSpace())
+                {
+                    <div class="col-md-4">
+                        <label class="form-label">Provider First Name:</label>
+                        <label class="form-text">@Provider.ProviderFirstName</label>
+                    </div>
+                }
+                @if (!Provider.ProviderLastName.IsNullOrWhiteSpace())
+                {
+                    <div class="col-md-4">
+                        <label class="form-label">Provider Last Name:</label>
+                        <label class="form-text">@Provider.ProviderLastName</label>
+                    </div>
+                }
+                @if (!Provider.PrimaryTaxonomyCode.IsNullOrWhiteSpace())
+                {
+                    <div class="col-md-4">
+                        <label class="form-label">Primary Taxonomy Code:</label>
+                        <label class="form-text">@Provider.PrimaryTaxonomyCode</label>
+                    </div>
+                }
+                @if (!Provider.PrimaryTaxonomyStateLicense.IsNullOrWhiteSpace())
+                {
+                    <div class="col-md-4">
+                        <label class="form-label">Primary Taxonomy State License:</label>
+                        <label class="form-text">@Provider.PrimaryTaxonomyStateLicense</label>
+                    </div>
+                }
+                <div class="row">
+                    <div class="col-md-6">
+                        <address>
+                            <strong>Primary Address</strong><br />
+                            @Provider.Address1<br />
+                            @Provider.City, @Provider.State @Provider.Zip<br />
+                            <abbr title="Phone">P:</abbr> @Provider.Phone<br />
+                            <abbr title="Fax">F:</abbr> @Provider.Fax
+                        </address>
+                    </div>
+                    <div class="col-md-6">
+                        <address>
+                            <strong>Mailing Address</strong><br />
+                            @Provider.MailingAddress1<br />
+                            @Provider.MailingCity, @Provider.MailingState @Provider.MailingZip<br />
+                            <abbr title="Mailing Phone">P:</abbr> @Provider.MailingPhone<br />
+                            <abbr title="Mailing Fax">F:</abbr> @Provider.MailingFax
+                        </address>
+                    </div>
+                </div>
+            </form>
         </div>
         <div class="card-footer">
             <input type="button" value="Close" class="btn btn-danger" @onclick="@ButtonClose" />

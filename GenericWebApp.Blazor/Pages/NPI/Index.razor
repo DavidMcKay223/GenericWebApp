@@ -89,10 +89,12 @@ else if (npiReponse.List == null)
 else
 {
     <br /><br />
+    <form class="row g-3">
     @foreach (var provider in npiReponse.List)
     {
         <ProviderComponent Provider="@provider"></ProviderComponent>
     }
+    </form>
 }
 
 @code {
