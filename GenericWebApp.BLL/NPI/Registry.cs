@@ -94,7 +94,7 @@ namespace GenericWebApp.BLL.NPI
                 if (temp != null)
                 {
                     npiProvider.PrimaryTaxonomyCode = temp.code;
-                    npiProvider.PrimaryTaxonomyStateLicense = (!String.IsNullOrWhiteSpace(temp.license) ? String.Format("{0}{1}", (temp.license.Contains(temp.state) ? "" : temp.state), temp.license) : "");
+                    npiProvider.PrimaryTaxonomyStateLicense = temp.license;
                 }
             }
 
