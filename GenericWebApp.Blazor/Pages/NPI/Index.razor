@@ -42,6 +42,14 @@
             <label for="text_last_name" class="form-label">Last Name</label>
             <InputText id="text_last_name" class="form-control" @bind-Value="mySearch.last_name" />
         </div>
+        <div class="col-md-6">
+            <label for="text_limit" class="form-label">Limit</label>
+            <InputText id="text_limit" class="form-control" @bind-Value="mySearch.limit" />
+        </div>
+        <div class="col-md-6">
+            <label for="text_skip" class="form-label">Skip</label>
+            <InputText id="text_skip" class="form-control" @bind-Value="mySearch.skip" />
+        </div>
     </form>
 </EditForm>
 
@@ -53,21 +61,21 @@
 @if (npiReponse == null)
 {
     <p class="card-text placeholder-glow">
-      <span class="placeholder col-7"></span>
-      <span class="placeholder col-4"></span>
-      <span class="placeholder col-4"></span>
-      <span class="placeholder col-6"></span>
-      <span class="placeholder col-8"></span>
-      <span class="placeholder col-7"></span>
-      <span class="placeholder col-4"></span>
-      <span class="placeholder col-4"></span>
-      <span class="placeholder col-6"></span>
-      <span class="placeholder col-8"></span>
-      <span class="placeholder col-7"></span>
-      <span class="placeholder col-4"></span>
-      <span class="placeholder col-4"></span>
-      <span class="placeholder col-6"></span>
-      <span class="placeholder col-8"></span>
+        <span class="placeholder col-7"></span>
+        <span class="placeholder col-4"></span>
+        <span class="placeholder col-4"></span>
+        <span class="placeholder col-6"></span>
+        <span class="placeholder col-8"></span>
+        <span class="placeholder col-7"></span>
+        <span class="placeholder col-4"></span>
+        <span class="placeholder col-4"></span>
+        <span class="placeholder col-6"></span>
+        <span class="placeholder col-8"></span>
+        <span class="placeholder col-7"></span>
+        <span class="placeholder col-4"></span>
+        <span class="placeholder col-4"></span>
+        <span class="placeholder col-6"></span>
+        <span class="placeholder col-8"></span>
     </p>
 }
 else if (npiReponse.Error != null)
@@ -80,25 +88,11 @@ else if (npiReponse.List == null)
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>NPI</th>
-                <th>Provider Name</th>
-                <th>Organization Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var provider in npiReponse.List)
-            {
-                <tr>
-                    <td>@provider.NPI</td>
-                    <td>@provider.ProviderFirstName, @provider.ProviderLastName</td>
-                    <td>@provider.OrganizationName</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <br /><br />
+    @foreach (var provider in npiReponse.List)
+    {
+        <ProviderComponent Provider="@provider"></ProviderComponent>
+    }
 }
 
 @code {

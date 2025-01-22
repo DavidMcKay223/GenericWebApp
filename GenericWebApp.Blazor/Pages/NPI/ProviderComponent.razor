@@ -1,0 +1,25 @@
+﻿@if(Provider != null)
+{
+    <div class="card">
+        <div class="card-title">
+            <h5>NPI: @Provider.NPI</h5>
+        </div>
+        <div class="card-body">
+            @Provider.OrganizationName, @Provider.ProviderFirstName, @Provider.ProviderLastName
+        </div>
+        <div class="card-footer">
+            <input type="button" value="Close" class="btn btn-danger" @onclick="@ButtonClose" />
+        </div>
+    </div>
+    <br />
+}
+
+@code {
+    [Parameter]
+    public DTO.NPI.Provider Provider { get; set; }
+
+    async Task ButtonClose()
+    {
+        Provider = null;
+    }
+}
