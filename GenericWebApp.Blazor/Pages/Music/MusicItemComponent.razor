@@ -1,14 +1,118 @@
 ﻿<h3>Music Item</h3>
 
+@if(Album == null)
+{
+
+}
+else
+{
+    <EditForm Model="@Album">
+        <form class="row g-3">
+            <div class="col-md-12">
+                <label for="text_ArtistName" class="form-label">Artist Name</label>
+                <InputText id="text_ArtistName" class="form-control" @bind-Value="Album.ArtistName" />
+            </div>
+            <div class="row g-3">
+                @if(Album.CDList != null)
+                {
+                    @foreach (DTO.Music.CD cd in Album.CDList)
+                    {
+                        <div class="col-md-6">
+                            <label for="text_CDName" class="form-label">CD Name</label>
+                            <InputText id="text_CDName" class="form-control" @bind-Value="cd.Name" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="text_CDGenere" class="form-label">Genere</label>
+                            <InputText id="text_CDGenere" class="form-control" @bind-Value="cd.Genere" />   
+                        </div>
+                        <div class="row g-3">
+                            @if(cd.TrackList != null)
+                            {
+                                @foreach (DTO.Music.Track track in cd.TrackList)
+                                {
+                                    <div class="col-md-2">
+                                        <label for="text_TrackNumber" class="form-label">Track Number</label>
+                                        <InputNumber id="text_TrackNumber" class="form-control" @bind-Value="track.Number" />
+                                    </div>
+                                   <div class="col-md-5">
+                                        <label for="text_TrackTitle" class="form-label">Track Title</label>
+                                        <InputText id="text_TrackTitle" class="form-control" @bind-Value="track.Title" />
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label for="text_TrackLength" class="form-label">Track Length</label>
+                                        <InputDate Type="InputDateType.Time" TValue="TimeOnly" step="1" class="form-control" id="text_TrackLength" @bind-Value="track.Length" />
+                                    </div> 
+                                }
+                            }
+                            <input type="button" value="New Track" class="btn btn-primary" @onclick="() => ButtonNewTrack(cd)" />
+                        </div>
+                    }
+                }
+                <input type="button" value="New CD" class="btn btn-primary" @onclick="@ButtonNewCD" />
+            </div>
+        </form>
+    </EditForm>
+}
+
+<br />
+
 <input type="button" value="Save" class="btn btn-primary" @onclick="@ButtonSave" />
 <input type="button" value="Cancel" class="btn btn-secondary" @onclick="@ButtonCancel" />
 
 @code {
     [Parameter]
-    public EventCallback DisplayCreate{ get; set; }
+    public EventCallback DisplayCreate { get; set; }
+
+    [Parameter]
+    public BLL.Music.Service Service { get; set; }
+
+    [Parameter]
+    public DTO.Music.Album Album { get; set; }
+
+    private Boolean isNew;
+
+    protected override void OnInitialized()
+    {
+        if(Album == null)
+        {
+            Album = new DTO.Music.Album();
+            isNew = true;
+        }
+        else
+        {
+            isNew = false;
+        }
+    }
+
+    async Task ButtonNewTrack(DTO.Music.CD tempCd)
+    {
+        if(tempCd != null)
+        {
+            if(tempCd.TrackList == null)
+            {
+                tempCd.TrackList = new List<DTO.Music.Track>();
+            }
+
+            tempCd.TrackList.Add(new DTO.Music.Track() { Number = tempCd.TrackList.Count + 1});
+        }
+    }
+
+    async Task ButtonNewCD()
+    {
+        if(Album != null)
+        {
+            if(Album.CDList == null)
+            {
+                Album.CDList = new List<DTO.Music.CD>();
+            }
+
+            Album.CDList.Add(new DTO.Music.CD());
+        }
+    }
 
     async Task ButtonSave()
     {
+        Service.SaveItem(Album, isNew);
         await DisplayCreate.InvokeAsync();
     }
 

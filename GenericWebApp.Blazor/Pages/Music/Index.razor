@@ -2,16 +2,20 @@
 
 @if (createNewAlbum)
 {
-    <MusicItemComponent DisplayCreate="@ButtonNew"></MusicItemComponent>
+    <MusicItemComponent Album="@Album" Service="@myService" DisplayCreate="@ButtonNew"></MusicItemComponent>
 }
 else
 {
     <h1>Music</h1>
+    @if (myService.Response.Error != null)
+    {
+        <label class="form-text text-danger">@myService.Response.Error.Message</label>
+    }
 
     @if (myService.Response.List != null)
     {
         <div class="row g-3">
-            @foreach(DTO.Music.Album album in myService.Response.List)
+            @foreach (DTO.Music.Album album in myService.Response.List)
             {
                 <div class="col-md-6 card p-2">
                     <div class="card-title">
@@ -19,45 +23,55 @@ else
                     </div>
                     <div class="card-body">
                         <div class="row g-3 card-deck">
-                            @foreach(DTO.Music.CD cd in album.CDList)
+                            @if (album.CDList != null)
                             {
-                                <div class="card p-2">
-                                    <div class="card-title">
-                                        <h5><label class="form-text">@cd.Name (@cd.Genere)</label></h5>
+                                foreach (DTO.Music.CD cd in album.CDList)
+                                {
+                                    <div class="card p-2">
+                                        <div class="card-title">
+                                            <h5><label class="form-text">@cd.Name (@cd.Genere)</label></h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <label class="form-text">Track</label>
+                                            <ul class="list-group">
+                                                @if(cd.TrackList != null)
+                                                {
+                                                    @foreach (DTO.Music.Track track in cd.TrackList)
+                                                    {
+                                                        <li class="list-group-item">
+                                                            <label class="form-text">@track.Number</label>
+                                                            <label class="form-text">@track.Title</label>
+                                                            <label class="form-text">@track.Length.ToString("mm\\:ss")</label>
+                                                        </li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                        <div class="card-footer border-white">
+                                            <input type="button" value="Remove" class="btn btn-danger" @onclick="(() => { album.CDList.Remove(cd); myService.SaveItem(album); })" />
+                                        </div>
                                     </div>
-                                    <div class="card-body">
-                                        <label class="form-text">Track</label>
-                                        <ul class="list-group">
-                                            @foreach(DTO.Music.Track track in cd.TrackList)
-                                            {
-                                                <li class="list-group-item">
-                                                    <label class="form-text">@track.Number</label>
-                                                    <label class="form-text">@track.Title</label>
-                                                    <label class="form-text">@track.Length</label>
-                                                </li>
-                                            }
-                                        </ul>
-                                    </div>
-                                    <div class="card-footer border-white">
-                                        <input type="button" value="Remove" class="btn btn-danger" @onclick="() => album.CDList.Remove(cd)" />
-                                    </div>
-                                </div>
+                                }
                             }
                         </div>
                     </div>
                     <div class="card-footer border-white">
-                        <input type="button" value="Remove" class="btn btn-danger" @onclick="() => myService.Response.List.Remove(album)" />
+                        <input type="button" value="Edit" class="btn btn-primary" @onclick="(() =>{ Album = album; createNewAlbum = !createNewAlbum; })" />
+                        <input type="button" value="Remove" class="btn btn-danger" @onclick="() => myService.DeleteItem(album)" />
                     </div>
                 </div>
             }
         </div>
     }
 
-  <input type="button" value="New" class="btn btn-primary" @onclick="@ButtonNew" />
+    <br />
+
+    <input type="button" value="New" class="btn btn-primary" @onclick="@ButtonNew" />
 }
 
 @code {
     private BLL.Music.Service myService = new BLL.Music.Service();
+    private DTO.Music.Album Album;
 
     private Boolean createNewAlbum = false;
 
@@ -68,6 +82,7 @@ else
 
     async Task ButtonNew()
     {
-            createNewAlbum = !createNewAlbum;
+        Album = null;
+        createNewAlbum = !createNewAlbum;
     }
 }

@@ -23,6 +23,6 @@ namespace GenericWebApp.DTO.Music
     {
         public int Number { get; set; }
         public string Title { get; set; }
-        public decimal Length { get; set; }
+        public TimeOnly Length { get; set; }
     }
 }
