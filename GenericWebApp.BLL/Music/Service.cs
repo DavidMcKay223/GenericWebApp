@@ -12,8 +12,13 @@ namespace GenericWebApp.BLL.Music
     {
         public override void DeleteItem(Album dto)
         {
+            Response.Error = null;
+
             //Delete Item from DB
-            Response.List.Remove(dto);
+            if (!Response.List.Remove(dto))
+            {
+                Response.Error = new DTO.Common.Error() { Message = "Item did not delete" };
+            }
         }
 
         public override async void SaveItem(Album dto, Boolean isNew = false)
@@ -33,7 +38,11 @@ namespace GenericWebApp.BLL.Music
             }
             else
             {
-                //Save Album Changes to DB
+                Album tempAlbum = Response.List.Find(x => x.ArtistName == dto.ArtistName);
+                if(tempAlbum.CDList != null)
+                {
+                    tempAlbum.CDList = dto.CDList;
+                }
             }
         }
 
@@ -47,12 +56,24 @@ namespace GenericWebApp.BLL.Music
         public override async Task<List<DTO.Music.Album>> GetList(MusicSearchDTO searchParams)
         {
             List<DTO.Music.Album> myList = Response.List;
-            Response.Error = null;
 
-            if (Response.List != null && Response.List.Count == 0)
+            if (FirstRun)
             {
-                Response.List = FakeCallDB();
+                Response.List = Music.Fake.FakeCallDB();
+
+                List<String> tempStrList = Response.List.Select(x => x.ArtistName).Distinct().ToList();
+                List<DTO.Music.Album> tempList = new List<Album>();
+
+                foreach (String tempStr in tempStrList)
+                {
+                    tempList.Add(new Album() { ArtistName = tempStr, CDList = Response.List.Where(x => x.ArtistName == tempStr && x.CDList != null).SelectMany(x => x.CDList).ToList() });
+                }
+
+                Response.List = tempList;
+
                 myList = Response.List;
+
+                FirstRun = false;
             }
 
             if (searchParams != null)
@@ -87,6 +108,28 @@ namespace GenericWebApp.BLL.Music
                     myList = tempList;
                 }
 
+                if (!searchParams.CdLabel.IsNullOrWhiteSpace())
+                {
+                    if (subFilter)
+                    {
+                        myList = myList.Where(x => x.CDList != null && x.CDList.Any(y => y.Label.SafeString().Contains(searchParams.CdLabel, StringComparison.OrdinalIgnoreCase))).ToList();
+
+                    }
+                    else
+                    {
+                        myList = Response.List.Where(x => x.CDList != null && x.CDList.Any(y => y.Label.SafeString().Contains(searchParams.CdLabel, StringComparison.OrdinalIgnoreCase))).ToList();
+                        subFilter = true;
+                    }
+
+                    List<DTO.Music.Album> tempList = new List<Album>();
+                    foreach (DTO.Music.Album album in myList)
+                    {
+                        tempList.Add(new Album() { ArtistName = album.ArtistName, CDList = album.CDList.Where(x => x.Label.SafeString().Contains(searchParams.CdLabel, StringComparison.OrdinalIgnoreCase)).ToList() });
+                    }
+
+                    myList = tempList;
+                }
+
                 if (!searchParams.TrackTitle.IsNullOrWhiteSpace())
                 {
                     if (subFilter)
@@ -106,7 +149,13 @@ namespace GenericWebApp.BLL.Music
 
                         foreach (DTO.Music.CD cd in album.CDList)
                         {
-                            tempCdList.Add(new DTO.Music.CD() { Name = cd.Name, Genere = cd.Genere, TrackList = cd.TrackList.Where(x => x.Title.SafeString().Contains(searchParams.TrackTitle, StringComparison.OrdinalIgnoreCase)).ToList() });
+                            if (cd.TrackList != null)
+                            {
+                                DTO.Music.CD tempCd = new DTO.Music.CD() { Name = cd.Name, Genere = cd.Genere };
+                                tempCd.TrackList = cd.TrackList.Where(x => x.Title.SafeString().Contains(searchParams.TrackTitle, StringComparison.OrdinalIgnoreCase)).ToList();
+
+                                tempCdList.Add(tempCd);
+                            }
                         }
 
                         tempList.Add(new Album() { ArtistName = album.ArtistName, CDList = new List<CD>(tempCdList) });
@@ -118,137 +167,6 @@ namespace GenericWebApp.BLL.Music
 
             return myList;
         }
-
-        private List<Album> FakeCallDB()
-        {
-            List<Album> list = new List<Album>();
-
-            list.Add(new DTO.Music.Album()
-            {
-                #region -- Daft Punk --
-                ArtistName = "Daft Punk",
-                CDList = new List<DTO.Music.CD>()
-                {
-                        #region - Random Access Memories -
-                        new DTO.Music.CD()
-                        {
-                            Name = "Random Access Memories",
-                            Genere = "Disco",
-                            TrackList = new List<DTO.Music.Track>()
-                            {
-                                new DTO.Music.Track()
-                                {
-                                    Number = 2,
-                                    Title = "The Game of Love",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(5.22))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 3,
-                                    Title = "Giorgio By Moroder",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(9.04))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 4,
-                                    Title = "Within",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(3.48))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 5,
-                                    Title = "Instant Crush",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(5.37))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 6,
-                                    Title = "Lose Yourself To Dance",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(5.53))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 7,
-                                    Title = "Touch",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(8.18))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 8,
-                                    Title = "Get Lucky",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(6.09))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 9,
-                                    Title = "Beyond",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(4.50))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 10,
-                                    Title = "Motherboard",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(5.41))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 11,
-                                    Title = "Fragments Of Time",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(4.39))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 12,
-                                    Title = "Doin' It Right",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(4.11))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 13,
-                                    Title = "Contact",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(6.23))
-                                }
-                            }
-                        }
-                        #endregion
-                }
-                #endregion
-            });
-
-            list.Add(new DTO.Music.Album()
-            {
-                #region -- The Glitch Mob --
-                ArtistName = "The Glitch Mob",
-                CDList = new List<DTO.Music.CD>()
-                {
-                        #region - Drink The Sea -
-                        new DTO.Music.CD()
-                        {
-                            Name = "Drink The Sea",
-                            Genere = "Miscellaneous",
-                            TrackList = new List<DTO.Music.Track>()
-                            {
-                                new DTO.Music.Track()
-                                {
-                                    Number = 1,
-                                    Title = "Animus Vox",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(6.44))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 2,
-                                    Title = "Bad Wings",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(6.39))
-                                }
-                            }
-                        }
-                        #endregion
-                }
-                #endregion
-            });
-
-            return list;
-        }
     }
 
     public class MusicSearchDTO
@@ -256,5 +174,6 @@ namespace GenericWebApp.BLL.Music
         public string ArtistName { get; set; }
         public string CdName { get; set; }
         public string TrackTitle { get; set; }
+        public string CdLabel { get; set; }
     }
 }

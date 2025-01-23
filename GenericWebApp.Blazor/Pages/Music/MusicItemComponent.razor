@@ -17,13 +17,17 @@ else
                 {
                     @foreach (DTO.Music.CD cd in Album.CDList)
                     {
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="text_CDName" class="form-label">CD Name</label>
                             <InputText id="text_CDName" class="form-control" @bind-Value="cd.Name" />
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="text_CDGenere" class="form-label">Genere</label>
                             <InputText id="text_CDGenere" class="form-control" @bind-Value="cd.Genere" />   
+                        </div>
+                        <div class="col-md-4">
+                            <label for="text_CDLabel" class="form-label">Label</label>
+                            <InputText id="text_CDLabel" class="form-control" @bind-Value="cd.Label" />   
                         </div>
                         <div class="row g-3">
                             @if(cd.TrackList != null)

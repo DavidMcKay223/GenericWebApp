@@ -10,17 +10,21 @@ else
 
     <EditForm Model="@searchParams">
         <form class="row g-3">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label for="text_ArtistName" class="form-label">Artist Name</label>
                 <InputText id="text_ArtistName" class="form-control" @bind-Value="searchParams.ArtistName" />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label for="text_CdName" class="form-label">CD Name</label>
                 <InputText id="text_CdName" class="form-control" @bind-Value="searchParams.CdName" />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label for="text_TrackTitle" class="form-label">Track Title</label>
                 <InputText id="text_TrackTitle" class="form-control" @bind-Value="searchParams.TrackTitle" />
+            </div>
+            <div class="col-md-3">
+                <label for="text_CdLabel" class="form-label">Label</label>
+                <InputText id="text_CdLabel" class="form-control" @bind-Value="searchParams.CdLabel" />
             </div>
         </form>
     </EditForm>
@@ -32,6 +36,7 @@ else
 
     @if (myService.Response.Error != null)
     {
+        <br />
         <label class="form-text text-danger">@myService.Response.Error.Message</label>
     }
 
@@ -54,6 +59,7 @@ else
                                     <div class="card p-2">
                                         <div class="card-title">
                                             <h5><label class="form-text">@cd.Name (@cd.Genere)</label></h5>
+                                            <h5><label class="form-text">@cd.Label</label></h5>
                                         </div>
                                         <div class="card-body">
                                             <label class="form-text">Track</label>
@@ -72,7 +78,7 @@ else
                                             </ul>
                                         </div>
                                         <div class="card-footer border-white">
-                                            <input type="button" value="Remove" class="btn btn-danger" @onclick="(() => { album.CDList.Remove(cd); myService.SaveItem(album); })" />
+                                            <input type="button" value="Remove" class="btn btn-danger" @onclick="() => ButtonDeleteCD(album, cd)" />
                                         </div>
                                     </div>
                                 }
@@ -81,7 +87,7 @@ else
                     </div>
                     <div class="card-footer border-white">
                         <input type="button" value="Edit" class="btn btn-primary" @onclick="(() =>{ Album = album; createNewAlbum = !createNewAlbum; })" />
-                        <input type="button" value="Remove" class="btn btn-danger" @onclick="() => myService.DeleteItem(album)" />
+                        <input type="button" value="Remove" class="btn btn-danger" @onclick="() => ButtonDeleteAlbum(album)" />
                     </div>
                 </div>
             }
@@ -118,9 +124,23 @@ else
         AlbumList = await myService.GetList(searchParams);
     }
 
+    async Task ButtonDeleteAlbum(DTO.Music.Album album)
+    {
+        myService.DeleteItem(album);
+        AlbumList = await myService.GetList(searchParams);
+    }
+
+    async Task ButtonDeleteCD(DTO.Music.Album album, DTO.Music.CD cd)
+    {
+        album.CDList.Remove(cd);
+        myService.SaveItem(album);
+        AlbumList = await myService.GetList(searchParams);
+    }
+
     async Task ButtonNew()
     {
         Album = null;
         createNewAlbum = !createNewAlbum;
+        AlbumList = await myService.GetList(searchParams);
     }
 }

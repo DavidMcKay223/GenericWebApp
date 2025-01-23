@@ -6,16 +6,24 @@ using System.Threading.Tasks;
 
 namespace GenericWebApp.DTO.Music
 {
-    public class Album
+    public class Album : IEquatable<Album>
     {
         public string ArtistName { get; set; }
         public List<CD> CDList { get; set; }
+
+        public bool Equals(Album? other)
+        {
+            if (other == null) return false;
+
+            return (String.Equals(ArtistName, other.ArtistName, StringComparison.OrdinalIgnoreCase));
+        }
     }
 
     public class CD
     {
         public string Name { get; set; }
         public string Genere { get; set; }
+        public string Label { get; set; }
         public List<Track> TrackList { get; set; }
     }
 

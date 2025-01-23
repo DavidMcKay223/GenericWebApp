@@ -9,10 +9,12 @@ namespace GenericWebApp.BLL.Common
     public abstract class ServiceManager<T, Tdto>
     {
         public virtual DTO.Common.Response<T> Response { get; set; }
+        public virtual Boolean FirstRun { get; set; }
 
         public ServiceManager()
         {
             Response = new DTO.Common.Response<T>() { List = new List<T>() };
+            FirstRun = true;
         }
 
         public abstract Task<List<T>> GetList(Tdto searchParams);
