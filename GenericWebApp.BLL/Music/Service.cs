@@ -46,19 +46,77 @@ namespace GenericWebApp.BLL.Music
 
         public override async Task<List<DTO.Music.Album>> GetList(MusicSearchDTO searchParams)
         {
+            List<DTO.Music.Album> myList = Response.List;
             Response.Error = null;
 
             if (Response.List != null && Response.List.Count == 0)
             {
                 Response.List = FakeCallDB();
+                myList = Response.List;
+            }
 
-                if(searchParams != null && !searchParams.ArtistName.IsNullOrWhiteSpace())
+            if (searchParams != null)
+            {
+                Boolean subFilter = false;
+
+                if (!searchParams.ArtistName.IsNullOrWhiteSpace())
                 {
-                    Response.List = Response.List.Where(x => x.ArtistName.Contains(searchParams.ArtistName)).ToList();
+                    myList = Response.List.Where(x => x.ArtistName.SafeString().Contains(searchParams.ArtistName, StringComparison.OrdinalIgnoreCase)).ToList();
+                    subFilter = true;
+                }
+
+                if (!searchParams.CdName.IsNullOrWhiteSpace())
+                {
+                    if (subFilter)
+                    {
+                        myList = myList.Where(x => x.CDList != null && x.CDList.Any(y => y.Name.SafeString().Contains(searchParams.CdName, StringComparison.OrdinalIgnoreCase))).ToList();
+                        
+                    }
+                    else
+                    {
+                        myList = Response.List.Where(x => x.CDList != null && x.CDList.Any(y => y.Name.SafeString().Contains(searchParams.CdName, StringComparison.OrdinalIgnoreCase))).ToList();
+                        subFilter = true;
+                    }
+
+                    List<DTO.Music.Album> tempList = new List<Album>();
+                    foreach (DTO.Music.Album album in myList)
+                    {
+                        tempList.Add(new Album() { ArtistName = album.ArtistName, CDList = album.CDList.Where(x => x.Name.SafeString().Contains(searchParams.CdName, StringComparison.OrdinalIgnoreCase)).ToList() });
+                    }
+
+                    myList = tempList;
+                }
+
+                if (!searchParams.TrackTitle.IsNullOrWhiteSpace())
+                {
+                    if (subFilter)
+                    {
+                        myList = myList.Where(x => x.CDList != null && x.CDList.Any(y => y.TrackList != null && y.TrackList.Any(z => z.Title.SafeString().Contains(searchParams.TrackTitle, StringComparison.OrdinalIgnoreCase)))).ToList();
+                    }
+                    else
+                    {
+                        myList = Response.List.Where(x => x.CDList != null && x.CDList.Any(y => y.TrackList != null && y.TrackList.Any(z => z.Title.SafeString().Contains(searchParams.TrackTitle, StringComparison.OrdinalIgnoreCase)))).ToList();
+                        subFilter = true;
+                    }
+
+                    List<DTO.Music.Album> tempList = new List<Album>();
+                    foreach (DTO.Music.Album album in myList)
+                    {
+                        List<DTO.Music.CD> tempCdList = new List<CD>();
+
+                        foreach (DTO.Music.CD cd in album.CDList)
+                        {
+                            tempCdList.Add(new DTO.Music.CD() { Name = cd.Name, Genere = cd.Genere, TrackList = cd.TrackList.Where(x => x.Title.SafeString().Contains(searchParams.TrackTitle, StringComparison.OrdinalIgnoreCase)).ToList() });
+                        }
+
+                        tempList.Add(new Album() { ArtistName = album.ArtistName, CDList = new List<CD>(tempCdList) });
+                    }
+
+                    myList = tempList;
                 }
             }
 
-            return Response.List;
+            return myList;
         }
 
         private List<Album> FakeCallDB()
@@ -196,5 +254,7 @@ namespace GenericWebApp.BLL.Music
     public class MusicSearchDTO
     {
         public string ArtistName { get; set; }
+        public string CdName { get; set; }
+        public string TrackTitle { get; set; }
     }
 }

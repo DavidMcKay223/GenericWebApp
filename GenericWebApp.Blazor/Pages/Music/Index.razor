@@ -7,15 +7,39 @@
 else
 {
     <h1>Music</h1>
+
+    <EditForm Model="@searchParams">
+        <form class="row g-3">
+            <div class="col-md-4">
+                <label for="text_ArtistName" class="form-label">Artist Name</label>
+                <InputText id="text_ArtistName" class="form-control" @bind-Value="searchParams.ArtistName" />
+            </div>
+            <div class="col-md-4">
+                <label for="text_CdName" class="form-label">CD Name</label>
+                <InputText id="text_CdName" class="form-control" @bind-Value="searchParams.CdName" />
+            </div>
+            <div class="col-md-4">
+                <label for="text_TrackTitle" class="form-label">Track Title</label>
+                <InputText id="text_TrackTitle" class="form-control" @bind-Value="searchParams.TrackTitle" />
+            </div>
+        </form>
+    </EditForm>
+
+    <br />
+
+    <input type="button" value="Search" class="btn btn-primary" @onclick="@ButtonSearch" />
+    <input type="button" value="Reset" class="btn btn-danger" @onclick="@ButtonReset" />
+
     @if (myService.Response.Error != null)
     {
         <label class="form-text text-danger">@myService.Response.Error.Message</label>
     }
 
-    @if (myService.Response.List != null)
+    @if (AlbumList != null)
     {
+        <br /><br />
         <div class="row g-3">
-            @foreach (DTO.Music.Album album in myService.Response.List)
+            @foreach (DTO.Music.Album album in AlbumList)
             {
                 <div class="col-md-6 card p-2">
                     <div class="card-title">
@@ -71,13 +95,27 @@ else
 
 @code {
     private BLL.Music.Service myService = new BLL.Music.Service();
+    private BLL.Music.MusicSearchDTO searchParams;
+    private List<DTO.Music.Album> AlbumList;
     private DTO.Music.Album Album;
 
     private Boolean createNewAlbum = false;
 
     protected async override void OnInitialized()
     {
-        await myService.GetList(null);
+        searchParams = new BLL.Music.MusicSearchDTO();
+        AlbumList = await myService.GetList(searchParams);
+    }
+
+    async Task ButtonSearch()
+    {
+        AlbumList = await myService.GetList(searchParams);
+    }
+
+    async Task ButtonReset()
+    {
+        searchParams = new BLL.Music.MusicSearchDTO();
+        AlbumList = await myService.GetList(searchParams);
     }
 
     async Task ButtonNew()
