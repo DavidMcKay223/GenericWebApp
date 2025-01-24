@@ -1,0 +1,31 @@
+﻿@if (ErrorList != null && ErrorList.Count > 0)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ErrorList)
+        {
+            <div class="error-message">
+                <span class="error-icon">⚠️</span>
+                @error.Message
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public List<GenericWebApp.DTO.Common.Error> ErrorList { get; set; }
+}
+
+<style>
+    .error-message {
+        color: #ff4d4d;
+        font-weight: bold;
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+    }
+    .error-icon {
+        margin-right: 10px;
+        color: #ff4d4d;
+    }
+</style>

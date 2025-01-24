@@ -32,15 +32,7 @@ else
             <button class="btn btn-danger" @onclick="@ButtonReset">Reset</button>
         </div>
 
-        @if (myService.Response.ErrorList != null && myService.Response.ErrorList.Count > 0)
-        {
-            <div class="alert alert-danger">
-                @foreach (var Error in myService.Response.ErrorList)
-                {
-                    <div>@Error.Message</div>
-                }
-            </div>
-        }
+       <DisplayError ErrorList="@myService.Response.ErrorList" />
 
         @if (myService.Response.List != null)
         {

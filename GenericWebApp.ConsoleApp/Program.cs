@@ -20,22 +20,22 @@ public class Program
                 context.Database.EnsureCreated();
 
                 // Create and add genres
-                var genres = new List<Genre>
-                {
-                    new Genre { Description = "Rock" },
-                    new Genre { Description = "Pop" },
-                    new Genre { Description = "Jazz" },
-                    new Genre { Description = "Classical" },
-                    new Genre { Description = "Hip-Hop" },
-                    new Genre { Description = "Electronic" },
-                    new Genre { Description = "Country" },
-                    new Genre { Description = "Reggae" },
-                    new Genre { Description = "Blues" },
-                    new Genre { Description = "Metal" }
-                };
+                //var genres = new List<Genre>
+                //{
+                //    new Genre { Description = "Rock" },
+                //    new Genre { Description = "Pop" },
+                //    new Genre { Description = "Jazz" },
+                //    new Genre { Description = "Classical" },
+                //    new Genre { Description = "Hip-Hop" },
+                //    new Genre { Description = "Electronic" },
+                //    new Genre { Description = "Country" },
+                //    new Genre { Description = "Reggae" },
+                //    new Genre { Description = "Blues" },
+                //    new Genre { Description = "Metal" }
+                //};
 
-                context.Genres.AddRange(genres);
-                context.SaveChanges();
+                //context.Genres.AddRange(genres);
+                //context.SaveChanges();
 
                 // Retrieve the genre IDs from the database
                 var genreDictionary = context.Genres.ToDictionary(g => g.Description, g => g.ID);
@@ -51,7 +51,7 @@ public class Program
                             new CD
                             {
                                 Name = "Abbey Road",
-                                Genre_ID = genres.FirstOrDefault(g => g.Description == "Rock").ID,
+                                Genre_ID = genreDictionary["Rock"],
                                 TrackList = new List<Track>
                                 {
                                     new Track { Number = 1, Title = "Come Together", Length = TimeSpan.FromMinutes(4.33) },
@@ -76,7 +76,7 @@ public class Program
                             new CD
                             {
                                 Name = "Sgt. Pepper's Lonely Hearts Club Band",
-                                Genre_ID = genres.FirstOrDefault(g => g.Description == "Rock").ID,
+                                Genre_ID = genreDictionary["Rock"],
                                 TrackList = new List<Track>
                                 {
                                     new Track { Number = 1, Title = "Sgt. Pepper's Lonely Hearts Club Band", Length = TimeSpan.FromMinutes(2.02) },
@@ -97,55 +97,168 @@ public class Program
                         }
                     },
                     new Album
-                {
-                    ArtistName = "Daft Punk",
-                    CDList = new List<CD>
                     {
-                        new CD
+                        ArtistName = "Daft Punk",
+                        CDList = new List<CD>
                         {
-                            Name = "Random Access Memories",
-                            Genre_ID = genreDictionary["Electronic"],
-                            TrackList = new List<Track>
+                            new CD
                             {
-                                new Track { Number = 1, Title = "Give Life Back to Music", Length = TimeSpan.FromMinutes(4.34) },
-                                new Track { Number = 2, Title = "The Game of Love", Length = TimeSpan.FromMinutes(5.21) },
-                                new Track { Number = 3, Title = "Giorgio by Moroder", Length = TimeSpan.FromMinutes(9.05) },
-                                new Track { Number = 4, Title = "Within", Length = TimeSpan.FromMinutes(3.48) },
-                                new Track { Number = 5, Title = "Instant Crush", Length = TimeSpan.FromMinutes(5.37) },
-                                new Track { Number = 6, Title = "Lose Yourself to Dance", Length = TimeSpan.FromMinutes(5.53) },
-                                new Track { Number = 7, Title = "Touch", Length = TimeSpan.FromMinutes(8.18) },
-                                new Track { Number = 8, Title = "Get Lucky", Length = TimeSpan.FromMinutes(6.09) },
-                                new Track { Number = 9, Title = "Beyond", Length = TimeSpan.FromMinutes(4.50) },
-                                new Track { Number = 10, Title = "Motherboard", Length = TimeSpan.FromMinutes(5.41) },
-                                new Track { Number = 11, Title = "Fragments of Time", Length = TimeSpan.FromMinutes(4.39) },
-                                new Track { Number = 12, Title = "Doin' It Right", Length = TimeSpan.FromMinutes(4.11) },
-                                new Track { Number = 13, Title = "Contact", Length = TimeSpan.FromMinutes(6.21) }
+                                Name = "Random Access Memories",
+                                Genre_ID = genreDictionary["Electronic"],
+                                TrackList = new List<Track>
+                                {
+                                    new Track { Number = 1, Title = "Give Life Back to Music", Length = TimeSpan.FromMinutes(4.34) },
+                                    new Track { Number = 2, Title = "The Game of Love", Length = TimeSpan.FromMinutes(5.21) },
+                                    new Track { Number = 3, Title = "Giorgio by Moroder", Length = TimeSpan.FromMinutes(9.05) },
+                                    new Track { Number = 4, Title = "Within", Length = TimeSpan.FromMinutes(3.48) },
+                                    new Track { Number = 5, Title = "Instant Crush", Length = TimeSpan.FromMinutes(5.37) },
+                                    new Track { Number = 6, Title = "Lose Yourself to Dance", Length = TimeSpan.FromMinutes(5.53) },
+                                    new Track { Number = 7, Title = "Touch", Length = TimeSpan.FromMinutes(8.18) },
+                                    new Track { Number = 8, Title = "Get Lucky", Length = TimeSpan.FromMinutes(6.09) },
+                                    new Track { Number = 9, Title = "Beyond", Length = TimeSpan.FromMinutes(4.50) },
+                                    new Track { Number = 10, Title = "Motherboard", Length = TimeSpan.FromMinutes(5.41) },
+                                    new Track { Number = 11, Title = "Fragments of Time", Length = TimeSpan.FromMinutes(4.39) },
+                                    new Track { Number = 12, Title = "Doin' It Right", Length = TimeSpan.FromMinutes(4.11) },
+                                    new Track { Number = 13, Title = "Contact", Length = TimeSpan.FromMinutes(6.21) }
+                                }
+                            },
+                            new CD
+                            {
+                                Name = "Discovery",
+                                Genre_ID = genreDictionary["Electronic"],
+                                TrackList = new List<Track>
+                                {
+                                    new Track { Number = 1, Title = "One More Time", Length = TimeSpan.FromMinutes(5.20) },
+                                    new Track { Number = 2, Title = "Aerodynamic", Length = TimeSpan.FromMinutes(3.27) },
+                                    new Track { Number = 3, Title = "Digital Love", Length = TimeSpan.FromMinutes(4.58) },
+                                    new Track { Number = 4, Title = "Harder, Better, Faster, Stronger", Length = TimeSpan.FromMinutes(3.44) },
+                                    new Track { Number = 5, Title = "Crescendolls", Length = TimeSpan.FromMinutes(3.31) },
+                                    new Track { Number = 6, Title = "Nightvision", Length = TimeSpan.FromMinutes(1.44) },
+                                    new Track { Number = 7, Title = "Superheroes", Length = TimeSpan.FromMinutes(3.57) },
+                                    new Track { Number = 8, Title = "High Life", Length = TimeSpan.FromMinutes(3.22) },
+                                    new Track { Number = 9, Title = "Something About Us", Length = TimeSpan.FromMinutes(3.51) },
+                                    new Track { Number = 10, Title = "Voyager", Length = TimeSpan.FromMinutes(3.47) },
+                                    new Track { Number = 11, Title = "Veridis Quo", Length = TimeSpan.FromMinutes(5.44) },
+                                    new Track { Number = 12, Title = "Short Circuit", Length = TimeSpan.FromMinutes(3.26) },
+                                    new Track { Number = 13, Title = "Face to Face", Length = TimeSpan.FromMinutes(3.58) },
+                                    new Track { Number = 14, Title = "Too Long", Length = TimeSpan.FromMinutes(10.00) }
+                                }
                             }
-                        },
-                        new CD
+                        }
+                    },
+
+                    new Album
+                    {
+                        ArtistName = "Beyoncé",
+                        CDList = new List<CD>
                         {
-                            Name = "Discovery",
-                            Genre_ID = genreDictionary["Electronic"],
-                            TrackList = new List<Track>
+                            new CD
                             {
-                                new Track { Number = 1, Title = "One More Time", Length = TimeSpan.FromMinutes(5.20) },
-                                new Track { Number = 2, Title = "Aerodynamic", Length = TimeSpan.FromMinutes(3.27) },
-                                new Track { Number = 3, Title = "Digital Love", Length = TimeSpan.FromMinutes(4.58) },
-                                new Track { Number = 4, Title = "Harder, Better, Faster, Stronger", Length = TimeSpan.FromMinutes(3.44) },
-                                new Track { Number = 5, Title = "Crescendolls", Length = TimeSpan.FromMinutes(3.31) },
-                                new Track { Number = 6, Title = "Nightvision", Length = TimeSpan.FromMinutes(1.44) },
-                                new Track { Number = 7, Title = "Superheroes", Length = TimeSpan.FromMinutes(3.57) },
-                                new Track { Number = 8, Title = "High Life", Length = TimeSpan.FromMinutes(3.22) },
-                                new Track { Number = 9, Title = "Something About Us", Length = TimeSpan.FromMinutes(3.51) },
-                                new Track { Number = 10, Title = "Voyager", Length = TimeSpan.FromMinutes(3.47) },
-                                new Track { Number = 11, Title = "Veridis Quo", Length = TimeSpan.FromMinutes(5.44) },
-                                new Track { Number = 12, Title = "Short Circuit", Length = TimeSpan.FromMinutes(3.26) },
-                                new Track { Number = 13, Title = "Face to Face", Length = TimeSpan.FromMinutes(3.58) },
-                                new Track { Number = 14, Title = "Too Long", Length = TimeSpan.FromMinutes(10.00) }
+                                Name = "Lemonade",
+                                Genre_ID = genreDictionary["Pop"],
+                                TrackList = new List<Track>
+                                {
+                                    new Track { Number = 1, Title = "Pray You Catch Me", Length = TimeSpan.FromMinutes(3.16) },
+                                    new Track { Number = 2, Title = "Hold Up", Length = TimeSpan.FromMinutes(3.41) },
+                                    new Track { Number = 3, Title = "Don't Hurt Yourself", Length = TimeSpan.FromMinutes(3.54) },
+                                    new Track { Number = 4, Title = "Sorry", Length = TimeSpan.FromMinutes(3.53) },
+                                    new Track { Number = 5, Title = "6 Inch", Length = TimeSpan.FromMinutes(4.20) },
+                                    new Track { Number = 6, Title = "Daddy Lessons", Length = TimeSpan.FromMinutes(4.47) },
+                                    new Track { Number = 7, Title = "Love Drought", Length = TimeSpan.FromMinutes(3.57) },
+                                    new Track { Number = 8, Title = "Sandcastles", Length = TimeSpan.FromMinutes(3.02) },
+                                    new Track { Number = 9, Title = "Forward", Length = TimeSpan.FromMinutes(1.19) },
+                                    new Track { Number = 10, Title = "Freedom", Length = TimeSpan.FromMinutes(4.50) },
+                                    new Track { Number = 11, Title = "All Night", Length = TimeSpan.FromMinutes(5.22) },
+                                    new Track { Number = 12, Title = "Formation", Length = TimeSpan.FromMinutes(3.26) }
+                                }
+                            },
+                            new CD
+                            {
+                                Name = "Beyoncé",
+                                Genre_ID = genreDictionary["Pop"],
+                                TrackList = new List<Track>
+                                {
+                                    new Track { Number = 1, Title = "Pretty Hurts", Length = TimeSpan.FromMinutes(4.17) },
+                                    new Track { Number = 2, Title = "Haunted", Length = TimeSpan.FromMinutes(6.09) },
+                                    new Track { Number = 3, Title = "Drunk in Love", Length = TimeSpan.FromMinutes(5.23) },
+                                    new Track { Number = 4, Title = "Blow", Length = TimeSpan.FromMinutes(5.09) },
+                                    new Track { Number = 5, Title = "No Angel", Length = TimeSpan.FromMinutes(3.48) },
+                                    new Track { Number = 6, Title = "Partition", Length = TimeSpan.FromMinutes(5.19) },
+                                    new Track { Number = 7, Title = "Jealous", Length = TimeSpan.FromMinutes(3.04) },
+                                    new Track { Number = 8, Title = "Rocket", Length = TimeSpan.FromMinutes(6.31) },
+                                    new Track { Number = 9, Title = "Mine", Length = TimeSpan.FromMinutes(6.18) },
+                                    new Track { Number = 10, Title = "XO", Length = TimeSpan.FromMinutes(3.36) },
+                                    new Track { Number = 11, Title = "Flawless", Length = TimeSpan.FromMinutes(4.10) },
+                                    new Track { Number = 12, Title = "Superpower", Length = TimeSpan.FromMinutes(4.36) },
+                                    new Track { Number = 13, Title = "Heaven", Length = TimeSpan.FromMinutes(3.50) },
+                                    new Track { Number = 14, Title = "Blue", Length = TimeSpan.FromMinutes(4.26) }
+                                }
+                            }
+                        }
+                    },
+
+                    new Album
+                    {
+                        ArtistName = "Eminem",
+                        CDList = new List<CD>
+                        {
+                            new CD
+                            {
+                                Name = "The Marshall Mathers LP",
+                                Genre_ID = genreDictionary["Hip-Hop"],
+                                TrackList = new List<Track>
+                                {
+                                    new Track { Number = 1, Title = "Public Service Announcement 2000", Length = TimeSpan.FromMinutes(0.25) },
+                                    new Track { Number = 2, Title = "Kill You", Length = TimeSpan.FromMinutes(4.24) },
+                                    new Track { Number = 3, Title = "Stan", Length = TimeSpan.FromMinutes(6.44) },
+                                    new Track { Number = 4, Title = "Paul (Skit)", Length = TimeSpan.FromMinutes(0.11) },
+                                    new Track { Number = 5, Title = "Who Knew", Length = TimeSpan.FromMinutes(3.48) },
+                                    new Track { Number = 6, Title = "Steve Berman (Skit)", Length = TimeSpan.FromMinutes(0.54) },
+                                    new Track { Number = 7, Title = "The Way I Am", Length = TimeSpan.FromMinutes(4.50) },
+                                    new Track { Number = 8, Title = "The Real Slim Shady", Length = TimeSpan.FromMinutes(4.44) },
+                                    new Track { Number = 9, Title = "Remember Me?", Length = TimeSpan.FromMinutes(3.38) },
+                                    new Track { Number = 10, Title = "I'm Back", Length = TimeSpan.FromMinutes(5.10) },
+                                    new Track { Number = 11, Title = "Marshall Mathers", Length = TimeSpan.FromMinutes(5.20) },
+                                    new Track { Number = 12, Title = "Ken Kaniff (Skit)", Length = TimeSpan.FromMinutes(1.16) },
+                                    new Track { Number = 13, Title = "Drug Ballad", Length = TimeSpan.FromMinutes(5.00) },
+                                    new Track { Number = 14, Title = "Amityville", Length = TimeSpan.FromMinutes(4.14) },
+                                    new Track { Number = 15, Title = "Bitch Please II", Length = TimeSpan.FromMinutes(4.48) },
+                                    new Track { Number = 16, Title = "Kim", Length = TimeSpan.FromMinutes(6.18) },
+                                    new Track { Number = 17, Title = "Under the Influence", Length = TimeSpan.FromMinutes(5.22) },
+                                    new Track { Number = 18, Title = "Criminal", Length = TimeSpan.FromMinutes(5.19) }
+                                }
+                            },
+                            new CD
+                            {
+                                Name = "The Eminem Show",
+                                Genre_ID = genreDictionary["Hip-Hop"],
+                                TrackList = new List<Track>
+                                {
+                                    new Track { Number = 1, Title = "Curtains Up (Skit)", Length = TimeSpan.FromMinutes(0.30) },
+                                    new Track { Number = 2, Title = "White America", Length = TimeSpan.FromMinutes(5.24) },
+                                    new Track { Number = 3, Title = "Business", Length = TimeSpan.FromMinutes(4.11) },
+                                    new Track { Number = 4, Title = "Cleanin' Out My Closet", Length = TimeSpan.FromMinutes(4.57) },
+                                    new Track { Number = 5, Title = "Square Dance", Length = TimeSpan.FromMinutes(5.23) },
+                                    new Track { Number = 6, Title = "The Kiss (Skit)", Length = TimeSpan.FromMinutes(1.15) },
+                                    new Track { Number = 7, Title = "Soldier", Length = TimeSpan.FromMinutes(3.46) },
+                                    new Track { Number = 8, Title = "Say Goodbye Hollywood", Length = TimeSpan.FromMinutes(4.32) },
+                                    new Track { Number = 9, Title = "Drips", Length = TimeSpan.FromMinutes(4.45) },
+                                    new Track { Number = 10, Title = "Without Me", Length = TimeSpan.FromMinutes(4.50) },
+                                    new Track { Number = 11, Title = "Paul Rosenberg (Skit)", Length = TimeSpan.FromMinutes(0.22) },
+                                    new Track { Number = 12, Title = "Sing for the Moment", Length = TimeSpan.FromMinutes(5.40) },
+                                    new Track { Number = 13, Title = "Superman", Length = TimeSpan.FromMinutes(5.50) },
+                                    new Track { Number = 14, Title = "Hailie's Song", Length = TimeSpan.FromMinutes(5.20) },
+                                    new Track { Number = 15, Title = "Steve Berman (Skit)", Length = TimeSpan.FromMinutes(0.33) },
+                                    new Track { Number = 16, Title = "When the Music Stops", Length = TimeSpan.FromMinutes(4.29) },
+                                    new Track { Number = 17, Title = "Say What You Say", Length = TimeSpan.FromMinutes(5.09) },
+                                    new Track { Number = 18, Title = "'Till I Collapse", Length = TimeSpan.FromMinutes(4.58) },
+                                    new Track { Number = 19, Title = "My Dad's Gone Crazy", Length = TimeSpan.FromMinutes(4.27) },
+                                    new Track { Number = 20, Title = "Curtains Close (Skit)", Length = TimeSpan.FromMinutes(1.01) }
+                                }
                             }
                         }
                     }
-                } };
+                };
 
                 context.Albums.AddRange(albums);
                 context.SaveChanges();

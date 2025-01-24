@@ -38,6 +38,7 @@ builder.Services.AddDbContext<ManagementContext>(options =>
 
 builder.Services.AddScoped<Service>();
 builder.Services.AddScoped<TaskService>();
+builder.Services.AddScoped<DashboardService>();
 
 var app = builder.Build();
 

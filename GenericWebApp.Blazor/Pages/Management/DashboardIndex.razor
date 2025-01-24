@@ -1,10 +1,8 @@
-﻿@page "/"
+﻿@page "/Management/"
 @using GenericWebApp.Blazor.Pages.Management.Dashboard
 @inject BLL.Management.DashboardService myService
 
 <h3>Dashboard</h3>
-
-<DashboardMusicSummary Service="@myService" />
 
 @code {
     protected override async Task OnInitializedAsync()

@@ -49,42 +49,45 @@ namespace GenericWebApp.BLL.Music
         {
             Response.ErrorList.Clear();
 
-            try
+            if (dto.IsValid(Response.ErrorList))
             {
-                var album = GenericWebApp.Model.Music.Album.ParseModel(dto);
-
-                if (dto.ID == null)
+                try
                 {
-                    var existingAlbum = await _context.Albums.Include(a => a.CDList).FirstOrDefaultAsync(a => a.ArtistName.ToLower() == dto.ArtistName.ToLower());
-                    if (existingAlbum != null)
-                    {
-                        Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = "An album with the same artist name already exists." });
-                        return;
-                    }
+                    var album = GenericWebApp.Model.Music.Album.ParseModel(dto);
 
-                    await _context.Albums.AddAsync(album);
-                }
-                else
-                {
-                    var existingAlbum = await _context.Albums.Include(a => a.CDList).FirstOrDefaultAsync(a => a.ID == dto.ID);
-                    if (existingAlbum != null)
+                    if (dto.ID == null)
                     {
-                        existingAlbum.ArtistName = album.ArtistName;
-                        existingAlbum.CDList = album.CDList;
-                        _context.Albums.Update(existingAlbum);
+                        var existingAlbum = await _context.Albums.Include(a => a.CDList).FirstOrDefaultAsync(a => a.ArtistName.ToLower() == dto.ArtistName.ToLower());
+                        if (existingAlbum != null)
+                        {
+                            Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = "An album with the same artist name already exists." });
+                            return;
+                        }
+
+                        await _context.Albums.AddAsync(album);
                     }
                     else
                     {
-                        Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = "Album not found." });
-                        return;
+                        var existingAlbum = await _context.Albums.Include(a => a.CDList).FirstOrDefaultAsync(a => a.ID == dto.ID);
+                        if (existingAlbum != null)
+                        {
+                            existingAlbum.ArtistName = album.ArtistName;
+                            existingAlbum.CDList = album.CDList;
+                            _context.Albums.Update(existingAlbum);
+                        }
+                        else
+                        {
+                            Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = "Album not found." });
+                            return;
+                        }
                     }
-                }
 
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = ex.Message });
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = ex.Message });
+                }
             }
         }
 

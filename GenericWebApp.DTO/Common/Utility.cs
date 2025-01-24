@@ -22,6 +22,7 @@ namespace GenericWebApp.DTO.Common
 
     public class Error
     {
+        public string Code { get; internal set; }
         public string Message { get; set; }
     }
 

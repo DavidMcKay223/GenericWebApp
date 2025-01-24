@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GenericWebApp.DTO.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,21 @@ namespace GenericWebApp.DTO.Management
         public int? TaskActivity_ID { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
+
+        public bool IsValid(List<Error> errorList)
+        {
+            if (String.IsNullOrEmpty(Title))
+            {
+                errorList.Add(new Error { Message = "Task Title Required" });
+            }
+
+            if (String.IsNullOrEmpty(Description))
+            {
+                errorList.Add(new Error { Message = "Task Description Required" });
+            }
+
+            return errorList.Count == 0;
+        }
     }
 
     public class TaskType

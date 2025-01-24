@@ -128,34 +128,37 @@ namespace GenericWebApp.BLL.Management
         {
             Response.ErrorList.Clear();
 
-            try
+            if (dto.IsValid(Response.ErrorList))
             {
-                var taskItem = GenericWebApp.Model.Management.TaskItem.ParseModel(dto);
-
-                var existingTaskItem = await _context.TaskItems.FirstOrDefaultAsync(t => t.ID == dto.ID);
-                if (existingTaskItem != null)
+                try
                 {
-                    existingTaskItem.Title = taskItem.Title;
-                    existingTaskItem.Description = taskItem.Description;
-                    existingTaskItem.TaskObjectType_Code = taskItem.TaskObjectType_Code;
-                    existingTaskItem.Task_Object_ID = taskItem.Task_Object_ID;
-                    existingTaskItem.TaskActivity_ID = taskItem.TaskActivity_ID;
-                    existingTaskItem.UpdatedDate = DateTime.UtcNow;
+                    var taskItem = GenericWebApp.Model.Management.TaskItem.ParseModel(dto);
 
-                    _context.TaskItems.Update(existingTaskItem);
+                    var existingTaskItem = await _context.TaskItems.FirstOrDefaultAsync(t => t.ID == dto.ID);
+                    if (existingTaskItem != null)
+                    {
+                        existingTaskItem.Title = taskItem.Title;
+                        existingTaskItem.Description = taskItem.Description;
+                        existingTaskItem.TaskObjectType_Code = taskItem.TaskObjectType_Code;
+                        existingTaskItem.Task_Object_ID = taskItem.Task_Object_ID;
+                        existingTaskItem.TaskActivity_ID = taskItem.TaskActivity_ID;
+                        existingTaskItem.UpdatedDate = DateTime.UtcNow;
+
+                        _context.TaskItems.Update(existingTaskItem);
+                    }
+                    else
+                    {
+                        taskItem.CreatedDate = DateTime.UtcNow;
+                        taskItem.UpdatedDate = DateTime.UtcNow;
+                        await _context.TaskItems.AddAsync(taskItem);
+                    }
+
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (Exception ex)
                 {
-                    taskItem.CreatedDate = DateTime.UtcNow;
-                    taskItem.UpdatedDate = DateTime.UtcNow;
-                    await _context.TaskItems.AddAsync(taskItem);
+                    Response.ErrorList.Add(new Error { Message = ex.Message });
                 }
-
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                Response.ErrorList.Add(new Error { Message = ex.Message });
             }
         }
     }

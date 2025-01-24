@@ -10,6 +10,8 @@
 }
 else
 {
+    <DisplayError ErrorList="@Service.Response.ErrorList" />
+
     <EditForm Model="@Album" OnValidSubmit="@ButtonSave">
         <div class="card mb-4">
             <div class="card-header">
@@ -125,7 +127,11 @@ else
         try
         {
             await Service.SaveItemAsync(Album);
-            await DisplayCreate.InvokeAsync();
+
+            if(Service.Response.ErrorList != null && Service.Response.ErrorList.Count == 0)
+            {
+                await DisplayCreate.InvokeAsync(); 
+            }
         }
         catch (Exception ex)
         {
@@ -135,6 +141,7 @@ else
 
     private async Task ButtonCancel()
     {
+        Service.Response.ErrorList.Clear();
         await DisplayCreate.InvokeAsync();
     }
 }
