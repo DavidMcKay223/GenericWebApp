@@ -1,0 +1,15 @@
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Model\bin\Debug\net6.0\GenericWebApp.Model.deps.json
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Model\bin\Debug\net6.0\GenericWebApp.Model.dll
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Model\bin\Debug\net6.0\GenericWebApp.Model.pdb
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Model\obj\Debug\net6.0\GenericWebApp.Model.csproj.AssemblyReference.cache
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Model\obj\Debug\net6.0\GenericWebApp.Model.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Model\obj\Debug\net6.0\GenericWebApp.Model.AssemblyInfoInputs.cache
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Model\obj\Debug\net6.0\GenericWebApp.Model.AssemblyInfo.cs
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Model\obj\Debug\net6.0\GenericWebApp.Model.csproj.CoreCompileInputs.cache
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Model\obj\Debug\net6.0\GenericWebApp.Model.dll
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Model\obj\Debug\net6.0\refint\GenericWebApp.Model.dll
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Model\obj\Debug\net6.0\GenericWebApp.Model.pdb
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Model\obj\Debug\net6.0\ref\GenericWebApp.Model.dll
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Model\bin\Debug\net6.0\GenericWebApp.DTO.dll
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Model\bin\Debug\net6.0\GenericWebApp.DTO.pdb
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Model\obj\Debug\net6.0\GenericWebApp.Model.csproj.CopyComplete

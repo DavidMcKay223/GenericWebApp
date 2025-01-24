@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericWebApp.BLL", "..\Gen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericWebApp.DTO", "..\GenericWebApp.DTO\GenericWebApp.DTO.csproj", "{1160CB93-54CA-4BF0-B553-5A5DB8E80E08}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericWebApp.Model", "..\GenericWebApp.Model\GenericWebApp.Model.csproj", "{05A187D0-021D-4C11-B036-352BE9F8A71D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{1160CB93-54CA-4BF0-B553-5A5DB8E80E08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1160CB93-54CA-4BF0-B553-5A5DB8E80E08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1160CB93-54CA-4BF0-B553-5A5DB8E80E08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05A187D0-021D-4C11-B036-352BE9F8A71D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05A187D0-021D-4C11-B036-352BE9F8A71D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05A187D0-021D-4C11-B036-352BE9F8A71D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05A187D0-021D-4C11-B036-352BE9F8A71D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

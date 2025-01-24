@@ -3,7 +3,6 @@ using GenericWebApp.BLL.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GenericWebApp.BLL.Music
@@ -14,7 +13,7 @@ namespace GenericWebApp.BLL.Music
         {
             Response.Error = null;
 
-            //Delete Item from DB
+            // Delete Item from DB
             if (!Response.List.Remove(dto))
             {
                 Response.Error = new DTO.Common.Error() { Message = "Item did not delete" };
@@ -39,7 +38,7 @@ namespace GenericWebApp.BLL.Music
             else
             {
                 Album tempAlbum = Response.List.Find(x => x.ArtistName == dto.ArtistName);
-                if(tempAlbum.CDList != null)
+                if (tempAlbum != null && tempAlbum.CDList != null)
                 {
                     tempAlbum.CDList = dto.CDList;
                 }
@@ -49,7 +48,6 @@ namespace GenericWebApp.BLL.Music
         public override async Task<DTO.Music.Album> GetItem(MusicSearchDTO searchParams)
         {
             Response.Error = null;
-
             throw new NotImplementedException();
         }
 
@@ -70,98 +68,51 @@ namespace GenericWebApp.BLL.Music
                 }
 
                 Response.List = tempList;
-
                 myList = Response.List;
-
                 FirstRun = false;
             }
 
             if (searchParams != null)
             {
-                Boolean subFilter = false;
-
                 if (!searchParams.ArtistName.IsNullOrWhiteSpace())
                 {
-                    myList = Response.List.Where(x => x.ArtistName.SafeString().Contains(searchParams.ArtistName, StringComparison.OrdinalIgnoreCase)).ToList();
-                    subFilter = true;
+                    myList = myList.Where(x => x.ArtistName.SafeString().Contains(searchParams.ArtistName, StringComparison.OrdinalIgnoreCase)).ToList();
                 }
 
                 if (!searchParams.CdName.IsNullOrWhiteSpace())
                 {
-                    if (subFilter)
+                    myList = myList.Where(x => x.CDList != null && x.CDList.Any(y => y.Name.SafeString().Contains(searchParams.CdName, StringComparison.OrdinalIgnoreCase))).ToList();
+                    myList = myList.Select(x => new Album
                     {
-                        myList = myList.Where(x => x.CDList != null && x.CDList.Any(y => y.Name.SafeString().Contains(searchParams.CdName, StringComparison.OrdinalIgnoreCase))).ToList();
-                        
-                    }
-                    else
-                    {
-                        myList = Response.List.Where(x => x.CDList != null && x.CDList.Any(y => y.Name.SafeString().Contains(searchParams.CdName, StringComparison.OrdinalIgnoreCase))).ToList();
-                        subFilter = true;
-                    }
-
-                    List<DTO.Music.Album> tempList = new List<Album>();
-                    foreach (DTO.Music.Album album in myList)
-                    {
-                        tempList.Add(new Album() { ArtistName = album.ArtistName, CDList = album.CDList.Where(x => x.Name.SafeString().Contains(searchParams.CdName, StringComparison.OrdinalIgnoreCase)).ToList() });
-                    }
-
-                    myList = tempList;
+                        ArtistName = x.ArtistName,
+                        CDList = x.CDList.Where(y => y.Name.SafeString().Contains(searchParams.CdName, StringComparison.OrdinalIgnoreCase)).ToList()
+                    }).ToList();
                 }
 
                 if (!searchParams.CdLabel.IsNullOrWhiteSpace())
                 {
-                    if (subFilter)
+                    myList = myList.Where(x => x.CDList != null && x.CDList.Any(y => y.Label.SafeString().Contains(searchParams.CdLabel, StringComparison.OrdinalIgnoreCase))).ToList();
+                    myList = myList.Select(x => new Album
                     {
-                        myList = myList.Where(x => x.CDList != null && x.CDList.Any(y => y.Label.SafeString().Contains(searchParams.CdLabel, StringComparison.OrdinalIgnoreCase))).ToList();
-
-                    }
-                    else
-                    {
-                        myList = Response.List.Where(x => x.CDList != null && x.CDList.Any(y => y.Label.SafeString().Contains(searchParams.CdLabel, StringComparison.OrdinalIgnoreCase))).ToList();
-                        subFilter = true;
-                    }
-
-                    List<DTO.Music.Album> tempList = new List<Album>();
-                    foreach (DTO.Music.Album album in myList)
-                    {
-                        tempList.Add(new Album() { ArtistName = album.ArtistName, CDList = album.CDList.Where(x => x.Label.SafeString().Contains(searchParams.CdLabel, StringComparison.OrdinalIgnoreCase)).ToList() });
-                    }
-
-                    myList = tempList;
+                        ArtistName = x.ArtistName,
+                        CDList = x.CDList.Where(y => y.Label.SafeString().Contains(searchParams.CdLabel, StringComparison.OrdinalIgnoreCase)).ToList()
+                    }).ToList();
                 }
 
                 if (!searchParams.TrackTitle.IsNullOrWhiteSpace())
                 {
-                    if (subFilter)
+                    myList = myList.Where(x => x.CDList != null && x.CDList.Any(y => y.TrackList != null && y.TrackList.Any(z => z.Title.SafeString().Contains(searchParams.TrackTitle, StringComparison.OrdinalIgnoreCase)))).ToList();
+                    myList = myList.Select(x => new Album
                     {
-                        myList = myList.Where(x => x.CDList != null && x.CDList.Any(y => y.TrackList != null && y.TrackList.Any(z => z.Title.SafeString().Contains(searchParams.TrackTitle, StringComparison.OrdinalIgnoreCase)))).ToList();
-                    }
-                    else
-                    {
-                        myList = Response.List.Where(x => x.CDList != null && x.CDList.Any(y => y.TrackList != null && y.TrackList.Any(z => z.Title.SafeString().Contains(searchParams.TrackTitle, StringComparison.OrdinalIgnoreCase)))).ToList();
-                        subFilter = true;
-                    }
-
-                    List<DTO.Music.Album> tempList = new List<Album>();
-                    foreach (DTO.Music.Album album in myList)
-                    {
-                        List<DTO.Music.CD> tempCdList = new List<CD>();
-
-                        foreach (DTO.Music.CD cd in album.CDList)
+                        ArtistName = x.ArtistName,
+                        CDList = x.CDList.Select(y => new CD
                         {
-                            if (cd.TrackList != null)
-                            {
-                                DTO.Music.CD tempCd = new DTO.Music.CD() { Name = cd.Name, Genere = cd.Genere };
-                                tempCd.TrackList = cd.TrackList.Where(x => x.Title.SafeString().Contains(searchParams.TrackTitle, StringComparison.OrdinalIgnoreCase)).ToList();
-
-                                tempCdList.Add(tempCd);
-                            }
-                        }
-
-                        tempList.Add(new Album() { ArtistName = album.ArtistName, CDList = new List<CD>(tempCdList) });
-                    }
-
-                    myList = tempList;
+                            Name = y.Name,
+                            Genre = y.Genre,
+                            Label = y.Label,
+                            TrackList = y.TrackList.Where(z => z.Title.SafeString().Contains(searchParams.TrackTitle, StringComparison.OrdinalIgnoreCase)).ToList()
+                        }).Where(y => y.TrackList.Any()).ToList()
+                    }).ToList();
                 }
             }
 

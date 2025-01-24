@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GenericWebApp.BLL.Music
 {
@@ -14,2877 +11,961 @@ namespace GenericWebApp.BLL.Music
 
             list.Add(new DTO.Music.Album()
             {
-                #region -- Daft Punk --
                 ArtistName = "Daft Punk",
                 CDList = new List<DTO.Music.CD>()
                 {
-                        #region - Random Access Memories -
-                        new DTO.Music.CD()
+                    new DTO.Music.CD()
+                    {
+                        Name = "Random Access Memories",
+                        Genre = "Disco",
+                        TrackList = new List<DTO.Music.Track>()
                         {
-                            Name = "Random Access Memories",
-                            Genere = "Disco",
-                            TrackList = new List<DTO.Music.Track>()
+                            new DTO.Music.Track()
                             {
-                                new DTO.Music.Track()
-                                {
-                                    Number = 2,
-                                    Title = "The Game of Love",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(5.22))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 3,
-                                    Title = "Giorgio By Moroder",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(9.04))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 4,
-                                    Title = "Within",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(3.48))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 5,
-                                    Title = "Instant Crush",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(5.37))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 6,
-                                    Title = "Lose Yourself To Dance",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(5.53))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 7,
-                                    Title = "Touch",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(8.18))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 8,
-                                    Title = "Get Lucky",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(6.09))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 9,
-                                    Title = "Beyond",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(4.50))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 10,
-                                    Title = "Motherboard",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(5.41))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 11,
-                                    Title = "Fragments Of Time",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(4.39))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 12,
-                                    Title = "Doin' It Right",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(4.11))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 13,
-                                    Title = "Contact",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(6.23))
-                                }
+                                Number = 1,
+                                Title = "Give Life Back to Music",
+                                Length = TimeSpan.FromMinutes(4.34)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 2,
+                                Title = "The Game of Love",
+                                Length = TimeSpan.FromMinutes(5.22)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 3,
+                                Title = "Giorgio By Moroder",
+                                Length = TimeSpan.FromMinutes(9.04)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 4,
+                                Title = "Within",
+                                Length = TimeSpan.FromMinutes(3.48)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 5,
+                                Title = "Instant Crush",
+                                Length = TimeSpan.FromMinutes(5.37)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 6,
+                                Title = "Lose Yourself To Dance",
+                                Length = TimeSpan.FromMinutes(5.53)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 7,
+                                Title = "Touch",
+                                Length = TimeSpan.FromMinutes(8.18)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 8,
+                                Title = "Get Lucky",
+                                Length = TimeSpan.FromMinutes(6.09)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 9,
+                                Title = "Beyond",
+                                Length = TimeSpan.FromMinutes(4.50)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 10,
+                                Title = "Motherboard",
+                                Length = TimeSpan.FromMinutes(5.41)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 11,
+                                Title = "Fragments Of Time",
+                                Length = TimeSpan.FromMinutes(4.39)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 12,
+                                Title = "Doin' It Right",
+                                Length = TimeSpan.FromMinutes(4.11)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 13,
+                                Title = "Contact",
+                                Length = TimeSpan.FromMinutes(6.23)
                             }
                         }
-                        #endregion
+                    }
                 }
-                #endregion
             });
 
             list.Add(new DTO.Music.Album()
             {
-                #region -- The Glitch Mob --
                 ArtistName = "The Glitch Mob",
                 CDList = new List<DTO.Music.CD>()
                 {
-                        #region - Drink The Sea -
-                        new DTO.Music.CD()
+                    new DTO.Music.CD()
+                    {
+                        Name = "Drink The Sea",
+                        Genre = "Miscellaneous",
+                        TrackList = new List<DTO.Music.Track>()
                         {
-                            Name = "Drink The Sea",
-                            Genere = "Miscellaneous",
-                            TrackList = new List<DTO.Music.Track>()
+                            new DTO.Music.Track()
                             {
-                                new DTO.Music.Track()
+                                Number = 1,
+                                Title = "Animus Vox",
+                                Length = TimeSpan.FromMinutes(6.44)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 2,
+                                Title = "Bad Wings",
+                                Length = TimeSpan.FromMinutes(6.39)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 3,
+                                Title = "How to Be Eaten by a Woman",
+                                Length = TimeSpan.FromMinutes(6.00)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 4,
+                                Title = "A Dream Within a Dream",
+                                Length = TimeSpan.FromMinutes(5.24)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 5,
+                                Title = "Fistful of Silence",
+                                Length = TimeSpan.FromMinutes(6.11)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 6,
+                                Title = "Between Two Points",
+                                Length = TimeSpan.FromMinutes(4.44)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 7,
+                                Title = "We Swarm",
+                                Length = TimeSpan.FromMinutes(5.56)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 8,
+                                Title = "Drive It Like You Stole It",
+                                Length = TimeSpan.FromMinutes(5.55)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 9,
+                                Title = "Fortune Days",
+                                Length = TimeSpan.FromMinutes(6.23)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 10,
+                                Title = "Starve the Ego, Feed the Soul",
+                                Length = TimeSpan.FromMinutes(5.52)
+                            }
+                        }
+                    }
+                }
+            });
+
+            list.Add(new DTO.Music.Album()
+            {
+                ArtistName = "Soundgarden",
+                CDList = new List<DTO.Music.CD>()
+                {
+                    new DTO.Music.CD()
+                    {
+                        Name = "Louder Than Love",
+                        Label = "A&M",
+                        Genre = "Grunge",
+                        TrackList = new List<DTO.Music.Track>()
+                        {
+                            new DTO.Music.Track()
+                            {
+                                Number = 1,
+                                Title = "Ugly Truth",
+                                Length = TimeSpan.FromMinutes(5.26)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 2,
+                                Title = "Hands All Over",
+                                Length = TimeSpan.FromMinutes(6.00)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 3,
+                                Title = "Gun",
+                                Length = TimeSpan.FromMinutes(4.42)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 4,
+                                Title = "Power Trip",
+                                Length = TimeSpan.FromMinutes(4.10)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 5,
+                                Title = "Get on the Snake",
+                                Length = TimeSpan.FromMinutes(3.44)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 6,
+                                Title = "Full on Kevin's Mom",
+                                Length = TimeSpan.FromMinutes(3.37)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 7,
+                                Title = "Loud Love",
+                                Length = TimeSpan.FromMinutes(4.57)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 8,
+                                Title = "I Awake",
+                                Length = TimeSpan.FromMinutes(4.21)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 9,
+                                Title = "No Wrong No Right",
+                                Length = TimeSpan.FromMinutes(4.47)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 10,
+                                Title = "Uncovered",
+                                Length = TimeSpan.FromMinutes(4.30)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 11,
+                                Title = "Big Dumb Sex",
+                                Length = TimeSpan.FromMinutes(4.11)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 12,
+                                Title = "Full on (Reprise)",
+                                Length = TimeSpan.FromMinutes(2.42)
+                            }
+                        }
+                    },
+                    new DTO.Music.CD()
+                    {
+                        Name = "Badmotorfinger",
+                        Label = "A&M",
+                        Genre = "Grunge",
+                        TrackList = new List<DTO.Music.Track>()
+                        {
+                            new DTO.Music.Track()
+                            {
+                                Number = 1,
+                                Title = "Rusty Cage",
+                                Length = TimeSpan.FromMinutes(4.26)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 2,
+                                Title = "Outshined",
+                                Length = TimeSpan.FromMinutes(5.11)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 3,
+                                Title = "Slaves & Bulldozers",
+                                Length = TimeSpan.FromMinutes(6.56)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 4,
+                                Title = "Jesus Christ Pose",
+                                Length = TimeSpan.FromMinutes(5.51)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 5,
+                                Title = "Face Pollution",
+                                Length = TimeSpan.FromMinutes(2.24)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 6,
+                                Title = "Somewhere",
+                                Length = TimeSpan.FromMinutes(4.21)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 7,
+                                Title = "Searching with My Good Eye Closed",
+                                Length = TimeSpan.FromMinutes(6.31)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 8,
+                                Title = "Room a Thousand Years Wide",
+                                Length = TimeSpan.FromMinutes(4.06)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 9,
+                                Title = "Mind Riot",
+                                Length = TimeSpan.FromMinutes(4.49)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 9,
+                                Title = "Mind Riot",
+                                Length = TimeSpan.FromMinutes(4.49)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 10,
+                                Title = "Drawing Flies",
+                                Length = TimeSpan.FromMinutes(2.25)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 11,
+                                Title = "Holy Water",
+                                Length = TimeSpan.FromMinutes(5.07)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 12,
+                                Title = "New Damage",
+                                Length = TimeSpan.FromMinutes(5.40)
+                            }
+                        }
+                    }
+                }
+            });
+
+            // New Artist 1
+            list.Add(new DTO.Music.Album()
+            {
+                ArtistName = "Radiohead",
+                CDList = new List<DTO.Music.CD>()
+                {
+                    new DTO.Music.CD()
+                    {
+                        Name = "OK Computer",
+                        Genre = "Alternative Rock",
+                        TrackList = new List<DTO.Music.Track>()
+                        {
+                            new DTO.Music.Track()
+                            {
+                                Number = 1,
+                                Title = "Airbag",
+                                Length = TimeSpan.FromMinutes(4.44)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 2,
+                                Title = "Paranoid Android",
+                                Length = TimeSpan.FromMinutes(6.23)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 3,
+                                Title = "Subterranean Homesick Alien",
+                                Length = TimeSpan.FromMinutes(4.27)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 4,
+                                Title = "Exit Music (For a Film)",
+                                Length = TimeSpan.FromMinutes(4.24)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 5,
+                                Title = "Let Down",
+                                Length = TimeSpan.FromMinutes(4.59)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 6,
+                                Title = "Karma Police",
+                                Length = TimeSpan.FromMinutes(4.21)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 7,
+                                Title = "Fitter Happier",
+                                Length = TimeSpan.FromMinutes(1.57)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 8,
+                                Title = "Electioneering",
+                                Length = TimeSpan.FromMinutes(3.50)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 9,
+                                Title = "Climbing Up the Walls",
+                                Length = TimeSpan.FromMinutes(4.45)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 10,
+                                Title = "No Surprises",
+                                Length = TimeSpan.FromMinutes(3.48)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 11,
+                                Title = "Lucky",
+                                Length = TimeSpan.FromMinutes(4.19)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 12,
+                                Title = "The Tourist",
+                                Length = TimeSpan.FromMinutes(5.24)
+                            }
+                        }
+                    }
+                }
+            });
+
+            // New Artist 2
+            list.Add(new DTO.Music.Album()
+            {
+                ArtistName = "Nirvana",
+                CDList = new List<DTO.Music.CD>()
+                {
+                    new DTO.Music.CD()
+                    {
+                        Name = "Nevermind",
+                        Genre = "Grunge",
+                        TrackList = new List<DTO.Music.Track>()
+                        {
+                            new DTO.Music.Track()
+                            {
+                                Number = 1,
+                                Title = "Smells Like Teen Spirit",
+                                Length = TimeSpan.FromMinutes(5.01)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 2,
+                                Title = "In Bloom",
+                                Length = TimeSpan.FromMinutes(4.14)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 3,
+                                Title = "Come as You Are",
+                                Length = TimeSpan.FromMinutes(3.39)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 4,
+                                Title = "Breed",
+                                Length = TimeSpan.FromMinutes(3.03)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 5,
+                                Title = "Lithium",
+                                Length = TimeSpan.FromMinutes(4.17)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 6,
+                                Title = "Polly",
+                                Length = TimeSpan.FromMinutes(2.57)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 7,
+                                Title = "Territorial Pissings",
+                                Length = TimeSpan.FromMinutes(2.22)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 8,
+                                Title = "Drain You",
+                                Length = TimeSpan.FromMinutes(3.43)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 9,
+                                Title = "Lounge Act",
+                                Length = TimeSpan.FromMinutes(2.36)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 10,
+                                Title = "Stay Away",
+                                Length = TimeSpan.FromMinutes(3.32)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 11,
+                                Title = "On a Plain",
+                                Length = TimeSpan.FromMinutes(3.16)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 12,
+                                Title = "Something in the Way",
+                                Length = TimeSpan.FromMinutes(3.52)
+                            }
+                        }
+                    }
+                }
+            });
+
+            // New Artist 3
+            list.Add(new DTO.Music.Album()
+            {
+                ArtistName = "The Beatles",
+                CDList = new List<DTO.Music.CD>()
+                {
+                    new DTO.Music.CD()
+                    {
+                        Name = "Abbey Road",
+                        Genre = "Rock",
+                        TrackList = new List<DTO.Music.Track>()
+                        {
+                            new DTO.Music.Track()
+                            {
+                                Number = 1,
+                                Title = "Come Together",
+                                Length = TimeSpan.FromMinutes(4.20)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 2,
+                                Title = "Something",
+                                Length = TimeSpan.FromMinutes(3.03)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 3,
+                                Title = "Maxwell's Silver Hammer",
+                                Length = TimeSpan.FromMinutes(3.27)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 4,
+                                Title = "Oh! Darling",
+                                Length = TimeSpan.FromMinutes(3.26)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 5,
+                                Title = "Octopus's Garden",
+                                Length = TimeSpan.FromMinutes(2.51)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 6,
+                                Title = "I Want You (She's So Heavy)",
+                                Length = TimeSpan.FromMinutes(7.47)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 7,
+                                Title = "Here Comes the Sun",
+                                Length = TimeSpan.FromMinutes(3.05)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 8,
+                                Title = "Because",
+                                Length = TimeSpan.FromMinutes(2.45)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 9,
+                                Title = "You Never Give Me Your Money",
+                                Length = TimeSpan.FromMinutes(4.02)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 10,
+                                Title = "Sun King",
+                                Length = TimeSpan.FromMinutes(2.26)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 11,
+                                Title = "Mean Mr. Mustard",
+                                Length = TimeSpan.FromMinutes(1.06)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 12,
+                                Title = "Polythene Pam",
+                                Length = TimeSpan.FromMinutes(1.12)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 13,
+                                Title = "She Came in Through the Bathroom Window",
+                                Length = TimeSpan.FromMinutes(1.57)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 14,
+                                Title = "Golden Slumbers",
+                                Length = TimeSpan.FromMinutes(1.31)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 15,
+                                Title = "Carry That Weight",
+                                Length = TimeSpan.FromMinutes(1.36)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 16,
+                                Title = "The End",
+                                Length = TimeSpan.FromMinutes(2.20)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 17,
+                                Title = "Her Majesty",
+                                Length = TimeSpan.FromMinutes(0.23)
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Rap Artist 1
+            list.Add(new DTO.Music.Album()
+            {
+                ArtistName = "Kendrick Lamar",
+                CDList = new List<DTO.Music.CD>()
+                {
+                    new DTO.Music.CD()
+                    {
+                        Name = "DAMN.",
+                        Genre = "Hip Hop",
+                        TrackList = new List<DTO.Music.Track>()
+                        {
+                            new DTO.Music.Track()
+                            {
+                                Number = 1,
+                                Title = "DNA.",
+                                Length = TimeSpan.FromMinutes(3.05)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 2,
+                                Title = "YAH.",
+                                Length = TimeSpan.FromMinutes(2.40)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 3,
+                                Title = "ELEMENT.",
+                                Length = TimeSpan.FromMinutes(3.28)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 4,
+                                Title = "FEEL.",
+                                Length = TimeSpan.FromMinutes(3.34)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 5,
+                                Title = "LOYALTY. (feat. Rihanna)",
+                                Length = TimeSpan.FromMinutes(3.47)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 6,
+                                Title = "PRIDE.",
+                                Length = TimeSpan.FromMinutes(4.35)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 7,
+                                Title = "HUMBLE.",
+                                Length = TimeSpan.FromMinutes(2.57)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 8,
+                                Title = "LUST.",
+                                Length = TimeSpan.FromMinutes(5.08)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 9,
+                                Title = "LOVE. (feat. Zacari)",
+                                Length = TimeSpan.FromMinutes(3.33)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 10,
+                                Title = "XXX. (feat. U2)",
+                                Length = TimeSpan.FromMinutes(4.14)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 11,
+                                Title = "FEAR.",
+                                Length = TimeSpan.FromMinutes(7.40)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 12,
+                                Title = "GOD.",
+                                Length = TimeSpan.FromMinutes(4.08)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 13,
+                                Title = "DUCKWORTH.",
+                                Length = TimeSpan.FromMinutes(4.08)
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Rap Artist 2
+            list.Add(new DTO.Music.Album()
+            {
+                ArtistName = "J. Cole",
+                CDList = new List<DTO.Music.CD>()
+                {
+                    new DTO.Music.CD()
+                    {
+                        Name = "2014 Forest Hills Drive",
+                        Genre = "Hip Hop",
+                        TrackList = new List<DTO.Music.Track>()
+                        {
+                            new DTO.Music.Track()
+                            {
+                                Number = 1,
+                                Title = "Intro",
+                                Length = TimeSpan.FromMinutes(2.09)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 2,
+                                Title = "January 28th",
+                                Length = TimeSpan.FromMinutes(4.02)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 3,
+                                Title = "Wet Dreamz",
+                                Length = TimeSpan.FromMinutes(3.59)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 4,
+                                Title = "03' Adolescence",
+                                Length = TimeSpan.FromMinutes(3.16)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 5,
+                                Title = "A Tale of 2 Citiez",
+                                Length = TimeSpan.FromMinutes(4.29)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 6,
+                                Title = "Fire Squad",
+                                Length = TimeSpan.FromMinutes(4.48)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 7,
+                                Title = "St. Tropez",
+                                Length = TimeSpan.FromMinutes(4.17)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 8,
+                                Title = "G.O.M.D.",
+                                Length = TimeSpan.FromMinutes(5.01)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 9,
+                                Title = "No Role Modelz",
+                                Length = TimeSpan.FromMinutes(4.52)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 10,
+                                Title = "Hello",
+                                Length = TimeSpan.FromMinutes(3.39)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 11,
+                                Title = "Apparently",
+                                Length = TimeSpan.FromMinutes(4.53)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 12,
+                                Title = "Love Yourz",
+                                Length = TimeSpan.FromMinutes(3.31)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 13,
+                                Title = "Note to Self",
+                                Length = TimeSpan.FromMinutes(14.35)
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Rap Artist 3
+            list.Add(new DTO.Music.Album()
+            {
+                ArtistName = "Drake",
+                CDList = new List<DTO.Music.CD>()
+                {
+                    new DTO.Music.CD()
+                    {
+                        Name = "Take Care",
+                        Genre = "Hip Hop",
+                        TrackList = new List<DTO.Music.Track>()
+                        {
+                            new DTO.Music.Track()
+                            {
+                                Number = 1,
+                                Title = "Over My Dead Body",
+                                Length = TimeSpan.FromMinutes(4.32)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 2,
+                                Title = "Shot for Me",
+                                Length = TimeSpan.FromMinutes(3.45)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 3,
+                                Title = "Headlines",
+                                Length = TimeSpan.FromMinutes(3.56)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 4,
+                                Title = "Crew Love (feat. The Weeknd)",
+                                Length = TimeSpan.FromMinutes(3.29)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 5,
+                                Title = "Take Care (feat. Rihanna)",
+                                Length = TimeSpan.FromMinutes(4.37)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 6,
+                                Title = "Marvins Room",
+                                Length = TimeSpan.FromMinutes(5.47)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 7,
+                                Title = "Buried Alive Interlude (feat. Kendrick Lamar)",
+                                Length = TimeSpan.FromMinutes(2.31)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 8,
+                                Title = "Under Ground Kings",
+                                Length = TimeSpan.FromMinutes(3.32)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 9,
+                                Title = "We'll Be Fine (feat. Birdman)",
+                                Length = TimeSpan.FromMinutes(4.08)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 10,
+                                Title = "Make Me Proud (feat. Nicki Minaj)",
+                                Length = TimeSpan.FromMinutes(3.39)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 11,
+                                Title = "Lord Knows (feat. Rick Ross)",
+                                Length = TimeSpan.FromMinutes(5.08)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 12,
+                                Title = "Cameras / Good Ones Go Interlude",
+                                Length = TimeSpan.FromMinutes(7.14)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 13,
+                                Title = "Doing It Wrong",
+                                Length = TimeSpan.FromMinutes(4.25)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 14,
+                                Title = "The Real Her (feat. Lil Wayne & Andre 3000)",
+                                Length = TimeSpan.FromMinutes(5.21)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 15,
+                                Title = "Look What You've Done",
+                                Length = TimeSpan.FromMinutes(5.02)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 16,
+                                Title = "HYFR (Hell Ya Fucking Right) (feat. Lil Wayne)",
+                                Length = TimeSpan.FromMinutes(3.27)
+                            },
+                            new DTO.Music.Track()
+                            {
+                                Number = 17,
+                                Title = "Practice",
+                                Length = TimeSpan.FromMinutes(3.57)
+                            },
+                            new DTO.Music.Track()
                                 {
-                                    Number = 1,
-                                    Title = "Animus Vox",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(6.44))
-                                },
-                                new DTO.Music.Track()
-                                {
-                                    Number = 2,
-                                    Title = "Bad Wings",
-                                    Length = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(6.39))
+                                    Number = 18,
+                                    Title = "The Ride",
+                                    Length = TimeSpan.FromMinutes(5.51)
                                 }
                             }
                         }
-                        #endregion
-                }
-                #endregion
+                    }
             });
-
-			//Grabbed the list from: https://en.wikipedia.org/wiki/List_of_grunge_albums
-			//Formatted in Google Sheet
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Soundgarden",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Louder Than Love", Label = "A&M",
-						Genere = "Grunge"
-					},
-					new DTO.Music.CD()
-					{
-						Name = "Badmotorfinger", Label = "A&M",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Temple of the Dog",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Temple of the Dog", Label = "A&M",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Hammerbox",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Numb", Label = "A&M",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Hater",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Hater", Label = "A&M",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Soundgarden",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Superunknown", Label = "A&M",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Soundgarden",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Songs from the Superunknown", Label = "A&M",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Soundgarden",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Down on the Upside", Label = "A&M",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Soundgarden",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "A-Sides", Label = "A&M",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Soundgarden",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Telephantasm", Label = "A&M Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Soundgarden",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Live on I-5", Label = "A&M Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Soundgarden",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Echo of Miles: Scattered Tracks Across the Path", Label = "A&M Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Melvins",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Gluey Porch Treatments", Label = "Alchemy",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Babes in Toyland",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Lived, Devil, Viled", Label = "Almafame",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Stone Temple Pilots",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Core", Label = "Atlantic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Melvins",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Houdini", Label = "Atlantic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Melvins",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Stoner Witch", Label = "Atlantic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Stone Temple Pilots",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Purple", Label = "Atlantic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "7 Year Bitch",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Gato Negro", Label = "Atlantic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Melvins",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Stag", Label = "Atlantic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Stone Temple Pilots",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Tiny Music... Songs from the Vatican Gift Shop", Label = "Atlantic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Melvins",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Honky", Label = "Atlantic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Stone Temple Pilots",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "No. 4", Label = "Atlantic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Stone Temple Pilots",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Shangri-La Dee Da", Label = "Atlantic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Stone Temple Pilots",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Thank You", Label = "Atlantic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Stone Temple Pilots",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Stone Temple Pilots", Label = "Atlantic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Pearl Jam",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Live at Benaroya Hall", Label = "BMG",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Alice in Chains",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Rainier Fog", Label = "BMG",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Bush",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "The Kingdom", Label = "BMG",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Melvins",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Ozma", Label = "Boner",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Melvins",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Bullhead", Label = "Boner",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Melvins",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Eggnog", Label = "Boner",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Melvins",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "King Buzzo", Label = "Boner",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Melvins",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Dale Crover", Label = "Boner",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Melvins",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Joe Preston", Label = "Boner",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Melvins",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Lysol", Label = "Boner",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "L7",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Slap-Happy", Label = "Bong Load Custom",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Various artists",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Deep Six", Label = "C/Z Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Melvins",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Melvins", Label = "C/Z Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Skin Yard",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Skin Yard", Label = "C/Z Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Various Artists",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Another Pyrrhic Victory", Label = "C/Z Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Hammerbox",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Hammerbox", Label = "C/Z Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "7 Year Bitch",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Sick 'Em", Label = "C/Z Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "7 Year Bitch",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "¡Viva Zapata!", Label = "C/Z Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Love Battery",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Confusion Au Go Go", Label = "C/Z Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Truly",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Fast Stories... from Kid Coma", Label = "Capitol",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Truly",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Feeling You Up", Label = "Capitol",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Truly",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Twilight Curtains", Label = "Capitol",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Alice in Chains",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "The Devil Put Dinosaurs Here", Label = "Capitol",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Foo Fighters",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Foo Fighters", Label = "Capitol/Roswell Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Hole",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Pretty on the Inside", Label = "Caroline",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Hole",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Ask for It", Label = "Caroline",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Hole",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "My Body, the Hand Grenade", Label = "City Slang",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Alice in Chains",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "We Die Young", Label = "Columbia",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Alice in Chains",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Facelift", Label = "Columbia",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Alice in Chains",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Sap", Label = "Columbia",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Alice in Chains",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Dirt", Label = "Columbia",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Manic Street Preachers",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Gold Against the Soul", Label = "Columbia",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Alice in Chains",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Jar of Flies", Label = "Columbia",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Alice in Chains",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Alice in Chains", Label = "Columbia",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mad Season",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Above", Label = "Columbia",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Alice in Chains",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Unplugged", Label = "Columbia",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "The Presidents of the United States of America",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "II", Label = "Columbia",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Jerry Cantrell",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Boggy Depot", Label = "Columbia",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "The Presidents of the United States of America",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Pure Frosting", Label = "Columbia",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Alice in Chains",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Nothing Safe: Best of the Box", Label = "Columbia",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Alice in Chains",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Music Bank", Label = "Columbia",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Alice in Chains",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Live", Label = "Columbia",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Alice in Chains",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Greatest Hits", Label = "Columbia",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Alice in Chains",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "The Essential Alice in Chains", Label = "Columbia",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Skin Yard",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Fist Sized Chunks", Label = "Cruz",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Skin Yard",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "1000 Smiling Knuckles", Label = "Cruz",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Skin Yard",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Inside the Eye", Label = "Cruz",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Nirvana",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Nevermind", Label = "DGC",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Nirvana",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Incesticide", Label = "DGC",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Nirvana",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "In Utero", Label = "DGC",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Hole",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Live Through This", Label = "DGC",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Nirvana",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "MTV Unplugged in New York", Label = "DGC",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Nirvana",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "From the Muddy Banks of the Wishkah", Label = "DGC",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Nirvana",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Nirvana", Label = "DGC",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Nirvana",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "With the Lights Out", Label = "DGC",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Nirvana",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Sliver: The Best of the Box", Label = "DGC",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Tad",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Infrared Riding Hood", Label = "East West/Elektra",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mötley Crüe",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Mötley Crüe", Label = "Elektra",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Radiohead",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Pablo Honey", Label = "EMI",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Moist",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Silver", Label = "EMI",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Moist",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Creature", Label = "EMI",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Moist",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Machine Punch Through: The Singles Collection", Label = "EMI",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Alice in Chains",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Black Gives Way To Blue", Label = "EMI",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Gruntruck",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Inside Yours", Label = "eMpTy",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Screaming Trees",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Something About Today", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Pearl Jam",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Ten", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Screaming Trees",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Uncle Anesthesia", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Screaming Trees",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Sweet Oblivion", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Various artists",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Singles: Original Motion Picture Soundtrack", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Pearl Jam",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Vs.", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Pearl Jam",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Vitalogy", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Pearl Jam",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Merkin Ball", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Pearl Jam",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "No Code", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Screaming Trees",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Dust", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Pearl Jam",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Yield", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Pearl Jam",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Live on Two Legs", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Pearl Jam",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Binaural", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Screaming Trees",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Nearly Lost You", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Pearl Jam",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Riot Act", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Pearl Jam",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Lost Dogs", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Pearl Jam",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Rearviewmirror (Greatest Hits 1991–2003)", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Screaming Trees",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Ocean of Confusion: Songs of Screaming Trees 1989–1996", Label = "Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Tad",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Live Alien Broadcasts", Label = "Futurist",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Hole",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Celebrity Skin", Label = "Geffen",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Nirvana",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Live At Reading", Label = "Geffen",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Green River",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Come On Down", Label = "Homestead",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Melvins",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "The Maggot", Label = "Ipecac",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Melvins",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "The Bootlicker", Label = "Ipecac",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Melvins",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "The Crybaby", Label = "Ipecac",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Pearl Jam",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Pearl Jam", Label = "J",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Bush",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Zen X Four", Label = "Kirtland",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Hammerbox",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Live EMP Skychurch, Seattle, WA", Label = "Kufala",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "", Label = "",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Malfunkshun",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Return to Olympus", Label = "Loosegroove",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "L7",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Live: Omaha to Osaka", Label = "Man's Ruin",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mother Love Bone",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Shine", Label = "Mercury",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mother Love Bone",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Apple", Label = "Mercury",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mother Love Bone",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Mother Love Bone", Label = "Mercury",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Def Leppard",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Slang", Label = "Mercury",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Kiss",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Carnival of Souls: The Final Sessions", Label = "Mercury",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Hole",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Nobody's Daughter", Label = "Mercury",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Pearl Jam",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Lightning Bolt", Label = "Monkeywrench Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Ammonia",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Mint 400", Label = "Murmur",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Silverchair",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Freak Show", Label = "Murmur",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Ammonia",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Eleventh Avenue", Label = "Murmur",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Silverchair",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Frogstomp", Label = "Murmur/Epic",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Solomon Grundy",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Solomon Grundy", Label = "New Alliance Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "The Presidents of the United States of America",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "The Presidents of the United States of America", Label = "PopLlama",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "The Presidents of the United States of America",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Kudos to You!", Label = "PUSA Inc.",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Babes in Toyland",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Fontanelle", Label = "Reprise",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mudhoney",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Piece of Cake", Label = "Reprise",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mudhoney",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Five Dollar Bob's Mock Cooter Stew", Label = "Reprise",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Babes in Toyland",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Nemesisters", Label = "Reprise",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mudhoney",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "My Brother the Cow", Label = "Reprise",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mudhoney",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Tomorrow Hit Today", Label = "Reprise",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Pearl Jam",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Live at the Gorge 05/06", Label = "Rhino/WEA",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Willard",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Steel Mill", Label = "Roadracer Records/Roadrunner Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Gruntruck",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Push", Label = "Roadrunner",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Jerry Cantrell",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Degradation Trip", Label = "Roadrunner",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Earth",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Full upon Her Burning Lips", Label = "Sargent House",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Soundgarden",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "King Animal", Label = "Seven Four Entertainment/Republic Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Late!",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Pocketwatch", Label = "Simple Machines",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "L7",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Bricks Are Heavy", Label = "Slash",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "L7",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Hungry for Stink", Label = "Slash",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "L7",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "The Beauty Process: Triple Platinum", Label = "Slash",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "L7",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "The Slash Years", Label = "Slash",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "The Presidents of the United States of America",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Rarities", Label = "Sony Music Japan",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Earth",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Hex; Or Printing in the Infernal Method", Label = "Southern Lord Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Earth",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "The Bees Made Honey in the Lion's Skull", Label = "Southern Lord Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Earth",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Angels of Darkness, Demons of Light I", Label = "Southern Lord Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Earth",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Angels of Darkness, Demons of Light II", Label = "Southern Lord Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Earth",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Primitive and Deadly", Label = "Southern Lord Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Bush",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "The Best of '94–'99", Label = "SPV GmbH",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Screaming Trees",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Even If and Especially When", Label = "SST",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Screaming Trees",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Invisible Lantern", Label = "SST",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Soundgarden",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Ultramega OK", Label = "SST",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Screaming Trees",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Buzz Factory", Label = "SST",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Screaming Trees",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Anthology: SST Years 1985–1989", Label = "SST",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Green River",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Dry As a Bone", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Soundgarden",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Screaming Life", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Green River",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Rehab Doll", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Soundgarden",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Fopp", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mudhoney",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Superfuzz Bigmuff", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Various artists",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Sub Pop 200", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Blood Circus",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Primal Rock Therapy", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Tad",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "God's Balls", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Nirvana",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Bleach", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mudhoney",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Mudhoney", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Green River",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Dry As a Bone/Rehab Doll", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "L7",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Smell the Magic", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mudhoney",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Superfuzz Bigmuff Plus Early Singles", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Screaming Trees",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Change Has Come", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Soundgarden",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Screaming Life/Fopp", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Tad",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Salt Lick/God's Balls", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mudhoney",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Every Good Boy Deserves Fudge", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Tad",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "8-Way Santa", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Various Artists",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "The Grunge Years", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Earth",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Extra-Capsular Extraction", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Love Battery",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Between the Eyes", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Love Battery",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Dayglo", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Earth",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Earth 2", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Earth",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Phase 3: Thrones and Dominions", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Earth",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Pentastar: In the Style of Demons", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Various artists",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Hype!", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mudhoney",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "March to Fuzz", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mudhoney",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Here Comes Sickness: The Best of the BBC", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mudhoney",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Since We've Become Translucent", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mudhoney",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Under a Billion Suns", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mudhoney",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "The Lucky Ones", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Mudhoney",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Digital Garbage", Label = "Sub Pop",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Screaming Trees",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Last Words: The Final Recordings", Label = "Sunyata Productions",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Hole",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "The First Session", Label = "Sympathy for the Record Industry",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Everclear",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "World of Noise", Label = "Tim/Kerr",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Skin Yard",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Hallowed Ground", Label = "Toxic Shock",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Bush",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Sixteen Stone", Label = "Trauma Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Bush",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Razorblade Suitcase", Label = "Trauma/Interscope",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Bush",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Deconstructed", Label = "Trauma/Interscope",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Bush",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "The Science of Things", Label = "Trauma/Interscope",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Babes in Toyland",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Spanking Machine", Label = "Twin/Tone",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Babes in Toyland",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "To Mother", Label = "Twin/Tone",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Screaming Trees",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Other Worlds", Label = "Velvetone",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Screaming Trees",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Clairvoyance", Label = "Velvetone",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Tad",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Inhaler", Label = "Warner Bros.",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "R.E.M.",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Monster", Label = "Warner Bros.",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Various artists",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Fuck Me I'm Rich", Label = "Waterfront Records",
-						Genere = "Grunge"
-					}
-				}
-			});
-
-			list.Add(new DTO.Music.Album()
-			{
-				ArtistName = "Kid Cudi",
-				CDList = new List<DTO.Music.CD>()
-				{
-					new DTO.Music.CD()
-					{
-						Name = "Speedin' Bullet 2 Heaven", Label = "Wicked Awesome/Republic",
-						Genere = "Grunge"
-					}
-				}
-			});
 
             return list;
         }

@@ -31,3 +31,7 @@ C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Blazor\obj\Debug\net6.0\
 C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Blazor\obj\Debug\net6.0\GenericWebApp.Blazor.pdb
 C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Blazor\obj\Debug\net6.0\GenericWebApp.Blazor.genruntimeconfig.cache
 C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Blazor\obj\Debug\net6.0\ref\GenericWebApp.Blazor.dll
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Blazor\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Blazor\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Blazor\bin\Debug\net6.0\GenericWebApp.Model.dll
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.Blazor\bin\Debug\net6.0\GenericWebApp.Model.pdb

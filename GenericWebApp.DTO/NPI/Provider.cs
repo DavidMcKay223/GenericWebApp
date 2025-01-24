@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GenericWebApp.DTO.NPI
 {
@@ -40,6 +37,11 @@ namespace GenericWebApp.DTO.NPI
         public string ProviderLastName { get; set; }
         public string OrganizationName { get; set; }
         public string ParentOrganizationLegalBusinessName { get; set; }
+        public string Gender { get; set; }
+        public string SoleProprietor { get; set; }
+        public string EnumerationDate { get; set; }
+        public string LastUpdated { get; set; }
+        public string Status { get; set; }
         #endregion
 
         #region -- Other Names --
@@ -49,24 +51,50 @@ namespace GenericWebApp.DTO.NPI
         #region -- Taxonomy --
         public string PrimaryTaxonomyCode { get; set; }
         public string PrimaryTaxonomyStateLicense { get; set; }
+        public string PrimaryTaxonomyDescription { get; set; }
+        public string PrimaryTaxonomyGroup { get; set; }
+        #endregion
+
+        #region -- Identifiers --
+        public List<Identifier> Identifiers { get; set; }
+        #endregion
+
+        #region -- Endpoints --
+        public List<Endpoint> Endpoints { get; set; }
         #endregion
 
         #region -- Dynamic --
-        public string DynamicName
-        {
-            get
-            {
-                return (String.IsNullOrWhiteSpace(OtherOrganizationName) ? Name : OtherOrganizationName);
-            }
-        }
+        public string DynamicName => string.IsNullOrWhiteSpace(OtherOrganizationName) ? Name : OtherOrganizationName;
 
-        public string DynamicLegalName
-        {
-            get
-            {
-                return (String.IsNullOrWhiteSpace(ParentOrganizationLegalBusinessName) ? Name : ParentOrganizationLegalBusinessName);
-            }
-        }
+        public string DynamicLegalName => string.IsNullOrWhiteSpace(ParentOrganizationLegalBusinessName) ? Name : ParentOrganizationLegalBusinessName;
         #endregion
+    }
+
+    [Serializable]
+    public class Identifier
+    {
+        public string Code { get; set; }
+        public string Description { get; set; }
+        public string Issuer { get; set; }
+        public string IdentifierValue { get; set; }
+        public string State { get; set; }
+    }
+
+    [Serializable]
+    public class Endpoint
+    {
+        public string EndpointType { get; set; }
+        public string EndpointTypeDescription { get; set; }
+        public string EndpointValue { get; set; }
+        public string Affiliation { get; set; }
+        public string UseDescription { get; set; }
+        public string ContentTypeDescription { get; set; }
+        public string CountryCode { get; set; }
+        public string CountryName { get; set; }
+        public string AddressType { get; set; }
+        public string Address1 { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string PostalCode { get; set; }
     }
 }

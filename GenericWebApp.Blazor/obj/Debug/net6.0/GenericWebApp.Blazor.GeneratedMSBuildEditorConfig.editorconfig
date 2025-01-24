@@ -39,6 +39,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTlBJXFByb3ZpZGVyQ29tcG9uZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/David/source/repos/GenericWebApp/GenericWebApp.Blazor/Shared/Common/CustomTimeInput.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbW1vblxDdXN0b21UaW1lSW5wdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/David/source/repos/GenericWebApp/GenericWebApp.Blazor/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 

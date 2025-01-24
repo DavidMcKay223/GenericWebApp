@@ -1,0 +1,49 @@
+﻿@using System.Globalization
+@typeparam TValue
+@inherits InputBase<TValue>
+
+<InputBase TValue="TValue" @attributes="AdditionalAttributes">
+    <input @bind="CurrentValueAsString" @bind:event="oninput" class="@CssClass" />
+</InputBase>
+
+@code {
+    protected override bool TryParseValueFromString(string value, out TValue result, out string validationErrorMessage)
+    {
+        if (typeof(TValue) == typeof(TimeOnly))
+        {
+            if (TimeOnly.TryParseExact(value, "mm\\:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out var timeOnly))
+            {
+                result = (TValue)(object)timeOnly;
+                validationErrorMessage = null;
+                return true;
+            }
+        }
+        else if (typeof(TValue) == typeof(TimeSpan))
+        {
+            if (TimeSpan.TryParseExact(value, "mm\\:ss", CultureInfo.InvariantCulture, out var timeSpan))
+            {
+                result = (TValue)(object)timeSpan;
+                validationErrorMessage = null;
+                return true;
+            }
+        }
+
+        result = default;
+        validationErrorMessage = "Invalid time format";
+        return false;
+    }
+
+    protected override string FormatValueAsString(TValue value)
+    {
+        if (value is TimeOnly timeOnly)
+        {
+            return timeOnly.ToString("mm\\:ss", CultureInfo.InvariantCulture);
+        }
+        else if (value is TimeSpan timeSpan)
+        {
+            return timeSpan.ToString("mm\\:ss", CultureInfo.InvariantCulture);
+        }
+
+        return string.Empty;
+    }
+}

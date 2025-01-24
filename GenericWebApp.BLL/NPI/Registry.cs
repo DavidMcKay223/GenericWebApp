@@ -2,7 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
+using GenericWebApp.BLL.Common;
+
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using GenericWebApp.BLL.Common;
 
@@ -10,92 +16,100 @@ namespace GenericWebApp.BLL.NPI
 {
     public class Registry
     {
+        private const string Endpoint = "https://npiregistry.cms.hhs.gov/api/";
+
         public static async Task<DTO.Common.Response<DTO.NPI.Provider>> GetProviderList(RegistrySearchDTO searchDTO = null)
         {
-            DTO.Common.Response<DTO.NPI.Provider> myResponse = new DTO.Common.Response<DTO.NPI.Provider>();
+            var response = new DTO.Common.Response<DTO.NPI.Provider>();
 
-            if (searchDTO == null) return myResponse;
+            if (searchDTO == null) return response;
 
-            String endpoint = "https://npiregistry.cms.hhs.gov/api/";
+            var jsonResponse = await Endpoint.GetUriToJson(searchDTO.GetSearchParameter());
+            var root = JsonConvert.DeserializeObject<Parser.Root>(jsonResponse);
 
-            String myJsonResponse = await endpoint.GetUriToJson(searchDTO.GetSearchParameter());
-
-            GenericWebApp.BLL.NPI.Parser.Root? myRoot = JsonConvert.DeserializeObject<GenericWebApp.BLL.NPI.Parser.Root>(myJsonResponse);
-
-            if (myRoot != null && myRoot.Errors != null && myRoot.Errors.Count > 0)
+            if (root?.Errors?.Count > 0)
             {
-                myResponse.Error = new DTO.Common.Error() { Message = String.Join("\r\n", myRoot.Errors.Select(x => x.description)) };
+                response.Error = new DTO.Common.Error { Message = string.Join("\r\n", root.Errors.Select(x => x.description)) };
             }
-            else if (myRoot != null && myRoot.results != null)
+            else if (root?.results != null)
             {
-                List<DTO.NPI.Provider> providerList = new List<DTO.NPI.Provider>();
-                myResponse.List = providerList;
-
-                foreach (Parser.Result myProvider in myRoot.results)
-                {
-                    providerList.Add(ParseProvider(myProvider));
-                }
+                response.List = root.results.Select(ParseProvider).ToList();
             }
 
-            return myResponse;
+            return response;
         }
 
-        private static DTO.NPI.Provider ParseProvider(Parser.Result myProvider)
+        private static DTO.NPI.Provider ParseProvider(Parser.Result provider)
         {
-            if(myProvider == null) return null;
+            if (provider == null) return null;
 
-            DTO.NPI.Provider npiProvider = new DTO.NPI.Provider() { NPI = myProvider.number };
-
-            if (myProvider.addresses != null && myProvider.addresses.Count > 0)
+            var npiProvider = new DTO.NPI.Provider
             {
-                Parser.Address tempAddress = myProvider.addresses[0];
-
-                npiProvider.Address1 = tempAddress.address_1;
-                npiProvider.Address2 = tempAddress.address_2;
-                npiProvider.City = tempAddress.city;
-                npiProvider.State = tempAddress.state;
-                npiProvider.Zip = tempAddress.postal_code;
-                npiProvider.Phone = tempAddress.telephone_number;
-                npiProvider.Fax = tempAddress.fax_number;
-            }
-
-            if (myProvider.addresses != null && myProvider.addresses.Count > 1)
-            {
-                Parser.Address tempAddress = myProvider.addresses[1];
-
-                npiProvider.MailingAddress1 = tempAddress.address_1;
-                npiProvider.MailingAddress2 = tempAddress.address_2;
-                npiProvider.MailingCity = tempAddress.city;
-                npiProvider.MailingState = tempAddress.state;
-                npiProvider.MailingZip = tempAddress.postal_code;
-                npiProvider.MailingPhone = tempAddress.telephone_number;
-                npiProvider.MailingFax = tempAddress.fax_number;
-            }
-
-            if (myProvider.basic != null)
-            {
-                npiProvider.Name = myProvider.basic.name;
-                npiProvider.ProviderName = myProvider.basic.last_name + ", " + myProvider.basic.first_name;
-                npiProvider.ProviderFirstName = myProvider.basic.first_name;
-                npiProvider.ProviderLastName = myProvider.basic.last_name;
-                npiProvider.OrganizationName = myProvider.basic.organization_name;
-                npiProvider.ParentOrganizationLegalBusinessName = myProvider.basic.parent_organization_legal_business_name;
-            }
-
-            if (myProvider.other_names != null && myProvider.other_names.Count > 0)
-            {
-                npiProvider.OtherOrganizationName = myProvider.other_names[0].organization_name;
-            }
-
-            if (myProvider.taxonomies != null)
-            {
-                Parser.Taxonomy temp = myProvider.taxonomies.Where(x => x.primary == true).FirstOrDefault();
-
-                if (temp != null)
+                NPI = provider.number,
+                Name = provider.basic?.name,
+                ProviderName = $"{provider.basic?.last_name}, {provider.basic?.first_name}",
+                ProviderFirstName = provider.basic?.first_name,
+                ProviderLastName = provider.basic?.last_name,
+                OrganizationName = provider.basic?.organization_name,
+                ParentOrganizationLegalBusinessName = provider.basic?.parent_organization_legal_business_name,
+                Gender = provider.basic?.gender,
+                SoleProprietor = provider.basic?.sole_proprietor,
+                EnumerationDate = provider.basic?.enumeration_date,
+                LastUpdated = provider.basic?.last_updated,
+                Status = provider.basic?.status,
+                OtherOrganizationName = provider.other_names?.FirstOrDefault()?.organization_name,
+                PrimaryTaxonomyCode = provider.taxonomies?.FirstOrDefault(x => x.primary)?.code,
+                PrimaryTaxonomyStateLicense = provider.taxonomies?.FirstOrDefault(x => x.primary)?.license,
+                PrimaryTaxonomyDescription = provider.taxonomies?.FirstOrDefault(x => x.primary)?.desc,
+                PrimaryTaxonomyGroup = provider.taxonomies?.FirstOrDefault(x => x.primary)?.taxonomy_group,
+                Identifiers = provider.identifiers?.Select(i => new DTO.NPI.Identifier
                 {
-                    npiProvider.PrimaryTaxonomyCode = temp.code;
-                    npiProvider.PrimaryTaxonomyStateLicense = temp.license;
-                }
+                    Code = i.code,
+                    Description = i.desc,
+                    Issuer = i.issuer,
+                    IdentifierValue = i.identifier,
+                    State = i.state
+                }).ToList(),
+                Endpoints = provider.endpoints?.Select(e => new DTO.NPI.Endpoint
+                {
+                    EndpointType = e.endpointType,
+                    EndpointTypeDescription = e.endpointTypeDescription,
+                    EndpointValue = e.endpoint,
+                    Affiliation = e.affiliation,
+                    UseDescription = e.useDescription,
+                    ContentTypeDescription = e.contentTypeDescription,
+                    CountryCode = e.country_code,
+                    CountryName = e.country_name,
+                    AddressType = e.address_type,
+                    Address1 = e.address_1,
+                    City = e.city,
+                    State = e.state,
+                    PostalCode = e.postal_code
+                }).ToList()
+            };
+
+            if (provider.addresses?.Count > 0)
+            {
+                var primaryAddress = provider.addresses[0];
+                npiProvider.Address1 = primaryAddress.address_1;
+                npiProvider.Address2 = primaryAddress.address_2;
+                npiProvider.City = primaryAddress.city;
+                npiProvider.State = primaryAddress.state;
+                npiProvider.Zip = primaryAddress.postal_code;
+                npiProvider.Phone = primaryAddress.telephone_number;
+                npiProvider.Fax = primaryAddress.fax_number;
+            }
+
+            if (provider.addresses?.Count > 1)
+            {
+                var mailingAddress = provider.addresses[1];
+                npiProvider.MailingAddress1 = mailingAddress.address_1;
+                npiProvider.MailingAddress2 = mailingAddress.address_2;
+                npiProvider.MailingCity = mailingAddress.city;
+                npiProvider.MailingState = mailingAddress.state;
+                npiProvider.MailingZip = mailingAddress.postal_code;
+                npiProvider.MailingPhone = mailingAddress.telephone_number;
+                npiProvider.MailingFax = mailingAddress.fax_number;
             }
 
             return npiProvider;
@@ -120,32 +134,32 @@ namespace GenericWebApp.BLL.NPI
         public string limit { get; set; }
         public string skip { get; set; }
         public string pretty { get; set; }
-        public string version { get { return "2.1"; } }
-
+        public string version => "2.1";
 
         public string GetSearchParameter()
         {
-            List<String> parameterList = new List<string>();
+            var parameters = new List<string>
+            {
+                $"number={number}",
+                $"enumeration_type={enumeration_type}",
+                $"taxonomy_description={taxonomy_description}",
+                $"name_purpose={name_purpose}",
+                $"first_name={first_name}",
+                $"use_first_name_alias={use_first_name_alias}",
+                $"last_name={last_name}",
+                $"organization_name={organization_name}",
+                $"address_purpose={address_purpose}",
+                $"city={city}",
+                $"state={state}",
+                $"postal_code={postal_code}",
+                $"country_code={country_code}",
+                $"limit={limit}",
+                $"skip={skip}",
+                $"pretty={pretty}",
+                $"version={version}"
+            };
 
-            parameterList.Add(String.Format("number={0}", number));
-            parameterList.Add(String.Format("enumeration_type={0}", enumeration_type));
-            parameterList.Add(String.Format("taxonomy_description={0}", taxonomy_description));
-            parameterList.Add(String.Format("name_purpose={0}", name_purpose));
-            parameterList.Add(String.Format("first_name={0}", first_name));
-            parameterList.Add(String.Format("use_first_name_alias={0}", use_first_name_alias));
-            parameterList.Add(String.Format("last_name={0}", last_name));
-            parameterList.Add(String.Format("organization_name={0}", organization_name));
-            parameterList.Add(String.Format("address_purpose={0}", address_purpose));
-            parameterList.Add(String.Format("city={0}", city));
-            parameterList.Add(String.Format("state={0}", state));
-            parameterList.Add(String.Format("postal_code={0}", postal_code));
-            parameterList.Add(String.Format("country_code={0}", country_code));
-            parameterList.Add(String.Format("limit={0}", limit));
-            parameterList.Add(String.Format("skip={0}", skip));
-            parameterList.Add(String.Format("pretty={0}", pretty));
-            parameterList.Add(String.Format("version={0}", version));
-
-            return String.Join("&", parameterList);
+            return string.Join("&", parameters);
         }
     }
 }

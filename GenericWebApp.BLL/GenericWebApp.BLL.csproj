@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GenericWebApp.DTO\GenericWebApp.DTO.csproj" />
+    <ProjectReference Include="..\GenericWebApp.Model\GenericWebApp.Model.csproj" />
   </ItemGroup>
 
 </Project>

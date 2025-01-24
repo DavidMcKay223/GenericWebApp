@@ -13,3 +13,5 @@ C:\Users\David\source\repos\GenericWebApp\GenericWebApp.BLL\obj\Debug\net6.0\Gen
 C:\Users\David\source\repos\GenericWebApp\GenericWebApp.BLL\obj\Debug\net6.0\refint\GenericWebApp.BLL.dll
 C:\Users\David\source\repos\GenericWebApp\GenericWebApp.BLL\obj\Debug\net6.0\GenericWebApp.BLL.pdb
 C:\Users\David\source\repos\GenericWebApp\GenericWebApp.BLL\obj\Debug\net6.0\ref\GenericWebApp.BLL.dll
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.BLL\bin\Debug\net6.0\GenericWebApp.Model.dll
+C:\Users\David\source\repos\GenericWebApp\GenericWebApp.BLL\bin\Debug\net6.0\GenericWebApp.Model.pdb

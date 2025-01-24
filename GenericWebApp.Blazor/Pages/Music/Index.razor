@@ -6,97 +6,99 @@
 }
 else
 {
-    <h1>Music</h1>
+    <div class="container">
+        <h1 class="my-4 text-center">Music</h1>
 
-    <EditForm Model="@searchParams">
-        <form class="row g-3">
-            <div class="col-md-3">
-                <label for="text_ArtistName" class="form-label">Artist Name</label>
-                <InputText id="text_ArtistName" class="form-control" @bind-Value="searchParams.ArtistName" />
+        <EditForm Model="@searchParams">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label for="text_ArtistName" class="form-label">Artist Name</label>
+                    <InputText id="text_ArtistName" class="form-control" @bind-Value="searchParams.ArtistName" />
+                </div>
+                <div class="col-md-3">
+                    <label for="text_CdName" class="form-label">CD Name</label>
+                    <InputText id="text_CdName" class="form-control" @bind-Value="searchParams.CdName" />
+                </div>
+                <div class="col-md-3">
+                    <label for="text_TrackTitle" class="form-label">Track Title</label>
+                    <InputText id="text_TrackTitle" class="form-control" @bind-Value="searchParams.TrackTitle" />
+                </div>
+                <div class="col-md-3">
+                    <label for="text_CdLabel" class="form-label">Label</label>
+                    <InputText id="text_CdLabel" class="form-control" @bind-Value="searchParams.CdLabel" />
+                </div>
             </div>
-            <div class="col-md-3">
-                <label for="text_CdName" class="form-label">CD Name</label>
-                <InputText id="text_CdName" class="form-control" @bind-Value="searchParams.CdName" />
+        </EditForm>
+
+        <div class="my-3 text-center">
+            <button class="btn btn-primary me-2" @onclick="@ButtonSearch">Search</button>
+            <button class="btn btn-danger" @onclick="@ButtonReset">Reset</button>
+        </div>
+
+        @if (myService.Response.Error != null)
+        {
+            <div class="alert alert-danger">
+                @myService.Response.Error.Message
             </div>
-            <div class="col-md-3">
-                <label for="text_TrackTitle" class="form-label">Track Title</label>
-                <InputText id="text_TrackTitle" class="form-control" @bind-Value="searchParams.TrackTitle" />
-            </div>
-            <div class="col-md-3">
-                <label for="text_CdLabel" class="form-label">Label</label>
-                <InputText id="text_CdLabel" class="form-control" @bind-Value="searchParams.CdLabel" />
-            </div>
-        </form>
-    </EditForm>
+        }
 
-    <br />
-
-    <input type="button" value="Search" class="btn btn-primary" @onclick="@ButtonSearch" />
-    <input type="button" value="Reset" class="btn btn-danger" @onclick="@ButtonReset" />
-
-    @if (myService.Response.Error != null)
-    {
-        <br />
-        <label class="form-text text-danger">@myService.Response.Error.Message</label>
-    }
-
-    @if (AlbumList != null)
-    {
-        <br /><br />
-        <div class="row g-3">
-            @foreach (DTO.Music.Album album in AlbumList)
-            {
-                <div class="col-md-6 card p-2">
-                    <div class="card-title">
-                        <h4><label class="form-text">@album.ArtistName</label></h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-3 card-deck">
-                            @if (album.CDList != null)
-                            {
-                                foreach (DTO.Music.CD cd in album.CDList)
+        @if (AlbumList != null)
+        {
+            <div class="row g-3">
+                @foreach (DTO.Music.Album album in AlbumList)
+                {
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h4>@album.ArtistName</h4>
+                            </div>
+                            <div class="card-body">
+                                @if (album.CDList != null)
                                 {
-                                    <div class="card p-2">
-                                        <div class="card-title">
-                                            <h5><label class="form-text">@cd.Name (@cd.Genere)</label></h5>
-                                            <h5><label class="form-text">@cd.Label</label></h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <label class="form-text">Track</label>
-                                            <ul class="list-group">
-                                                @if(cd.TrackList != null)
-                                                {
-                                                    @foreach (DTO.Music.Track track in cd.TrackList)
+                                    @foreach (DTO.Music.CD cd in album.CDList)
+                                    {
+                                        <div class="card mb-3">
+                                            <div class="card-header">
+                                                <h5>@cd.Name (@cd.Genre)</h5>
+                                                <h6>@cd.Label</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <label>Track</label>
+                                                <ul class="list-group">
+                                                    @if(cd.TrackList != null)
                                                     {
-                                                        <li class="list-group-item">
-                                                            <label class="form-text">@track.Number</label>
-                                                            <label class="form-text">@track.Title</label>
-                                                            <label class="form-text">@track.Length.ToString("mm\\:ss")</label>
-                                                        </li>
+                                                        @foreach (DTO.Music.Track track in cd.TrackList)
+                                                        {
+                                                            <li class="list-group-item">
+                                                                <span class="fw-bold">@track.Number</span>
+                                                                <span>@track.Title</span>
+                                                                <span class="text-muted">@track.Length.ToString("mm\\:ss")</span>
+                                                            </li>
+                                                        }
                                                     }
-                                                }
-                                            </ul>
+                                                </ul>
+                                            </div>
+                                            <div class="card-footer">
+                                                <button class="btn btn-danger" @onclick="() => ButtonDeleteCD(album, cd)">Remove</button>
+                                            </div>
                                         </div>
-                                        <div class="card-footer border-white">
-                                            <input type="button" value="Remove" class="btn btn-danger" @onclick="() => ButtonDeleteCD(album, cd)" />
-                                        </div>
-                                    </div>
+                                    }
                                 }
-                            }
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-primary me-2" @onclick="(() =>{ Album = album; createNewAlbum = !createNewAlbum; })">Edit</button>
+                                <button class="btn btn-danger" @onclick="() => ButtonDeleteAlbum(album)">Remove</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-footer border-white">
-                        <input type="button" value="Edit" class="btn btn-primary" @onclick="(() =>{ Album = album; createNewAlbum = !createNewAlbum; })" />
-                        <input type="button" value="Remove" class="btn btn-danger" @onclick="() => ButtonDeleteAlbum(album)" />
-                    </div>
-                </div>
-            }
+                }
+            </div>
+        }
+
+        <div class="my-3 text-center">
+            <button class="btn btn-primary" @onclick="@ButtonNew">New</button>
         </div>
-    }
-
-    <br />
-
-    <input type="button" value="New" class="btn btn-primary" @onclick="@ButtonNew" />
+    </div>
 }
 
 @code {
