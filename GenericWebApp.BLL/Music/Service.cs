@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GenericWebApp.BLL.Music
 {
-    public class Service : GenericWebApp.BLL.Common.ServiceManager<GenericWebApp.DTO.Music.Album, GenericWebApp.BLL.Music.MusicSearchDTO>
+    public class Service : ServiceManager<GenericWebApp.DTO.Music.Album, GenericWebApp.BLL.Music.MusicSearchDTO>
     {
         private readonly AlbumContext _context;
 
@@ -20,11 +20,10 @@ namespace GenericWebApp.BLL.Music
 
         public override async Task DeleteItemAsync(GenericWebApp.DTO.Music.Album dto)
         {
-            Response.Error = null;
+            Response.ErrorList.Clear();
 
             try
             {
-                // Find the album by artist name and include related CDs and Tracks
                 var album = await _context.Albums
                     .Include(a => a.CDList)
                         .ThenInclude(cd => cd.TrackList)
@@ -32,24 +31,23 @@ namespace GenericWebApp.BLL.Music
 
                 if (album != null)
                 {
-                    // Remove the album, CDs, and Tracks
                     _context.Albums.Remove(album);
                     await _context.SaveChangesAsync();
                 }
                 else
                 {
-                    Response.Error = new GenericWebApp.DTO.Common.Error { Message = "Item did not delete" };
+                    Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = "Item did not delete" });
                 }
             }
             catch (Exception ex)
             {
-                Response.Error = new GenericWebApp.DTO.Common.Error { Message = ex.Message };
+                Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = ex.Message });
             }
         }
 
         public override async Task SaveItemAsync(GenericWebApp.DTO.Music.Album dto)
         {
-            Response.Error = null;
+            Response.ErrorList.Clear();
 
             try
             {
@@ -60,7 +58,7 @@ namespace GenericWebApp.BLL.Music
                     var existingAlbum = await _context.Albums.Include(a => a.CDList).FirstOrDefaultAsync(a => a.ArtistName.ToLower() == dto.ArtistName.ToLower());
                     if (existingAlbum != null)
                     {
-                        Response.Error = new GenericWebApp.DTO.Common.Error { Message = "An album with the same artist name already exists." };
+                        Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = "An album with the same artist name already exists." });
                         return;
                     }
 
@@ -77,7 +75,7 @@ namespace GenericWebApp.BLL.Music
                     }
                     else
                     {
-                        Response.Error = new GenericWebApp.DTO.Common.Error { Message = "Album not found." };
+                        Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = "Album not found." });
                         return;
                     }
                 }
@@ -86,39 +84,44 @@ namespace GenericWebApp.BLL.Music
             }
             catch (Exception ex)
             {
-                Response.Error = new GenericWebApp.DTO.Common.Error { Message = ex.Message };
+                Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = ex.Message });
             }
         }
 
-        public override async Task<GenericWebApp.DTO.Music.Album> GetItemAsync(GenericWebApp.BLL.Music.MusicSearchDTO searchParams)
+        public override async Task GetItemAsync(GenericWebApp.BLL.Music.MusicSearchDTO searchParams)
         {
+            Response.ErrorList.Clear();
+
             try
             {
-                var album = await _context.Albums.Include(a => a.CDList).ThenInclude(cd => cd.TrackList)
+                var album = await _context.Albums
+                    .Include(a => a.CDList)
+                        .ThenInclude(cd => cd.TrackList)
                     .FirstOrDefaultAsync(a => a.ArtistName.ToLower() == searchParams.ArtistName.ToLower());
 
-                return GenericWebApp.Model.Music.Album.ParseDTO(album);
+                Response.Item = GenericWebApp.Model.Music.Album.ParseDTO(album);
             }
             catch (Exception ex)
             {
-                Response.Error = new GenericWebApp.DTO.Common.Error { Message = ex.Message };
-                return null;
+                Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = ex.Message });
+                Response.Item = null;
             }
         }
 
-        public override async Task<List<GenericWebApp.DTO.Music.Album>> GetListAsync(MusicSearchDTO searchParams)
+        public override async Task GetListAsync(GenericWebApp.BLL.Music.MusicSearchDTO searchParams)
         {
             try
             {
                 if (searchParams == null)
                 {
-                    Response.Error = new GenericWebApp.DTO.Common.Error { Message = "Search parameters are null" };
-                    return new List<GenericWebApp.DTO.Music.Album>();
+                    Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = "Search parameters are null" });
+                    Response.List = new List<GenericWebApp.DTO.Music.Album>();
+                    return;
                 }
 
                 var query = _context.Albums
                     .Include(a => a.CDList)
-                    .ThenInclude(cd => cd.TrackList)
+                        .ThenInclude(cd => cd.TrackList)
                     .AsQueryable();
 
                 if (!string.IsNullOrWhiteSpace(searchParams.ArtistName))
@@ -138,7 +141,6 @@ namespace GenericWebApp.BLL.Music
 
                 var albums = await query.ToListAsync();
 
-                // Filter down CDs and tracks if necessary
                 if (!string.IsNullOrWhiteSpace(searchParams.CdName))
                 {
                     foreach (var album in albums)
@@ -165,12 +167,12 @@ namespace GenericWebApp.BLL.Music
                     albums = albums.Where(album => album.CDList.Any()).ToList();
                 }
 
-                return albums.Select(GenericWebApp.Model.Music.Album.ParseDTO).ToList();
+                Response.List = albums.Select(GenericWebApp.Model.Music.Album.ParseDTO).ToList();
             }
             catch (Exception ex)
             {
-                Response.Error = new GenericWebApp.DTO.Common.Error { Message = ex.Message };
-                return new List<GenericWebApp.DTO.Music.Album>();
+                Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = ex.Message });
+                Response.List = new List<GenericWebApp.DTO.Music.Album>();
             }
         }
     }

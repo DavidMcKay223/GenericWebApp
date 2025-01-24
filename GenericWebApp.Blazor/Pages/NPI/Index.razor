@@ -68,9 +68,14 @@
             </div>
         </div>
     }
-    else if (npiReponse.Error != null)
+    else if (npiReponse.ErrorList != null && npiReponse.ErrorList.Count > 0)
     {
-        <div class="alert alert-danger">@npiReponse.Error.Message</div>
+        <div class="alert alert-danger">
+            @foreach (var Error in npiReponse.ErrorList)
+            {
+                <div>@Error.Message</div>
+            }
+        </div>
     }
     else if (npiReponse.List == null)
     {

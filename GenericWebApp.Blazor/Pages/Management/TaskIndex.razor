@@ -5,7 +5,7 @@
 
 @if (createNewTask)
 {
-    <TaskItemComponent TaskItem="@TaskItem" Service="@myService" DisplayCreate="@ButtonNew"></TaskItemComponent>
+    <TaskItemComponent TaskItem="@TaskItem" Service="@myService" DisplayCreate="@ButtonClose"></TaskItemComponent>
 }
 else
 {
@@ -38,17 +38,20 @@ else
             <button class="btn btn-danger" @onclick="@ButtonReset">Reset</button>
         </div>
 
-        @if (myService.Response.Error != null)
+        @if (myService.Response.ErrorList != null && myService.Response.ErrorList.Count > 0)
         {
             <div class="alert alert-danger">
-                @myService.Response.Error.Message
+                @foreach (var Error in myService.Response.ErrorList)
+                {
+                    <div>@Error.Message</div>
+                }
             </div>
         }
 
-        @if (TaskList != null)
+        @if (myService.Response.List != null)
         {
             <div class="row">
-                @foreach (var task in TaskList)
+                @foreach (var task in myService.Response.List)
                 {
                     <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
                         <div class="card h-100">
@@ -77,7 +80,6 @@ else
 
 @code {
     private TaskSeachDTO searchParams;
-    private List<TaskItem> TaskList;
     private TaskItem TaskItem;
 
     private Boolean createNewTask = false;
@@ -90,17 +92,19 @@ else
 
     async Task LoadTasksAsync()
     {
-        TaskList = await myService.GetListAsync(searchParams);
+        await myService.GetListAsync(searchParams);
     }
 
     async Task ButtonSearch()
     {
+        myService.Response.ErrorList.Clear();
         await LoadTasksAsync();
     }
 
     async Task ButtonReset()
     {
         searchParams = new TaskSeachDTO();
+        myService.Response.ErrorList.Clear();
         await LoadTasksAsync();
     }
 
@@ -114,6 +118,13 @@ else
     {
         TaskItem = null;
         createNewTask = !createNewTask;
+    }
+
+    async Task ButtonClose()
+    {
+        TaskItem = null;
+        createNewTask = !createNewTask;
+        await LoadTasksAsync();
     }
 
     private string Truncate(string value, int maxLength)

@@ -29,7 +29,9 @@ namespace GenericWebApp.BLL.NPI
 
             if (root?.Errors?.Count > 0)
             {
-                response.Error = new DTO.Common.Error { Message = string.Join("\r\n", root.Errors.Select(x => x.description)) };
+                response.ErrorList = new List<DTO.Common.Error>();
+
+                root.Errors.ForEach(x => response.ErrorList.Add(new DTO.Common.Error() { Message = x.description }));
             }
             else if (root?.results != null)
             {

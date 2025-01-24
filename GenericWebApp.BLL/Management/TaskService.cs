@@ -21,7 +21,7 @@ namespace GenericWebApp.BLL.Management
 
         public override async Task DeleteItemAsync(GenericWebApp.DTO.Management.TaskItem dto)
         {
-            Response.Error = null;
+            Response.ErrorList.Clear();
 
             try
             {
@@ -33,18 +33,18 @@ namespace GenericWebApp.BLL.Management
                 }
                 else
                 {
-                    Response.Error = new Error { Message = "Item did not delete" };
+                    Response.ErrorList.Add(new Error { Message = "Item did not delete" });
                 }
             }
             catch (Exception ex)
             {
-                Response.Error = new Error { Message = ex.Message };
+                Response.ErrorList.Add(new Error { Message = ex.Message });
             }
         }
 
-        public override async Task<GenericWebApp.DTO.Management.TaskItem> GetItemAsync(GenericWebApp.BLL.Management.TaskSeachDTO searchParams)
+        public override async Task GetItemAsync(GenericWebApp.BLL.Management.TaskSeachDTO searchParams)
         {
-            Response.Error = null;
+            Response.ErrorList.Clear();
 
             try
             {
@@ -59,19 +59,17 @@ namespace GenericWebApp.BLL.Management
                         (searchParams.CreatedDate.HasValue && t.CreatedDate >= searchParams.CreatedDate) ||
                         (searchParams.UpdatedDate.HasValue && t.UpdatedDate >= searchParams.UpdatedDate));
 
-                return GenericWebApp.Model.Management.TaskItem.ParseDTO(taskItem);
+                Response.Item = GenericWebApp.Model.Management.TaskItem.ParseDTO(taskItem);
             }
             catch (Exception ex)
             {
-                Response.Error = new Error { Message = ex.Message };
-                return null;
+                Response.ErrorList.Add(new Error { Message = ex.Message });
+                Response.Item = null;
             }
         }
 
-        public override async Task<List<GenericWebApp.DTO.Management.TaskItem>> GetListAsync(GenericWebApp.BLL.Management.TaskSeachDTO searchParams)
+        public override async Task GetListAsync(GenericWebApp.BLL.Management.TaskSeachDTO searchParams)
         {
-            Response.Error = null;
-
             try
             {
                 var query = _context.TaskItems.AsQueryable();
@@ -117,18 +115,18 @@ namespace GenericWebApp.BLL.Management
                 }
 
                 var taskItems = await query.ToListAsync();
-                return taskItems.Select(GenericWebApp.Model.Management.TaskItem.ParseDTO).ToList();
+                Response.List = taskItems.Select(GenericWebApp.Model.Management.TaskItem.ParseDTO).ToList();
             }
             catch (Exception ex)
             {
-                Response.Error = new Error { Message = ex.Message };
-                return new List<GenericWebApp.DTO.Management.TaskItem>();
+                Response.ErrorList.Add(new Error { Message = ex.Message });
+                Response.List = new List<GenericWebApp.DTO.Management.TaskItem>();
             }
         }
 
         public override async Task SaveItemAsync(GenericWebApp.DTO.Management.TaskItem dto)
         {
-            Response.Error = null;
+            Response.ErrorList.Clear();
 
             try
             {
@@ -157,7 +155,7 @@ namespace GenericWebApp.BLL.Management
             }
             catch (Exception ex)
             {
-                Response.Error = new Error { Message = ex.Message };
+                Response.ErrorList.Add(new Error { Message = ex.Message });
             }
         }
     }

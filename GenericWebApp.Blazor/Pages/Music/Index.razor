@@ -3,7 +3,7 @@
 
 @if (createNewAlbum)
 {
-    <MusicItemComponent Album="@Album" Service="@myService" DisplayCreate="@ButtonNew"></MusicItemComponent>
+    <MusicItemComponent Album="@Album" Service="@myService" DisplayCreate="@ButtonClose"></MusicItemComponent>
 }
 else
 {
@@ -32,17 +32,20 @@ else
             <button class="btn btn-danger" @onclick="@ButtonReset">Reset</button>
         </div>
 
-        @if (myService.Response.Error != null)
+        @if (myService.Response.ErrorList != null && myService.Response.ErrorList.Count > 0)
         {
             <div class="alert alert-danger">
-                @myService.Response.Error.Message
+                @foreach (var Error in myService.Response.ErrorList)
+                {
+                    <div>@Error.Message</div>
+                }
             </div>
         }
 
-        @if (AlbumList != null)
+        @if (myService.Response.List != null)
         {
             <div class="row g-3">
-                @foreach (DTO.Music.Album album in AlbumList)
+                @foreach (DTO.Music.Album album in myService.Response.List)
                 {
                     <div class="col-md-6">
                         <div class="card mb-3">
@@ -99,7 +102,6 @@ else
 
 @code {
     private BLL.Music.MusicSearchDTO searchParams;
-    private List<DTO.Music.Album> AlbumList;
     private DTO.Music.Album Album;
 
     private Boolean createNewAlbum = false;
@@ -112,17 +114,19 @@ else
 
     async Task LoadAlbumsAsync()
     {
-        AlbumList = await myService.GetListAsync(searchParams);
+        await myService.GetListAsync(searchParams);
     }
 
     async Task ButtonSearch()
     {
+        myService.Response.ErrorList.Clear();
         await LoadAlbumsAsync();
     }
 
     async Task ButtonReset()
     {
         searchParams = new BLL.Music.MusicSearchDTO();
+        myService.Response.ErrorList.Clear();
         await LoadAlbumsAsync();
     }
 
@@ -143,5 +147,12 @@ else
     {
         Album = null;
         createNewAlbum = !createNewAlbum;
+    }
+
+    async Task ButtonClose()
+    {
+        Album = null;
+        createNewAlbum = !createNewAlbum;
+        await LoadAlbumsAsync();
     }
 }

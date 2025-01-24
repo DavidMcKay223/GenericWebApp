@@ -10,11 +10,11 @@ namespace GenericWebApp.BLL.Common
 
         public ServiceManager()
         {
-            Response = new DTO.Common.Response<T>() { List = new List<T>() };
+            Response = new DTO.Common.Response<T>() { List = new List<T>(), ErrorList = new List<DTO.Common.Error>() };
         }
 
-        public abstract Task<List<T>> GetListAsync(Tdto searchParams);
-        public abstract Task<T> GetItemAsync(Tdto searchParams);
+        public abstract Task GetListAsync(Tdto searchParams);
+        public abstract Task GetItemAsync(Tdto searchParams);
         public abstract Task SaveItemAsync(T dto);
         public abstract Task DeleteItemAsync(T dto);
     }

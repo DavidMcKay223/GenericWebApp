@@ -15,8 +15,9 @@ namespace GenericWebApp.DTO.Common
 
     public class Response<T>
     {
+        public T Item { get; set; }
         public List<T> List { get; set; }
-        public Common.Error Error { get; set; }
+        public List<Common.Error> ErrorList { get; set; }
     }
 
     public class Error
