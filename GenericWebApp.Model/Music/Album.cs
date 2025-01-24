@@ -79,7 +79,7 @@ namespace GenericWebApp.Model.Music
 
             Model.Music.Album album = new Model.Music.Album
             {
-                ID = dto.ID,
+                ID = dto.ID ?? 0,
                 ArtistName = dto.ArtistName,
                 CDList = dto.CDList?.Select(cd => CD.ParseModel(cd)).ToList()
             };

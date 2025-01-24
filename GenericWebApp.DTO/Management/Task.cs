@@ -14,6 +14,8 @@ namespace GenericWebApp.DTO.Management
         public string TaskObjectType_Code { get; set; }
         public int? Task_Object_ID { get; set; }
         public int? TaskActivity_ID { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
     }
 
     public class TaskType

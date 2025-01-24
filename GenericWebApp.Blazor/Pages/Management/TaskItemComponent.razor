@@ -58,18 +58,11 @@ else
     [Parameter]
     public DTO.Management.TaskItem TaskItem { get; set; }
 
-    private bool isNew;
-
     protected override void OnInitialized()
     {
         if (TaskItem == null)
         {
             TaskItem = new DTO.Management.TaskItem();
-            isNew = true;
-        }
-        else
-        {
-            isNew = false;
         }
     }
 
@@ -77,7 +70,7 @@ else
     {
         try
         {
-            await Service.SaveItemAsync(TaskItem, isNew);
+            await Service.SaveItemAsync(TaskItem);
             await DisplayCreate.InvokeAsync();
         }
         catch (Exception ex)

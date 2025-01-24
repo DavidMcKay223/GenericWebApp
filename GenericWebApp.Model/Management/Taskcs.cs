@@ -57,6 +57,10 @@ namespace GenericWebApp.Model.Management
 
         public int? TaskActivity_ID { get; set; }
 
+        public DateTime? CreatedDate { get; set; }
+
+        public DateTime? UpdatedDate { get; set; }
+
         public static GenericWebApp.DTO.Management.TaskItem ParseDTO(GenericWebApp.Model.Management.TaskItem taskItem)
         {
             if (taskItem == null) return null;
@@ -68,7 +72,9 @@ namespace GenericWebApp.Model.Management
                 Description = taskItem.Description,
                 TaskObjectType_Code = taskItem.TaskObjectType_Code,
                 Task_Object_ID = taskItem.Task_Object_ID,
-                TaskActivity_ID = taskItem.TaskActivity_ID
+                TaskActivity_ID = taskItem.TaskActivity_ID,
+                CreatedDate = taskItem.CreatedDate,
+                UpdatedDate = taskItem.UpdatedDate
             };
 
             return dto;
@@ -85,7 +91,9 @@ namespace GenericWebApp.Model.Management
                 Description = dto.Description,
                 TaskObjectType_Code = dto.TaskObjectType_Code,
                 Task_Object_ID = dto.Task_Object_ID,
-                TaskActivity_ID = dto.TaskActivity_ID
+                TaskActivity_ID = dto.TaskActivity_ID,
+                CreatedDate = dto.CreatedDate,
+                UpdatedDate = dto.UpdatedDate
             };
 
             return taskItem;
@@ -212,32 +220,42 @@ namespace GenericWebApp.Model.Management
         [MaxLength(10)]
         public string TaskSubType_Code { get; set; }
 
-        public static GenericWebApp.DTO.Management.TaskActivity ParseDTO(GenericWebApp.Model.Management.TaskActivity taskActivity)
+        public static GenericWebApp.DTO.Management.TaskItem ParseDTO(GenericWebApp.Model.Management.TaskItem taskItem)
         {
-            if (taskActivity == null) return null;
+            if (taskItem == null) return null;
 
-            GenericWebApp.DTO.Management.TaskActivity dto = new GenericWebApp.DTO.Management.TaskActivity
+            GenericWebApp.DTO.Management.TaskItem dto = new GenericWebApp.DTO.Management.TaskItem
             {
-                ID = taskActivity.ID,
-                TaskType_Code = taskActivity.TaskType_Code,
-                TaskSubType_Code = taskActivity.TaskSubType_Code
+                ID = taskItem.ID,
+                Title = taskItem.Title,
+                Description = taskItem.Description,
+                TaskObjectType_Code = taskItem.TaskObjectType_Code,
+                Task_Object_ID = taskItem.Task_Object_ID,
+                TaskActivity_ID = taskItem.TaskActivity_ID,
+                CreatedDate = taskItem.CreatedDate,
+                UpdatedDate = taskItem.UpdatedDate
             };
 
             return dto;
         }
 
-        public static GenericWebApp.Model.Management.TaskActivity ParseModel(GenericWebApp.DTO.Management.TaskActivity dto)
+        public static GenericWebApp.Model.Management.TaskItem ParseModel(GenericWebApp.DTO.Management.TaskItem dto)
         {
             if (dto == null) return null;
 
-            GenericWebApp.Model.Management.TaskActivity taskActivity = new GenericWebApp.Model.Management.TaskActivity
+            GenericWebApp.Model.Management.TaskItem taskItem = new GenericWebApp.Model.Management.TaskItem
             {
                 ID = dto.ID,
-                TaskType_Code = dto.TaskType_Code,
-                TaskSubType_Code = dto.TaskSubType_Code
+                Title = dto.Title,
+                Description = dto.Description,
+                TaskObjectType_Code = dto.TaskObjectType_Code,
+                Task_Object_ID = dto.Task_Object_ID,
+                TaskActivity_ID = dto.TaskActivity_ID,
+                CreatedDate = dto.CreatedDate,
+                UpdatedDate = dto.UpdatedDate
             };
 
-            return taskActivity;
+            return taskItem;
         }
     }
 }

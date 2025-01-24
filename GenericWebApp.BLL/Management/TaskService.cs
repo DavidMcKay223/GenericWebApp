@@ -55,7 +55,9 @@ namespace GenericWebApp.BLL.Management
                         (!string.IsNullOrWhiteSpace(searchParams.TaskDescription) && t.Description.ToLower().Contains(searchParams.TaskDescription.ToLower())) ||
                         (!string.IsNullOrWhiteSpace(searchParams.TaskObjectType_Code) && t.TaskObjectType_Code.ToLower().Contains(searchParams.TaskObjectType_Code.ToLower())) ||
                         (searchParams.Task_Object_ID.HasValue && t.Task_Object_ID == searchParams.Task_Object_ID) ||
-                        (searchParams.TaskActivity_ID.HasValue && t.TaskActivity_ID == searchParams.TaskActivity_ID));
+                        (searchParams.TaskActivity_ID.HasValue && t.TaskActivity_ID == searchParams.TaskActivity_ID) ||
+                        (searchParams.CreatedDate.HasValue && t.CreatedDate >= searchParams.CreatedDate) ||
+                        (searchParams.UpdatedDate.HasValue && t.UpdatedDate >= searchParams.UpdatedDate));
 
                 return GenericWebApp.Model.Management.TaskItem.ParseDTO(taskItem);
             }
@@ -104,6 +106,16 @@ namespace GenericWebApp.BLL.Management
                     query = query.Where(t => t.TaskActivity_ID == searchParams.TaskActivity_ID);
                 }
 
+                if (searchParams.CreatedDate.HasValue)
+                {
+                    query = query.Where(t => t.CreatedDate >= searchParams.CreatedDate);
+                }
+
+                if (searchParams.UpdatedDate.HasValue)
+                {
+                    query = query.Where(t => t.UpdatedDate >= searchParams.UpdatedDate);
+                }
+
                 var taskItems = await query.ToListAsync();
                 return taskItems.Select(GenericWebApp.Model.Management.TaskItem.ParseDTO).ToList();
             }
@@ -114,7 +126,7 @@ namespace GenericWebApp.BLL.Management
             }
         }
 
-        public override async Task SaveItemAsync(GenericWebApp.DTO.Management.TaskItem dto, bool isNew = false)
+        public override async Task SaveItemAsync(GenericWebApp.DTO.Management.TaskItem dto)
         {
             Response.Error = null;
 
@@ -122,27 +134,23 @@ namespace GenericWebApp.BLL.Management
             {
                 var taskItem = GenericWebApp.Model.Management.TaskItem.ParseModel(dto);
 
-                if (isNew)
+                var existingTaskItem = await _context.TaskItems.FirstOrDefaultAsync(t => t.ID == dto.ID);
+                if (existingTaskItem != null)
                 {
-                    await _context.TaskItems.AddAsync(taskItem);
+                    existingTaskItem.Title = taskItem.Title;
+                    existingTaskItem.Description = taskItem.Description;
+                    existingTaskItem.TaskObjectType_Code = taskItem.TaskObjectType_Code;
+                    existingTaskItem.Task_Object_ID = taskItem.Task_Object_ID;
+                    existingTaskItem.TaskActivity_ID = taskItem.TaskActivity_ID;
+                    existingTaskItem.UpdatedDate = DateTime.UtcNow;
+
+                    _context.TaskItems.Update(existingTaskItem);
                 }
                 else
                 {
-                    var existingTaskItem = await _context.TaskItems.FirstOrDefaultAsync(t => t.ID == dto.ID);
-                    if (existingTaskItem != null)
-                    {
-                        existingTaskItem.Title = taskItem.Title;
-                        existingTaskItem.Description = taskItem.Description;
-                        existingTaskItem.TaskObjectType_Code = taskItem.TaskObjectType_Code;
-                        existingTaskItem.Task_Object_ID = taskItem.Task_Object_ID;
-                        existingTaskItem.TaskActivity_ID = taskItem.TaskActivity_ID;
-
-                        _context.TaskItems.Update(existingTaskItem);
-                    }
-                    else
-                    {
-                        await _context.TaskItems.AddAsync(taskItem);
-                    }
+                    taskItem.CreatedDate = DateTime.UtcNow;
+                    taskItem.UpdatedDate = DateTime.UtcNow;
+                    await _context.TaskItems.AddAsync(taskItem);
                 }
 
                 await _context.SaveChangesAsync();
@@ -162,5 +170,7 @@ namespace GenericWebApp.BLL.Management
         public string TaskObjectType_Code { get; set; }
         public int? Task_Object_ID { get; set; }
         public int? TaskActivity_ID { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
     }
 }

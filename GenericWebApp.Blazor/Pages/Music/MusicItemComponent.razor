@@ -97,18 +97,11 @@ else
     [Parameter]
     public DTO.Music.Album Album { get; set; }
 
-    private bool isNew;
-
     protected override void OnInitialized()
     {
         if (Album == null)
         {
             Album = new DTO.Music.Album();
-            isNew = true;
-        }
-        else
-        {
-            isNew = false;
         }
     }
 
@@ -131,7 +124,7 @@ else
     {
         try
         {
-            await Service.SaveItemAsync(Album, isNew);
+            await Service.SaveItemAsync(Album);
             await DisplayCreate.InvokeAsync();
         }
         catch (Exception ex)

@@ -47,8 +47,7 @@ namespace GenericWebApp.BLL.Music
             }
         }
 
-
-        public override async Task SaveItemAsync(GenericWebApp.DTO.Music.Album dto, bool isNew = false)
+        public override async Task SaveItemAsync(GenericWebApp.DTO.Music.Album dto)
         {
             Response.Error = null;
 
@@ -56,22 +55,20 @@ namespace GenericWebApp.BLL.Music
             {
                 var album = GenericWebApp.Model.Music.Album.ParseModel(dto);
 
-                if (isNew)
+                if (dto.ID == null)
                 {
-                    var existingAlbum = await _context.Albums.FirstOrDefaultAsync(a => a.ArtistName.ToLower() == dto.ArtistName.ToLower());
-                    if (existingAlbum == null)
+                    var existingAlbum = await _context.Albums.Include(a => a.CDList).FirstOrDefaultAsync(a => a.ArtistName.ToLower() == dto.ArtistName.ToLower());
+                    if (existingAlbum != null)
                     {
-                        await _context.Albums.AddAsync(album);
-                    }
-                    else
-                    {
-                        Response.Error = new GenericWebApp.DTO.Common.Error { Message = "Artist Exists Already" };
+                        Response.Error = new GenericWebApp.DTO.Common.Error { Message = "An album with the same artist name already exists." };
                         return;
                     }
+
+                    await _context.Albums.AddAsync(album);
                 }
                 else
                 {
-                    var existingAlbum = await _context.Albums.Include(a => a.CDList).FirstOrDefaultAsync(a => a.ArtistName.ToLower() == dto.ArtistName.ToLower());
+                    var existingAlbum = await _context.Albums.Include(a => a.CDList).FirstOrDefaultAsync(a => a.ID == dto.ID);
                     if (existingAlbum != null)
                     {
                         existingAlbum.ArtistName = album.ArtistName;
@@ -80,7 +77,8 @@ namespace GenericWebApp.BLL.Music
                     }
                     else
                     {
-                        await _context.Albums.AddAsync(album);
+                        Response.Error = new GenericWebApp.DTO.Common.Error { Message = "Album not found." };
+                        return;
                     }
                 }
 

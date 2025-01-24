@@ -15,7 +15,7 @@ namespace GenericWebApp.BLL.Common
 
         public abstract Task<List<T>> GetListAsync(Tdto searchParams);
         public abstract Task<T> GetItemAsync(Tdto searchParams);
-        public abstract Task SaveItemAsync(T dto, Boolean isNew = false);
+        public abstract Task SaveItemAsync(T dto);
         public abstract Task DeleteItemAsync(T dto);
     }
 }

@@ -1,5 +1,7 @@
 ﻿@page "/Management/Tasks"
-@inject BLL.Management.TaskService myService
+@using BLL.Management
+@using DTO.Management
+@inject TaskService myService
 
 @if (createNewTask)
 {
@@ -12,17 +14,21 @@ else
 
         <EditForm Model="@searchParams">
             <div class="row g-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="text_TaskTitle" class="form-label">Task Title</label>
                     <InputText id="text_TaskTitle" class="form-control" @bind-Value="searchParams.TaskTitle" />
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="text_TaskDescription" class="form-label">Task Description</label>
                     <InputText id="text_TaskDescription" class="form-control" @bind-Value="searchParams.TaskDescription" />
                 </div>
-                <div class="col-md-4">
-                    <label for="text_TaskObjectType_Code" class="form-label">Task Object Type</label>
-                    <InputText id="text_TaskObjectType_Code" class="form-control" @bind-Value="searchParams.TaskObjectType_Code" />
+                <div class="col-md-3">
+                    <label for="date_CreatedDate" class="form-label">Created Date</label>
+                    <InputDate id="date_CreatedDate" class="form-control" @bind-Value="searchParams.CreatedDate" />
+                </div>
+                <div class="col-md-3">
+                    <label for="date_UpdatedDate" class="form-label">Updated Date</label>
+                    <InputDate id="date_UpdatedDate" class="form-control" @bind-Value="searchParams.UpdatedDate" />
                 </div>
             </div>
         </EditForm>
@@ -41,18 +47,19 @@ else
 
         @if (TaskList != null)
         {
-            <div class="row g-3">
-                @foreach (DTO.Management.TaskItem task in TaskList)
+            <div class="row">
+                @foreach (var task in TaskList)
                 {
-                    <div class="col-md-6">
-                        <div class="card mb-3">
-                            <div class="card-header">
-                                <h4>@task.Title</h4>
-                            </div>
+                    <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                        <div class="card h-100">
                             <div class="card-body">
-                                <p>@task.Description</p>
+                                <h5 class="card-title">@Truncate(task.Title, 100)</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">
+                                    @(task.CreatedDate.HasValue ? task.CreatedDate.Value.ToShortDateString() : "No Date")
+                                </h6>
+                                <p class="card-text">@Truncate(task.Description, 100)</p>
                             </div>
-                            <div class="card-footer">
+                            <div class="card-footer text-center">
                                 <button class="btn btn-primary me-2" @onclick="(() => { TaskItem = task; createNewTask = !createNewTask; })">Edit</button>
                                 <button class="btn btn-danger" @onclick="() => ButtonDeleteTask(task)">Remove</button>
                             </div>
@@ -69,15 +76,15 @@ else
 }
 
 @code {
-    private BLL.Management.TaskSeachDTO searchParams;
-    private List<DTO.Management.TaskItem> TaskList;
-    private DTO.Management.TaskItem TaskItem;
+    private TaskSeachDTO searchParams;
+    private List<TaskItem> TaskList;
+    private TaskItem TaskItem;
 
     private Boolean createNewTask = false;
 
     protected override async Task OnInitializedAsync()
     {
-        searchParams = new BLL.Management.TaskSeachDTO();
+        searchParams = new TaskSeachDTO();
         await LoadTasksAsync();
     }
 
@@ -93,11 +100,11 @@ else
 
     async Task ButtonReset()
     {
-        searchParams = new BLL.Management.TaskSeachDTO();
+        searchParams = new TaskSeachDTO();
         await LoadTasksAsync();
     }
 
-    async Task ButtonDeleteTask(DTO.Management.TaskItem task)
+    async Task ButtonDeleteTask(TaskItem task)
     {
         await myService.DeleteItemAsync(task);
         await LoadTasksAsync();
@@ -107,5 +114,11 @@ else
     {
         TaskItem = null;
         createNewTask = !createNewTask;
+    }
+
+    private string Truncate(string value, int maxLength)
+    {
+        if (string.IsNullOrEmpty(value)) return value;
+        return value.Length <= maxLength ? value : value.Substring(0, maxLength) + "...";
     }
 }
