@@ -24,10 +24,8 @@ namespace GenericWebApp.DTO.Music
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public string Genre { get; set; }//DELETE
         public int? Album_ID { get; set; }
         public int? Genre_ID { get; set; }
-        public string Label { get; set; }//DELETE
         public int? Label_ID { get; set; }
 
         public Label LabelObj { get; set; }
@@ -51,6 +49,7 @@ namespace GenericWebApp.DTO.Music
 
     public class Label_Genre
     {
+        public int ID { get; set; }
         public int Genre_ID { get; set; }
         public int Label_ID { get; set; }
 

@@ -9,10 +9,22 @@
   <ItemGroup>
     <ProjectReference Include="..\GenericWebApp.BLL\GenericWebApp.BLL.csproj" />
     <ProjectReference Include="..\GenericWebApp.DTO\GenericWebApp.DTO.csproj" />
+    <ProjectReference Include="..\GenericWebApp.Model\GenericWebApp.Model.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Data\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

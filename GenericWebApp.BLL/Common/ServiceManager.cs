@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GenericWebApp.BLL.Common
@@ -17,9 +15,9 @@ namespace GenericWebApp.BLL.Common
             FirstRun = true;
         }
 
-        public abstract Task<List<T>> GetList(Tdto searchParams);
-        public abstract Task<T> GetItem(Tdto searchParams);
-        public abstract void SaveItem(T dto, Boolean isNew = false);
-        public abstract void DeleteItem(T dto);
+        public abstract Task<List<T>> GetListAsync(Tdto searchParams);
+        public abstract Task<T> GetItemAsync(Tdto searchParams);
+        public abstract Task SaveItemAsync(T dto, Boolean isNew = false);
+        public abstract Task DeleteItemAsync(T dto);
     }
 }

@@ -1,122 +1,147 @@
 ﻿using GenericWebApp.DTO.Music;
 using GenericWebApp.BLL.Common;
+using GenericWebApp.Model.Music;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace GenericWebApp.BLL.Music
 {
-    public class Service : Common.ServiceManager<DTO.Music.Album, MusicSearchDTO>
+    public class Service : GenericWebApp.BLL.Common.ServiceManager<GenericWebApp.DTO.Music.Album, GenericWebApp.BLL.Music.MusicSearchDTO>
     {
-        public override void DeleteItem(Album dto)
-        {
-            Response.Error = null;
+        private readonly AlbumContext _context;
 
-            // Delete Item from DB
-            if (!Response.List.Remove(dto))
-            {
-                Response.Error = new DTO.Common.Error() { Message = "Item did not delete" };
-            }
+        public Service(AlbumContext context)
+        {
+            _context = context;
         }
 
-        public override async void SaveItem(Album dto, Boolean isNew = false)
+        public override async Task DeleteItemAsync(GenericWebApp.DTO.Music.Album dto)
         {
             Response.Error = null;
 
-            if (isNew)
+            try
             {
-                if (Response.List.Count(x => String.Equals(x.ArtistName, dto.ArtistName, StringComparison.OrdinalIgnoreCase)) == 0)
+                // Find the album by artist name and include related CDs and Tracks
+                var album = await _context.Albums
+                    .Include(a => a.CDList)
+                        .ThenInclude(cd => cd.TrackList)
+                    .FirstOrDefaultAsync(a => a.ArtistName.ToLower() == dto.ArtistName.ToLower());
+
+                if (album != null)
                 {
-                    Response.List.Add(dto);
+                    // Remove the album, CDs, and Tracks
+                    _context.Albums.Remove(album);
+                    await _context.SaveChangesAsync();
                 }
                 else
                 {
-                    Response.Error = new DTO.Common.Error() { Message = "Artist Exists Already" };
+                    Response.Error = new GenericWebApp.DTO.Common.Error { Message = "Item did not delete" };
                 }
             }
-            else
+            catch (Exception ex)
             {
-                Album tempAlbum = Response.List.Find(x => x.ArtistName == dto.ArtistName);
-                if (tempAlbum != null && tempAlbum.CDList != null)
-                {
-                    tempAlbum.CDList = dto.CDList;
-                }
+                Response.Error = new GenericWebApp.DTO.Common.Error { Message = ex.Message };
             }
         }
 
-        public override async Task<DTO.Music.Album> GetItem(MusicSearchDTO searchParams)
+
+        public override async Task SaveItemAsync(GenericWebApp.DTO.Music.Album dto, bool isNew = false)
         {
             Response.Error = null;
-            throw new NotImplementedException();
+
+            try
+            {
+                var album = GenericWebApp.Model.Music.Album.ParseModel(dto);
+
+                if (isNew)
+                {
+                    var existingAlbum = await _context.Albums.FirstOrDefaultAsync(a => a.ArtistName.ToLower() == dto.ArtistName.ToLower());
+                    if (existingAlbum == null)
+                    {
+                        await _context.Albums.AddAsync(album);
+                    }
+                    else
+                    {
+                        Response.Error = new GenericWebApp.DTO.Common.Error { Message = "Artist Exists Already" };
+                        return;
+                    }
+                }
+                else
+                {
+                    var existingAlbum = await _context.Albums.Include(a => a.CDList).FirstOrDefaultAsync(a => a.ArtistName.ToLower() == dto.ArtistName.ToLower());
+                    if (existingAlbum != null)
+                    {
+                        existingAlbum.ArtistName = album.ArtistName;
+                        existingAlbum.CDList = album.CDList;
+                        _context.Albums.Update(existingAlbum);
+                    }
+                    else
+                    {
+                        await _context.Albums.AddAsync(album);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Response.Error = new GenericWebApp.DTO.Common.Error { Message = ex.Message };
+            }
         }
 
-        public override async Task<List<DTO.Music.Album>> GetList(MusicSearchDTO searchParams)
+        public override async Task<GenericWebApp.DTO.Music.Album> GetItemAsync(GenericWebApp.BLL.Music.MusicSearchDTO searchParams)
         {
-            List<DTO.Music.Album> myList = Response.List;
-
-            if (FirstRun)
+            try
             {
-                Response.List = Music.Fake.FakeCallDB();
+                var album = await _context.Albums.Include(a => a.CDList).ThenInclude(cd => cd.TrackList)
+                    .FirstOrDefaultAsync(a => a.ArtistName.ToLower() == searchParams.ArtistName.ToLower());
 
-                List<String> tempStrList = Response.List.Select(x => x.ArtistName).Distinct().ToList();
-                List<DTO.Music.Album> tempList = new List<Album>();
-
-                foreach (String tempStr in tempStrList)
-                {
-                    tempList.Add(new Album() { ArtistName = tempStr, CDList = Response.List.Where(x => x.ArtistName == tempStr && x.CDList != null).SelectMany(x => x.CDList).ToList() });
-                }
-
-                Response.List = tempList;
-                myList = Response.List;
-                FirstRun = false;
+                return GenericWebApp.Model.Music.Album.ParseDTO(album);
             }
-
-            if (searchParams != null)
+            catch (Exception ex)
             {
-                if (!searchParams.ArtistName.IsNullOrWhiteSpace())
-                {
-                    myList = myList.Where(x => x.ArtistName.SafeString().Contains(searchParams.ArtistName, StringComparison.OrdinalIgnoreCase)).ToList();
-                }
-
-                if (!searchParams.CdName.IsNullOrWhiteSpace())
-                {
-                    myList = myList.Where(x => x.CDList != null && x.CDList.Any(y => y.Name.SafeString().Contains(searchParams.CdName, StringComparison.OrdinalIgnoreCase))).ToList();
-                    myList = myList.Select(x => new Album
-                    {
-                        ArtistName = x.ArtistName,
-                        CDList = x.CDList.Where(y => y.Name.SafeString().Contains(searchParams.CdName, StringComparison.OrdinalIgnoreCase)).ToList()
-                    }).ToList();
-                }
-
-                if (!searchParams.CdLabel.IsNullOrWhiteSpace())
-                {
-                    myList = myList.Where(x => x.CDList != null && x.CDList.Any(y => y.Label.SafeString().Contains(searchParams.CdLabel, StringComparison.OrdinalIgnoreCase))).ToList();
-                    myList = myList.Select(x => new Album
-                    {
-                        ArtistName = x.ArtistName,
-                        CDList = x.CDList.Where(y => y.Label.SafeString().Contains(searchParams.CdLabel, StringComparison.OrdinalIgnoreCase)).ToList()
-                    }).ToList();
-                }
-
-                if (!searchParams.TrackTitle.IsNullOrWhiteSpace())
-                {
-                    myList = myList.Where(x => x.CDList != null && x.CDList.Any(y => y.TrackList != null && y.TrackList.Any(z => z.Title.SafeString().Contains(searchParams.TrackTitle, StringComparison.OrdinalIgnoreCase)))).ToList();
-                    myList = myList.Select(x => new Album
-                    {
-                        ArtistName = x.ArtistName,
-                        CDList = x.CDList.Select(y => new CD
-                        {
-                            Name = y.Name,
-                            Genre = y.Genre,
-                            Label = y.Label,
-                            TrackList = y.TrackList.Where(z => z.Title.SafeString().Contains(searchParams.TrackTitle, StringComparison.OrdinalIgnoreCase)).ToList()
-                        }).Where(y => y.TrackList.Any()).ToList()
-                    }).ToList();
-                }
+                Response.Error = new GenericWebApp.DTO.Common.Error { Message = ex.Message };
+                return null;
             }
+        }
 
-            return myList;
+        public override async Task<List<GenericWebApp.DTO.Music.Album>> GetListAsync(GenericWebApp.BLL.Music.MusicSearchDTO searchParams)
+        {
+            try
+            {
+                var query = _context.Albums.Include(a => a.CDList).ThenInclude(cd => cd.TrackList).AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(searchParams.ArtistName))
+                {
+                    query = query.Where(a => a.ArtistName.ToLower().Contains(searchParams.ArtistName.ToLower()));
+                }
+
+                if (!string.IsNullOrWhiteSpace(searchParams.CdName))
+                {
+                    query = query.Where(a => a.CDList.Any(cd => cd.Name.ToLower().Contains(searchParams.CdName.ToLower())));
+                }
+
+                if (!string.IsNullOrWhiteSpace(searchParams.CdLabel))
+                {
+                    query = query.Where(a => a.CDList.Any(cd => cd.LabelObj.Name.ToLower().Contains(searchParams.CdLabel.ToLower())));
+                }
+
+                if (!string.IsNullOrWhiteSpace(searchParams.TrackTitle))
+                {
+                    query = query.Where(a => a.CDList.Any(cd => cd.TrackList.Any(t => t.Title.ToLower().Contains(searchParams.TrackTitle.ToLower()))));
+                }
+
+                var albums = await query.ToListAsync();
+                return albums.Select(GenericWebApp.Model.Music.Album.ParseDTO).ToList();
+            }
+            catch (Exception ex)
+            {
+                Response.Error = new GenericWebApp.DTO.Common.Error { Message = ex.Message };
+                return new List<GenericWebApp.DTO.Music.Album>();
+            }
         }
     }
 

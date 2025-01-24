@@ -1,4 +1,5 @@
-﻿@page "/Music/"
+﻿@page "/Music"
+@inject BLL.Music.Service myService
 
 @if (createNewAlbum)
 {
@@ -59,8 +60,8 @@ else
                                     {
                                         <div class="card mb-3">
                                             <div class="card-header">
-                                                <h5>@cd.Name (@cd.Genre)</h5>
-                                                <h6>@cd.Label</h6>
+                                                <h5>@cd.Name (@cd.Genre_ID)</h5>
+                                                <h6>@cd.LabelObj</h6>
                                             </div>
                                             <div class="card-body">
                                                 <label>Track</label>
@@ -86,7 +87,7 @@ else
                                 }
                             </div>
                             <div class="card-footer">
-                                <button class="btn btn-primary me-2" @onclick="(() =>{ Album = album; createNewAlbum = !createNewAlbum; })">Edit</button>
+                                <button class="btn btn-primary me-2" @onclick="(() => { Album = album; createNewAlbum = !createNewAlbum; })">Edit</button>
                                 <button class="btn btn-danger" @onclick="() => ButtonDeleteAlbum(album)">Remove</button>
                             </div>
                         </div>
@@ -102,47 +103,50 @@ else
 }
 
 @code {
-    private BLL.Music.Service myService = new BLL.Music.Service();
     private BLL.Music.MusicSearchDTO searchParams;
     private List<DTO.Music.Album> AlbumList;
     private DTO.Music.Album Album;
 
     private Boolean createNewAlbum = false;
 
-    protected async override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         searchParams = new BLL.Music.MusicSearchDTO();
-        AlbumList = await myService.GetList(searchParams);
+        await LoadAlbumsAsync();
+    }
+
+    async Task LoadAlbumsAsync()
+    {
+        AlbumList = await myService.GetListAsync(searchParams);
     }
 
     async Task ButtonSearch()
     {
-        AlbumList = await myService.GetList(searchParams);
+        await LoadAlbumsAsync();
     }
 
     async Task ButtonReset()
     {
         searchParams = new BLL.Music.MusicSearchDTO();
-        AlbumList = await myService.GetList(searchParams);
+        await LoadAlbumsAsync();
     }
 
     async Task ButtonDeleteAlbum(DTO.Music.Album album)
     {
-        myService.DeleteItem(album);
-        AlbumList = await myService.GetList(searchParams);
+        await myService.DeleteItemAsync(album);
+        await LoadAlbumsAsync();
     }
 
     async Task ButtonDeleteCD(DTO.Music.Album album, DTO.Music.CD cd)
     {
         album.CDList.Remove(cd);
-        myService.SaveItem(album);
-        AlbumList = await myService.GetList(searchParams);
+        await myService.SaveItemAsync(album);
+        await LoadAlbumsAsync();
     }
 
     async Task ButtonNew()
     {
         Album = null;
         createNewAlbum = !createNewAlbum;
-        AlbumList = await myService.GetList(searchParams);
     }
 }
