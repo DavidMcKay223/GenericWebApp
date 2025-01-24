@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="bin\**" />
+    <Content Remove="bin\**" />
+    <EmbeddedResource Remove="bin\**" />
+    <None Remove="bin\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GenericWebApp.BLL\GenericWebApp.BLL.csproj" />
     <ProjectReference Include="..\GenericWebApp.DTO\GenericWebApp.DTO.csproj" />
     <ProjectReference Include="..\GenericWebApp.Model\GenericWebApp.Model.csproj" />

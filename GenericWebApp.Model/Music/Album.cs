@@ -9,45 +9,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GenericWebApp.Model.Music
 {
-    public class AlbumContext : DbContext
-    {
-        public DbSet<Album> Albums { get; set; }
-        public DbSet<CD> CDs { get; set; }
-        public DbSet<Track> Tracks { get; set; }
-        public DbSet<Genre> Genres { get; set; }
-
-        public AlbumContext(DbContextOptions<AlbumContext> options) : base(options)
-        {
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("DefaultConnection", options =>
-                options.EnableRetryOnFailure(
-                    maxRetryCount: 5,
-                    maxRetryDelay: TimeSpan.FromSeconds(30),
-                    errorNumbersToAdd: null));
-            }
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Album>()
-                .HasMany(a => a.CDList)
-                .WithOne(cd => cd.Album)
-                .HasForeignKey(cd => cd.Album_ID)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<CD>()
-                .HasMany(cd => cd.TrackList)
-                .WithOne(track => track.CD)
-                .HasForeignKey(track => track.CD_ID)
-                .OnDelete(DeleteBehavior.Cascade);
-        }
-    }
-
     [Table("Music_Album")]
     public class Album
     {
