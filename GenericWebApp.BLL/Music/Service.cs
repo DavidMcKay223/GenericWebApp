@@ -18,6 +18,20 @@ namespace GenericWebApp.BLL.Music
             _context = context;
         }
 
+        public List<DTO.Common.ValuePair> GetGenreList()
+        {
+            List<DTO.Common.ValuePair> myList = new List<DTO.Common.ValuePair>();
+
+            var genres = _context.Genres.ToList();
+
+            foreach (var genre in genres)
+            {
+                myList.Add(new DTO.Common.ValuePair { Description = genre.Description, ID = genre.ID });
+            }
+
+            return myList;
+        }
+
         public override async Task DeleteItemAsync(GenericWebApp.DTO.Music.Album dto)
         {
             Response.ErrorList.Clear();
@@ -142,6 +156,11 @@ namespace GenericWebApp.BLL.Music
                     query = query.Where(a => a.CDList.Any(cd => cd.TrackList.Any(t => t.Title.ToLower().Contains(searchParams.TrackTitle.ToLower()))));
                 }
 
+                if (searchParams.GenreID.HasValue)
+                {
+                    query = query.Where(a => a.CDList.Any(cd => cd.Genre_ID == searchParams.GenreID.Value));
+                }
+
                 var albums = await query.ToListAsync();
 
                 if (!string.IsNullOrWhiteSpace(searchParams.CdName))
@@ -170,6 +189,17 @@ namespace GenericWebApp.BLL.Music
                     albums = albums.Where(album => album.CDList.Any()).ToList();
                 }
 
+                if (searchParams.GenreID.HasValue)
+                {
+                    foreach (var album in albums)
+                    {
+                        album.CDList = album.CDList
+                            .Where(cd => cd.Genre_ID == searchParams.GenreID.Value)
+                            .ToList();
+                    }
+                    albums = albums.Where(album => album.CDList.Any()).ToList();
+                }
+
                 Response.List = albums.Select(GenericWebApp.Model.Music.Album.ParseDTO).ToList();
             }
             catch (Exception ex)
@@ -185,5 +215,6 @@ namespace GenericWebApp.BLL.Music
         public string ArtistName { get; set; }
         public string CdName { get; set; }
         public string TrackTitle { get; set; }
+        public int? GenreID { get; set; }
     }
 }

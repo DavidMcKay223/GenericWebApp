@@ -35,17 +35,19 @@ else
                                 </div>
                                 <div class="card-body">
                                     <div class="row g-3">
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <label for="text_CDName" class="form-label">CD Name</label>
                                             <InputText id="text_CDName" class="form-control" @bind-Value="cd.Name" />
                                         </div>
-                                        <div class="col-md-4">
-                                            <label for="text_CDGenre" class="form-label">Genre</label>
-                                            @*<InputText id="text_CDGenre" class="form-control" @bind-Value="cd.Genre" />*@
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="text_CDLabel" class="form-label">Label</label>
-                                            @*<InputText id="text_CDLabel" class="form-control" @bind-Value="cd.Label" />*@
+                                        <div class="col-md-6">
+                                            <label for="ddl_genre" class="form-label">Genre</label>
+                                            <InputSelect id="ddl_genre" class="form-select" @bind-Value="cd.Genre_ID">
+                                                <option value="">Select Genre</option>
+                                                @foreach (var myGenre in myGenreList)
+                                                {
+                                                    <option value="@myGenre.ID">@myGenre.Description</option>
+                                                }
+                                            </InputSelect>
                                         </div>
                                     </div>
                                     <div class="row g-3 mt-3">
@@ -99,12 +101,16 @@ else
     [Parameter]
     public DTO.Music.Album Album { get; set; }
 
+    private List<DTO.Common.ValuePair> myGenreList;
+
     protected override void OnInitialized()
     {
         if (Album == null)
         {
             Album = new DTO.Music.Album();
         }
+
+        myGenreList = Service.GetGenreList();
     }
 
     private async Task ButtonNewTrack(DTO.Music.CD tempCd)
