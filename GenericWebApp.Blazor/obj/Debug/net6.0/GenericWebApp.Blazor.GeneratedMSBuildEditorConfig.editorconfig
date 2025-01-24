@@ -23,6 +23,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/David/source/repos/GenericWebApp/GenericWebApp.Blazor/Pages/Management/TaskIndex.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFuYWdlbWVudFxUYXNrSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/David/source/repos/GenericWebApp/GenericWebApp.Blazor/Pages/Management/TaskItemComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFuYWdlbWVudFxUYXNrSXRlbUNvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/David/source/repos/GenericWebApp/GenericWebApp.Blazor/Pages/Music/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTXVzaWNcSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 

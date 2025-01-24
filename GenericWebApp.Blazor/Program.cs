@@ -3,12 +3,15 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using GenericWebApp.BLL.Music;
 using GenericWebApp.Model.Music;
+using GenericWebApp.Model.Management;
+using GenericWebApp.BLL.Management;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
 builder.Services.AddDbContext<AlbumContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -21,7 +24,20 @@ builder.Services.AddDbContext<AlbumContext>(options =>
                 errorNumbersToAdd: null);
         }));
 
+builder.Services.AddDbContext<ManagementContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlOptions =>
+        {
+            sqlOptions.MigrationsAssembly("GenericWebApp.Model");
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null);
+        }));
+
 builder.Services.AddScoped<Service>();
+builder.Services.AddScoped<TaskService>();
 
 var app = builder.Build();
 

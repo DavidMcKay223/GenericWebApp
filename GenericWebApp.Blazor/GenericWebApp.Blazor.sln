@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericWebApp.DTO", "..\Gen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericWebApp.Model", "..\GenericWebApp.Model\GenericWebApp.Model.csproj", "{05A187D0-021D-4C11-B036-352BE9F8A71D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericWebApp.ConsoleApp", "..\GenericWebApp.ConsoleApp\GenericWebApp.ConsoleApp.csproj", "{B9D86B05-DDE3-4876-99D9-174C5E078D8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericWebApp.ConsoleApp", "..\GenericWebApp.ConsoleApp\GenericWebApp.ConsoleApp.csproj", "{B9D86B05-DDE3-4876-99D9-174C5E078D8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

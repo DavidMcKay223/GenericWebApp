@@ -1,0 +1,93 @@
+﻿@using GenericWebApp.DTO.Management
+@using GenericWebApp.BLL.Management
+@using GenericWebApp.Blazor.Shared.Common
+
+<h3 class="my-4">Task Item</h3>
+
+@if (TaskItem == null)
+{
+    <div class="alert alert-warning">No task selected.</div>
+}
+else
+{
+    <EditForm Model="@TaskItem" OnValidSubmit="@ButtonSave">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Task Details</h4>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <label for="text_TaskTitle" class="form-label">Task Title</label>
+                        <InputText id="text_TaskTitle" class="form-control" @bind-Value="TaskItem.Title" />
+                    </div>
+                    <div class="col-md-12">
+                        <label for="text_TaskDescription" class="form-label">Task Description</label>
+                        <InputText id="text_TaskDescription" class="form-control" @bind-Value="TaskItem.Description" />
+                    </div>
+                    <div class="col-md-12">
+                        <label for="text_TaskObjectType_Code" class="form-label">Task Object Type Code</label>
+                        <InputText id="text_TaskObjectType_Code" class="form-control" @bind-Value="TaskItem.TaskObjectType_Code" />
+                    </div>
+                    <div class="col-md-12">
+                        <label for="text_Task_Object_ID" class="form-label">Task Object ID</label>
+                        <InputNumber id="text_Task_Object_ID" class="form-control" @bind-Value="TaskItem.Task_Object_ID" />
+                    </div>
+                    <div class="col-md-12">
+                        <label for="text_TaskActivity_ID" class="form-label">Task Activity ID</label>
+                        <InputNumber id="text_TaskActivity_ID" class="form-control" @bind-Value="TaskItem.TaskActivity_ID" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </EditForm>
+}
+
+<div class="mt-4">
+    <button type="button" class="btn btn-primary me-2" @onclick="@ButtonSave">Save</button>
+    <button type="button" class="btn btn-secondary" @onclick="@ButtonCancel">Cancel</button>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback DisplayCreate { get; set; }
+
+    [Parameter]
+    public BLL.Management.TaskService Service { get; set; }
+
+    [Parameter]
+    public DTO.Management.TaskItem TaskItem { get; set; }
+
+    private bool isNew;
+
+    protected override void OnInitialized()
+    {
+        if (TaskItem == null)
+        {
+            TaskItem = new DTO.Management.TaskItem();
+            isNew = true;
+        }
+        else
+        {
+            isNew = false;
+        }
+    }
+
+    private async Task ButtonSave()
+    {
+        try
+        {
+            await Service.SaveItemAsync(TaskItem, isNew);
+            await DisplayCreate.InvokeAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error saving task: {ex.Message}");
+        }
+    }
+
+    private async Task ButtonCancel()
+    {
+        await DisplayCreate.InvokeAsync();
+    }
+}

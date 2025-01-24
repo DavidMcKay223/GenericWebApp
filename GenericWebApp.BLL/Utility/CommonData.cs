@@ -23,6 +23,17 @@ namespace GenericWebApp.BLL.Utility
                 }
             });
 
+            myList.Add(new DTO.Common.NavBarItem()
+            {
+                Description = "Management",
+                Class = "oi-basket",
+                Href = "management",
+                ChildNavBarList = new List<DTO.Common.NavBarItem>()
+                {
+                    new DTO.Common.NavBarItem() { Description = "Task", Class = "oi-book", Href = "/management/tasks" }
+                }
+            });
+
             myList.Add(new DTO.Common.NavBarItem() { Description = "NPI Registry", Class = "oi-list-rich", Href = "npi" });
 
             return myList;
