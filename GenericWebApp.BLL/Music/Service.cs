@@ -108,11 +108,20 @@ namespace GenericWebApp.BLL.Music
             }
         }
 
-        public override async Task<List<GenericWebApp.DTO.Music.Album>> GetListAsync(GenericWebApp.BLL.Music.MusicSearchDTO searchParams)
+        public override async Task<List<GenericWebApp.DTO.Music.Album>> GetListAsync(MusicSearchDTO searchParams)
         {
             try
             {
-                var query = _context.Albums.Include(a => a.CDList).ThenInclude(cd => cd.TrackList).AsQueryable();
+                if (searchParams == null)
+                {
+                    Response.Error = new GenericWebApp.DTO.Common.Error { Message = "Search parameters are null" };
+                    return new List<GenericWebApp.DTO.Music.Album>();
+                }
+
+                var query = _context.Albums
+                    .Include(a => a.CDList)
+                    .ThenInclude(cd => cd.TrackList)
+                    .AsQueryable();
 
                 if (!string.IsNullOrWhiteSpace(searchParams.ArtistName))
                 {
@@ -124,17 +133,40 @@ namespace GenericWebApp.BLL.Music
                     query = query.Where(a => a.CDList.Any(cd => cd.Name.ToLower().Contains(searchParams.CdName.ToLower())));
                 }
 
-                if (!string.IsNullOrWhiteSpace(searchParams.CdLabel))
-                {
-                    query = query.Where(a => a.CDList.Any(cd => cd.LabelObj.Name.ToLower().Contains(searchParams.CdLabel.ToLower())));
-                }
-
                 if (!string.IsNullOrWhiteSpace(searchParams.TrackTitle))
                 {
                     query = query.Where(a => a.CDList.Any(cd => cd.TrackList.Any(t => t.Title.ToLower().Contains(searchParams.TrackTitle.ToLower()))));
                 }
 
                 var albums = await query.ToListAsync();
+
+                // Filter down CDs and tracks if necessary
+                if (!string.IsNullOrWhiteSpace(searchParams.CdName))
+                {
+                    foreach (var album in albums)
+                    {
+                        album.CDList = album.CDList
+                            .Where(cd => cd.Name.ToLower().Contains(searchParams.CdName.ToLower()))
+                            .ToList();
+                    }
+                    albums = albums.Where(album => album.CDList.Any()).ToList();
+                }
+
+                if (!string.IsNullOrWhiteSpace(searchParams.TrackTitle))
+                {
+                    foreach (var album in albums)
+                    {
+                        foreach (var cd in album.CDList)
+                        {
+                            cd.TrackList = cd.TrackList
+                                .Where(t => t.Title.ToLower().Contains(searchParams.TrackTitle.ToLower()))
+                                .ToList();
+                        }
+                        album.CDList = album.CDList.Where(cd => cd.TrackList.Any()).ToList();
+                    }
+                    albums = albums.Where(album => album.CDList.Any()).ToList();
+                }
+
                 return albums.Select(GenericWebApp.Model.Music.Album.ParseDTO).ToList();
             }
             catch (Exception ex)
@@ -150,6 +182,5 @@ namespace GenericWebApp.BLL.Music
         public string ArtistName { get; set; }
         public string CdName { get; set; }
         public string TrackTitle { get; set; }
-        public string CdLabel { get; set; }
     }
 }

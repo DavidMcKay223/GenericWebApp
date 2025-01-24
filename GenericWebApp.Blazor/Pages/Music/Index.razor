@@ -12,21 +12,17 @@ else
 
         <EditForm Model="@searchParams">
             <div class="row g-3">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label for="text_ArtistName" class="form-label">Artist Name</label>
                     <InputText id="text_ArtistName" class="form-control" @bind-Value="searchParams.ArtistName" />
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label for="text_CdName" class="form-label">CD Name</label>
                     <InputText id="text_CdName" class="form-control" @bind-Value="searchParams.CdName" />
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label for="text_TrackTitle" class="form-label">Track Title</label>
                     <InputText id="text_TrackTitle" class="form-control" @bind-Value="searchParams.TrackTitle" />
-                </div>
-                <div class="col-md-3">
-                    <label for="text_CdLabel" class="form-label">Label</label>
-                    <InputText id="text_CdLabel" class="form-control" @bind-Value="searchParams.CdLabel" />
                 </div>
             </div>
         </EditForm>
@@ -61,7 +57,6 @@ else
                                         <div class="card mb-3">
                                             <div class="card-header">
                                                 <h5>@cd.Name (@cd.Genre_ID)</h5>
-                                                <h6>@cd.LabelObj</h6>
                                             </div>
                                             <div class="card-body">
                                                 <label>Track</label>

@@ -19,4 +19,8 @@
     <ProjectReference Include="..\GenericWebApp.DTO\GenericWebApp.DTO.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

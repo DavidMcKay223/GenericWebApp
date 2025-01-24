@@ -48,16 +48,10 @@ namespace GenericWebApp.Model.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
-                    b.Property<int?>("AlbumID")
-                        .HasColumnType("int");
-
                     b.Property<int?>("Album_ID")
                         .HasColumnType("int");
 
                     b.Property<int?>("Genre_ID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Label_ID")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -67,9 +61,7 @@ namespace GenericWebApp.Model.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("AlbumID");
-
-                    b.HasIndex("Label_ID");
+                    b.HasIndex("Album_ID");
 
                     b.ToTable("Music_CD");
                 });
@@ -87,66 +79,9 @@ namespace GenericWebApp.Model.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<int?>("LabelID")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
-
-                    b.HasIndex("LabelID");
 
                     b.ToTable("Music_Genre");
-                });
-
-            modelBuilder.Entity("GenericWebApp.Model.Music.Label", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
-
-                    b.Property<DateTime?>("Defunct")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Founded")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Founder")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Music_Label");
-                });
-
-            modelBuilder.Entity("GenericWebApp.Model.Music.Label_Genre", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
-
-                    b.Property<int>("Genre_ID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Label_ID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("Genre_ID");
-
-                    b.HasIndex("Label_ID");
-
-                    b.ToTable("Music_Label_Genre");
                 });
 
             modelBuilder.Entity("GenericWebApp.Model.Music.Track", b =>
@@ -156,9 +91,6 @@ namespace GenericWebApp.Model.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
-
-                    b.Property<int?>("CDID")
-                        .HasColumnType("int");
 
                     b.Property<int>("CD_ID")
                         .HasColumnType("int");
@@ -176,55 +108,30 @@ namespace GenericWebApp.Model.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("CDID");
+                    b.HasIndex("CD_ID");
 
                     b.ToTable("Music_Track");
                 });
 
             modelBuilder.Entity("GenericWebApp.Model.Music.CD", b =>
                 {
-                    b.HasOne("GenericWebApp.Model.Music.Album", null)
+                    b.HasOne("GenericWebApp.Model.Music.Album", "Album")
                         .WithMany("CDList")
-                        .HasForeignKey("AlbumID");
+                        .HasForeignKey("Album_ID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("GenericWebApp.Model.Music.Label", "LabelObj")
-                        .WithMany()
-                        .HasForeignKey("Label_ID");
-
-                    b.Navigation("LabelObj");
-                });
-
-            modelBuilder.Entity("GenericWebApp.Model.Music.Genre", b =>
-                {
-                    b.HasOne("GenericWebApp.Model.Music.Label", null)
-                        .WithMany("GenreList")
-                        .HasForeignKey("LabelID");
-                });
-
-            modelBuilder.Entity("GenericWebApp.Model.Music.Label_Genre", b =>
-                {
-                    b.HasOne("GenericWebApp.Model.Music.Genre", "Genre")
-                        .WithMany()
-                        .HasForeignKey("Genre_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GenericWebApp.Model.Music.Label", "Label")
-                        .WithMany()
-                        .HasForeignKey("Label_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Genre");
-
-                    b.Navigation("Label");
+                    b.Navigation("Album");
                 });
 
             modelBuilder.Entity("GenericWebApp.Model.Music.Track", b =>
                 {
-                    b.HasOne("GenericWebApp.Model.Music.CD", null)
+                    b.HasOne("GenericWebApp.Model.Music.CD", "CD")
                         .WithMany("TrackList")
-                        .HasForeignKey("CDID");
+                        .HasForeignKey("CD_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CD");
                 });
 
             modelBuilder.Entity("GenericWebApp.Model.Music.Album", b =>
@@ -235,11 +142,6 @@ namespace GenericWebApp.Model.Migrations
             modelBuilder.Entity("GenericWebApp.Model.Music.CD", b =>
                 {
                     b.Navigation("TrackList");
-                });
-
-            modelBuilder.Entity("GenericWebApp.Model.Music.Label", b =>
-                {
-                    b.Navigation("GenreList");
                 });
 #pragma warning restore 612, 618
         }

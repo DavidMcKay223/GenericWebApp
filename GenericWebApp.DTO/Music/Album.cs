@@ -15,8 +15,7 @@ namespace GenericWebApp.DTO.Music
         public bool Equals(Album? other)
         {
             if (other == null) return false;
-
-            return (String.Equals(ArtistName, other.ArtistName, StringComparison.OrdinalIgnoreCase));
+            return String.Equals(ArtistName, other.ArtistName, StringComparison.OrdinalIgnoreCase);
         }
     }
 
@@ -26,9 +25,7 @@ namespace GenericWebApp.DTO.Music
         public string Name { get; set; }
         public int? Album_ID { get; set; }
         public int? Genre_ID { get; set; }
-        public int? Label_ID { get; set; }
 
-        public Label LabelObj { get; set; }
         public List<Track> TrackList { get; set; }
     }
 
@@ -45,25 +42,5 @@ namespace GenericWebApp.DTO.Music
     {
         public int ID { get; set; }
         public string Description { get; set; }
-    }
-
-    public class Label_Genre
-    {
-        public int ID { get; set; }
-        public int Genre_ID { get; set; }
-        public int Label_ID { get; set; }
-
-        public Genre Genre { get; set; }
-        public Label Label { get; set; }
-    }
-
-    public class Label
-    {
-        public int ID { get; set; } = 0;
-        public string Name { get; set; }
-        public DateTime? Founded { get; set; }
-        public string Founder { get; set; }
-        public DateTime? Defunct { get; set; }
-        public List<Genre> GenreList { get; set; }
     }
 }
