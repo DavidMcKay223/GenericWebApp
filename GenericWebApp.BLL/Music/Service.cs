@@ -55,7 +55,7 @@ namespace GenericWebApp.BLL.Music
             }
             catch (Exception ex)
             {
-                Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = "Exception", Message = ex.Message });
+                Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = ex.Source, Message = ex.Message });
             }
         }
 
@@ -100,7 +100,7 @@ namespace GenericWebApp.BLL.Music
                 }
                 catch (Exception ex)
                 {
-                    Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = "Exception", Message = ex.Message });
+                    Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = ex.Source, Message = ex.Message });
                 }
             }
         }
@@ -120,7 +120,7 @@ namespace GenericWebApp.BLL.Music
             }
             catch (Exception ex)
             {
-                Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = "Exception", Message = ex.Message });
+                Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = ex.Source, Message = ex.Message });
                 Response.Item = null;
             }
         }
@@ -204,7 +204,7 @@ namespace GenericWebApp.BLL.Music
             }
             catch (Exception ex)
             {
-                Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = "Exception", Message = ex.Message });
+                Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = ex.Source, Message = ex.Message });
                 Response.List = new List<GenericWebApp.DTO.Music.Album>();
             }
         }

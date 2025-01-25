@@ -15,10 +15,12 @@ namespace GenericWebApp.UnitTest.Common
         public AlbumDatabaseFixture()
         {
             var options = new DbContextOptionsBuilder<Model.Music.AlbumContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .UseSqlite("DataSource=:memory:")
                 .Options;
 
             Context = new Model.Music.AlbumContext(options);
+            Context.Database.OpenConnection();
+            Context.Database.EnsureCreated();
             SeedData();
         }
 

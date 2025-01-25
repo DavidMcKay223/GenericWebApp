@@ -113,18 +113,34 @@ namespace GenericWebApp.UnitTest.Music
             var assertCollection = new AssertCollection("Deleting CD from album");
 
             // Arrange
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
             var album = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
-            var cdToDelete = album.CDList.Find(cd => cd.Name == "Abbey Road");
+            var cdToDelete = album?.CDList.Find(cd => cd.Name == "Abbey Road");
+            assertCollection.Assert("The CD to delete should exist", () => Assert.NotNull(cdToDelete));
 
             // Act
-            album.CDList.Remove(cdToDelete);
-            await _service.SaveItemAsync(album);
-            await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
+            if (cdToDelete != null)
+            {
+                album.CDList.Remove(cdToDelete);
 
-            // Assert
-            var savedAlbum = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
-            assertCollection.Assert("Album should still exist", () => Assert.NotNull(savedAlbum));
-            assertCollection.Assert("CD should be removed from album", () => Assert.DoesNotContain(savedAlbum.CDList, cd => cd.Name == "Abbey Road"));
+                // Convert album DTO to model before saving
+                await _service.SaveItemAsync(album);
+
+                // Check for errors and display code and description for each message
+                var errorMessages = string.Join(", ", _service.Response.ErrorList.Select(e => $"\n\t\tCode: {e.Code}, \n\t\tDescription: {e.Message}"));
+                assertCollection.Assert("No errors should be present",
+                    () => Assert.False(_service.Response.ErrorList.Any(),
+                    $"Errors: {errorMessages}"));
+
+                // Re-fetch the album object to ensure it's updated
+                await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
+                var savedAlbum = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
+
+                // Assert
+                assertCollection.Assert("Album should still exist", () => Assert.NotNull(savedAlbum));
+                assertCollection.Assert("CD should be removed from album", () => Assert.DoesNotContain(savedAlbum.CDList, cd => cd.Name == "Abbey Road"));
+            }
+
             assertCollection.Verify();
         }
 
@@ -135,6 +151,7 @@ namespace GenericWebApp.UnitTest.Music
             var assertCollection = new AssertCollection("Deleting track from CD");
 
             // Arrange
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
             var album = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
             var cd = album.CDList.Find(cd => cd.Name == "Abbey Road");
             var trackToDelete = cd.TrackList.Find(track => track.Title == "Come Together");

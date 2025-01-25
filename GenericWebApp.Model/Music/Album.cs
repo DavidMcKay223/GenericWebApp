@@ -63,7 +63,7 @@ namespace GenericWebApp.Model.Music
         public int? Genre_ID { get; set; }
 
         public List<Track> TrackList { get; set; }
-        public Album Album { get; internal set; }
+        public Album Album { get; set; }
 
         public static DTO.Music.CD ParseDTO(Model.Music.CD cd)
         {
@@ -112,7 +112,7 @@ namespace GenericWebApp.Model.Music
         public int CD_ID { get; set; }
 
         public TimeSpan Length { get; set; }
-        public CD CD { get; internal set; }
+        public CD CD { get; set; }
 
         public static DTO.Music.Track ParseDTO(Model.Music.Track track)
         {

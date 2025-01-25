@@ -38,7 +38,7 @@ namespace GenericWebApp.BLL.Management
             }
             catch (Exception ex)
             {
-                Response.ErrorList.Add(new Error { Message = ex.Message });
+                Response.ErrorList.Add(new Error { Code = ex.Source, Message = ex.Message });
             }
         }
 
@@ -63,7 +63,7 @@ namespace GenericWebApp.BLL.Management
             }
             catch (Exception ex)
             {
-                Response.ErrorList.Add(new Error { Message = ex.Message });
+                Response.ErrorList.Add(new Error { Code = ex.Source, Message = ex.Message });
                 Response.Item = null;
             }
         }
@@ -119,7 +119,7 @@ namespace GenericWebApp.BLL.Management
             }
             catch (Exception ex)
             {
-                Response.ErrorList.Add(new Error { Message = ex.Message });
+                Response.ErrorList.Add(new Error { Code = ex.Source, Message = ex.Message });
                 Response.List = new List<GenericWebApp.DTO.Management.TaskItem>();
             }
         }
@@ -157,7 +157,7 @@ namespace GenericWebApp.BLL.Management
                 }
                 catch (Exception ex)
                 {
-                    Response.ErrorList.Add(new Error { Message = ex.Message });
+                    Response.ErrorList.Add(new Error { Code = ex.Source, Message = ex.Message });
                 }
             }
         }

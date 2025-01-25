@@ -42,7 +42,7 @@ namespace GenericWebApp.UnitTest.Common
         {
             if (_exceptions.Count > 0)
             {
-                var message = "Multiple assertion failures:\n";
+                var message = _description + "\nMultiple assertion failures:\n";
                 message += string.Join("\n", _exceptions.Select((ex, index) => $"\tAssertion {index + 1}: {ex.Description} - {ex.Exception.Message}"));
                 throw new Exception(message);
             }
