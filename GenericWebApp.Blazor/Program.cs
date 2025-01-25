@@ -38,7 +38,8 @@ builder.Services.AddDbContext<ManagementContext>(options =>
 
 builder.Services.AddScoped<Service>();
 builder.Services.AddScoped<TaskService>();
-builder.Services.AddScoped<DashboardService>();
+builder.Services.AddScoped<DashboardAlbumService>();
+builder.Services.AddScoped<DashboardManagementService>();
 
 var app = builder.Build();
 
@@ -59,6 +60,13 @@ app.MapFallbackToPage("/_Host");
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AlbumContext>();
+    dbContext.Database.Migrate();
+}
+
+// Apply pending migrations automatically
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ManagementContext>();
     dbContext.Database.Migrate();
 }
 

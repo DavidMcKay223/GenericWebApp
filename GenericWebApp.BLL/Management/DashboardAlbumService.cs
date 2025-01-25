@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace GenericWebApp.BLL.Management
 {
-    public class DashboardService
+    public class DashboardAlbumService
     {
         private readonly AlbumContext _context;
 
-        public DashboardService(AlbumContext context)
+        public DashboardAlbumService(AlbumContext context)
         {
             _context = context;
         }
