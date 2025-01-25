@@ -69,6 +69,36 @@ namespace GenericWebApp.UnitTest.Music
         }
 
         [Fact]
+        public async Task DeleteItemAsync_DeletesAlbumIncorrectly_AlreadyDeleted()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Attempt to delete an album already deleted");
+
+            // Arrange
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
+            var album = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
+            assertCollection.Assert("The album to delete should exist", () => Assert.NotNull(album));
+
+            // Act
+            if (album != null)
+            {
+                await _service.DeleteItemAsync(album);
+                await _service.DeleteItemAsync(album);
+                await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
+
+                // Assert
+                assertCollection.Assert("Album should initially be deleted", () => Assert.DoesNotContain(_service.Response.List, a => a.ArtistName == "The Beatles"));
+                assertCollection.Assert("No additional albums should be deleted", () => Assert.Equal(3, _service.Response.List.Count));
+                assertCollection.Assert("Error list should contain one error", () => Assert.Single(_service.Response.ErrorList));
+                assertCollection.Assert("Error message should indicate deletion failure", () => Assert.Contains(_service.Response.ErrorList, e => e.Message == "Item did not delete"));
+                assertCollection.Assert("Error should be related to deletion failure", () => Assert.Equal("Item did not delete", _service.Response.ErrorList[0].Message));
+                assertCollection.Assert("Service response should have error", () => Assert.NotEmpty(_service.Response.ErrorList));
+            }
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
         public async Task DeleteItemAsync_DeletesAlbumWithCD()
         {
             Initialize();
@@ -91,18 +121,49 @@ namespace GenericWebApp.UnitTest.Music
         public async Task DeleteItemAsync_DeletesAlbumWithCDWithTrack()
         {
             Initialize();
-            var assertCollection = new AssertCollection("Deleting album with CDs and tracks");
+            var assertCollection = new AssertCollection("Deleting tracks, CDs, and then the album");
 
             // Arrange
-            var album = new DTO.Music.Album { ArtistName = "Daft Punk" };
-
-            // Act
-            await _service.DeleteItemAsync(album);
             await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
+            var album = _service.Response.List.Find(a => a.ArtistName == "Daft Punk");
+            assertCollection.Assert("The album to delete should exist", () => Assert.NotNull(album));
 
-            // Assert
-            assertCollection.Assert("Album with CDs and tracks should be deleted", () => Assert.Equal(3, _service.Response.List.Count));
-            assertCollection.Assert("Album should not be in the list", () => Assert.DoesNotContain(_service.Response.List, a => a.ArtistName == "Daft Punk"));
+            if (album != null)
+            {
+                // Step 1: Get initial track count and delete a couple of tracks from the first CD
+                var cd = album.CDList.First();
+                var initialTrackCount = cd.TrackList.Count;
+                var tracksToDelete = cd.TrackList.Take(2).ToList();
+                foreach (var track in tracksToDelete)
+                {
+                    cd.TrackList.Remove(track);
+                }
+                await _service.SaveItemAsync(album);
+
+                // Fetch updated album details
+                await _service.GetItemAsync(new BLL.Music.MusicSearchDTO { ArtistName = "Daft Punk" });
+                var updatedAlbum = _service.Response.Item;
+                var updatedTrackCount = updatedAlbum.CDList.First().TrackList.Count;
+                assertCollection.Assert("Tracks should be deleted from the CD", () => Assert.Equal(initialTrackCount - 2, updatedTrackCount));
+
+                // Step 2: Get initial CD count and delete the CD
+                var initialCDCount = updatedAlbum.CDList.Count;
+                var updatedCD = updatedAlbum.CDList.First(); // Update the CD reference
+                updatedAlbum.CDList.Remove(updatedCD);
+                await _service.SaveItemAsync(updatedAlbum);
+
+                // Fetch updated album details
+                await _service.GetItemAsync(new BLL.Music.MusicSearchDTO { ArtistName = "Daft Punk" });
+                var updatedAlbumAfterCDDeletion = _service.Response.Item;
+                var updatedCDCount = updatedAlbumAfterCDDeletion.CDList.Count;
+                assertCollection.Assert("CD should be deleted from the album", () => Assert.Equal(initialCDCount - 1, updatedCDCount));
+
+                // Step 3: Delete the album
+                await _service.DeleteItemAsync(updatedAlbumAfterCDDeletion);
+                await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
+                assertCollection.Assert("Album should be deleted", () => Assert.DoesNotContain(_service.Response.List, a => a.ArtistName == "Daft Punk"));
+            }
+
             assertCollection.Verify();
         }
 
@@ -127,10 +188,7 @@ namespace GenericWebApp.UnitTest.Music
                 await _service.SaveItemAsync(album);
 
                 // Check for errors and display code and description for each message
-                var errorMessages = string.Join(", ", _service.Response.ErrorList.Select(e => $"\n\t\tCode: {e.Code}, \n\t\tDescription: {e.Message}"));
-                assertCollection.Assert("No errors should be present",
-                    () => Assert.False(_service.Response.ErrorList.Any(),
-                    $"Errors: {errorMessages}"));
+                assertCollection.AssertErrorList("No errors should be present", _service.Response.ErrorList);
 
                 // Re-fetch the album object to ensure it's updated
                 await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
@@ -242,7 +300,7 @@ namespace GenericWebApp.UnitTest.Music
                     new DTO.Music.CD
                     {
                         Name = "CD with Genre",
-                        Genre_ID = genreDictionary["Rock"], // Using the dictionary to set Genre_ID
+                        Genre_ID = genreDictionary["Rock"],
                         TrackList = new List<DTO.Music.Track>
                         {
                             new DTO.Music.Track { Number = 1, Title = "Track 1", Length = TimeSpan.FromMinutes(3.00) }
