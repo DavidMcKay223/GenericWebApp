@@ -13,26 +13,51 @@ else
         <EditForm Model="@searchParams">
             <div class="row g-3">
                 <div class="col-md-3">
-                    <label for="text_ArtistName" class="form-label">Artist Name</label>
-                    <InputText id="text_ArtistName" class="form-control" @bind-Value="searchParams.ArtistName" />
+                    <div class="form-floating">
+                        <InputText id="text_ArtistName" class="form-control" @bind-Value="searchParams.ArtistName" />
+                        <label for="text_ArtistName">Artist Name</label>
+                    </div>
                 </div>
                 <div class="col-md-3">
-                    <label for="text_CdName" class="form-label">CD Name</label>
-                    <InputText id="text_CdName" class="form-control" @bind-Value="searchParams.CdName" />
+                    <div class="form-floating">
+                        <InputText id="text_CdName" class="form-control" @bind-Value="searchParams.CdName" />
+                        <label for="text_CdName">CD Name</label>
+                    </div>
                 </div>
                 <div class="col-md-3">
-                    <label for="text_TrackTitle" class="form-label">Track Title</label>
-                    <InputText id="text_TrackTitle" class="form-control" @bind-Value="searchParams.TrackTitle" />
+                    <div class="form-floating">
+                        <InputText id="text_TrackTitle" class="form-control" @bind-Value="searchParams.TrackTitle" />
+                        <label for="text_TrackTitle">Track Title</label>
+                    </div>
                 </div>
                 <div class="col-md-3">
-                    <label for="ddl_genre" class="form-label">Genre</label>
-                    <InputSelect id="ddl_genre" class="form-select" @bind-Value="searchParams.GenreID">
-                        <option value="">Select Genre</option>
-                        @foreach (var myGenre in myGenreList)
-                        {
-                            <option value="@myGenre.ID">@myGenre.Description</option>
-                        }
-                    </InputSelect>
+                    <div class="form-floating">
+                        <InputSelect id="ddl_genre" class="form-select" @bind-Value="searchParams.GenreID">
+                            <option value="">Select Genre</option>
+                            @foreach (var myGenre in myGenreList)
+                            {
+                                <option value="@myGenre.ID">@myGenre.Description</option>
+                            }
+                        </InputSelect>
+                        <label for="ddl_genre">Genre</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 mt-3">
+                <div class="col-md-3">
+                    <div class="form-floating">
+                        <select id="sortField" class="form-select" @bind="searchParams.SortField">
+                            <option value="ArtistName">Artist Name</option>
+                            <option value="CdName">CD Name</option>
+                        </select>
+                        <label for="sortField">Sort By</label>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="sortDescending" @bind="searchParams.SortDescending" />
+                        <label class="form-check-label" for="sortDescending">Descending</label>
+                    </div>
                 </div>
             </div>
         </EditForm>
@@ -40,16 +65,6 @@ else
         <div class="my-3 text-center">
             <button class="btn btn-primary me-2" @onclick="@ButtonSearch">Search</button>
             <button class="btn btn-danger" @onclick="@ButtonReset">Reset</button>
-        </div>
-
-        <div class="my-3 text-center">
-            <label for="sortField" class="form-label">Sort By</label>
-            <select id="sortField" class="form-select" @bind="searchParams.SortField">
-                <option value="ArtistName">Artist Name</option>
-                <option value="CdName">CD Name</option>
-            </select>
-            <label for="sortDescending" class="form-label">Descending</label>
-            <input type="checkbox" id="sortDescending" @bind="searchParams.SortDescending" />
         </div>
 
         <DisplayError ErrorList="@myService.Response.ErrorList" />
@@ -112,7 +127,7 @@ else
                     </div>
                 }
             </div>
-            <Pagination TItem="object" TotalItems="@totalItems" PageSize="@pageSize" OnPageChanged="OnPageChanged" OnPageSizeChangedCallback="OnPageSizeChanged" />
+            <Pagination TItem="object" TotalItems="@totalItems" PageSize="@pageSize" CurrentPage="@currentPage" OnPageChanged="OnPageChanged" OnPageSizeChangedCallback="OnPageSizeChanged" />
         }
         else
         {
