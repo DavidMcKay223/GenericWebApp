@@ -50,12 +50,12 @@ namespace GenericWebApp.BLL.Music
                 }
                 else
                 {
-                    Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = "Item did not delete" });
+                    Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = "ItemDeletionFailed", Message = "Item did not delete" });
                 }
             }
             catch (Exception ex)
             {
-                Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = ex.Message });
+                Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = "Exception", Message = ex.Message });
             }
         }
 
@@ -74,7 +74,7 @@ namespace GenericWebApp.BLL.Music
                         var existingAlbum = await _context.Albums.Include(a => a.CDList).FirstOrDefaultAsync(a => a.ArtistName.ToLower() == dto.ArtistName.ToLower());
                         if (existingAlbum != null)
                         {
-                            Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = "An album with the same artist name already exists." });
+                            Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = "DuplicateAlbum", Message = "An album with the same artist name already exists." });
                             return;
                         }
 
@@ -91,7 +91,7 @@ namespace GenericWebApp.BLL.Music
                         }
                         else
                         {
-                            Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = "Album not found." });
+                            Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = "AlbumNotFound", Message = "Album not found." });
                             return;
                         }
                     }
@@ -100,7 +100,7 @@ namespace GenericWebApp.BLL.Music
                 }
                 catch (Exception ex)
                 {
-                    Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = ex.Message });
+                    Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = "Exception", Message = ex.Message });
                 }
             }
         }
@@ -120,7 +120,7 @@ namespace GenericWebApp.BLL.Music
             }
             catch (Exception ex)
             {
-                Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = ex.Message });
+                Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = "Exception", Message = ex.Message });
                 Response.Item = null;
             }
         }
@@ -131,7 +131,7 @@ namespace GenericWebApp.BLL.Music
             {
                 if (searchParams == null)
                 {
-                    Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = "Search parameters are null" });
+                    Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = "NullSearchParams", Message = "Search parameters are null" });
                     Response.List = new List<GenericWebApp.DTO.Music.Album>();
                     return;
                 }
@@ -204,7 +204,7 @@ namespace GenericWebApp.BLL.Music
             }
             catch (Exception ex)
             {
-                Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Message = ex.Message });
+                Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = "Exception", Message = ex.Message });
                 Response.List = new List<GenericWebApp.DTO.Music.Album>();
             }
         }
