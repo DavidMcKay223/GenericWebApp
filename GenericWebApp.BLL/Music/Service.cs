@@ -164,7 +164,22 @@ namespace GenericWebApp.BLL.Music
                     query = query.Where(a => a.CDList.Any(cd => cd.TrackList.Any(t => EF.Functions.Like(t.Title.ToLower(), $"%{searchParams.TrackTitle.ToLower()}%"))));
                 }
 
-                var albums = await query.ToListAsync();
+                // Apply sorting
+                query = searchParams.SortField switch
+                {
+                    "ArtistName" => searchParams.SortDescending ? query.OrderByDescending(a => a.ArtistName) : query.OrderBy(a => a.ArtistName),
+                    "CdName" => searchParams.SortDescending ? query.OrderByDescending(a => a.CDList.FirstOrDefault().Name) : query.OrderBy(a => a.CDList.FirstOrDefault().Name),
+                    _ => query.OrderBy(a => a.ArtistName)
+                };
+
+                // Get total count before applying pagination
+                var totalItems = await query.CountAsync();
+
+                // Apply pagination
+                var albums = await query
+                    .Skip((searchParams.PageNumber - 1) * searchParams.PageSize)
+                    .Take(searchParams.PageSize)
+                    .ToListAsync();
 
                 // Further filter the CD and Track lists
                 foreach (var album in albums)
@@ -195,6 +210,7 @@ namespace GenericWebApp.BLL.Music
                 }
 
                 Response.List = albums.Select(Model.Music.Album.ParseDTO).ToList();
+                Response.TotalItems = totalItems; // Set the total items count in the response
             }
             catch (Exception ex)
             {
@@ -204,7 +220,7 @@ namespace GenericWebApp.BLL.Music
         }
     }
 
-    public class MusicSearchDTO
+    public class MusicSearchDTO : SearchDTO
     {
         public string ArtistName { get; set; }
         public string CdName { get; set; }

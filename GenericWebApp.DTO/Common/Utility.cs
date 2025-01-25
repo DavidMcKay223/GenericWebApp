@@ -17,6 +17,7 @@ namespace GenericWebApp.DTO.Common
     {
         public T Item { get; set; }
         public List<T> List { get; set; }
+        public int TotalItems { get; set; } = 0;
         public List<Common.Error> ErrorList { get; set; }
     }
 

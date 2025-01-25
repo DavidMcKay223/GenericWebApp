@@ -42,16 +42,34 @@ else
             <button class="btn btn-danger" @onclick="@ButtonReset">Reset</button>
         </div>
 
-       <DisplayError ErrorList="@myService.Response.ErrorList" />
+        <div class="my-3 text-center">
+            <label for="sortField" class="form-label">Sort By</label>
+            <select id="sortField" class="form-select" @bind="searchParams.SortField">
+                <option value="ArtistName">Artist Name</option>
+                <option value="CdName">CD Name</option>
+            </select>
+            <label for="sortDescending" class="form-label">Descending</label>
+            <input type="checkbox" id="sortDescending" @bind="searchParams.SortDescending" />
+        </div>
 
-        @if (myService.Response.List != null)
+        <DisplayError ErrorList="@myService.Response.ErrorList" />
+
+        @if (isLoading)
+        {
+            <div class="text-center my-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        }
+        else if (myService.Response.List != null && myService.Response.List.Any())
         {
             <div class="row g-3">
                 @foreach (DTO.Music.Album album in myService.Response.List)
                 {
                     <div class="col-md-6">
                         <div class="card mb-3">
-                            <div class="card-header">
+                            <div class="card-header bg-primary text-white">
                                 <h4>@album.ArtistName</h4>
                             </div>
                             <div class="card-body">
@@ -60,17 +78,17 @@ else
                                     @foreach (DTO.Music.CD cd in album.CDList)
                                     {
                                         <div class="card mb-3">
-                                            <div class="card-header">
+                                            <div class="card-header bg-secondary text-white">
                                                 <h5>@cd.Name (@myGenreList?.FirstOrDefault(x => x.ID == cd.Genre_ID)?.Description)</h5>
                                             </div>
                                             <div class="card-body">
                                                 <label>Track</label>
                                                 <ul class="list-group">
-                                                    @if(cd.TrackList != null)
+                                                    @if (cd.TrackList != null)
                                                     {
                                                         @foreach (DTO.Music.Track track in cd.TrackList)
                                                         {
-                                                            <li class="list-group-item">
+                                                            <li class="list-group-item d-flex justify-content-between align-items-center">
                                                                 <span class="fw-bold">@track.Number</span>
                                                                 <span>@track.Title</span>
                                                                 <span class="text-muted">@track.Length.ToString("mm\\:ss")</span>
@@ -94,6 +112,13 @@ else
                     </div>
                 }
             </div>
+            <Pagination TItem="object" TotalItems="@totalItems" PageSize="@pageSize" OnPageChanged="OnPageChanged" OnPageSizeChangedCallback="OnPageSizeChanged" />
+        }
+        else
+        {
+            <div class="text-center my-4">
+                <p>No albums found.</p>
+            </div>
         }
 
         <div class="my-3 text-center">
@@ -106,8 +131,11 @@ else
     private BLL.Music.MusicSearchDTO searchParams;
     private DTO.Music.Album Album;
     private List<DTO.Common.ValuePair>? myGenreList;
-
-    private Boolean createNewAlbum = false;
+    private bool isLoading = false;
+    private bool createNewAlbum = false;
+    private int totalItems;
+    private int pageSize = 10;
+    private int currentPage = 1;
 
     protected override async Task OnInitializedAsync()
     {
@@ -118,11 +146,18 @@ else
 
     async Task LoadAlbumsAsync()
     {
+        isLoading = true;
+        searchParams.PageNumber = currentPage;
+        searchParams.PageSize = pageSize;
+
         await myService.GetListAsync(searchParams);
+        totalItems = myService.Response.TotalItems;
+        isLoading = false;
     }
 
     async Task ButtonSearch()
     {
+        currentPage = 1; // Reset to the first page
         myService.Response.ErrorList.Clear();
         await LoadAlbumsAsync();
     }
@@ -130,6 +165,7 @@ else
     async Task ButtonReset()
     {
         searchParams = new BLL.Music.MusicSearchDTO();
+        currentPage = 1; // Reset to the first page
         myService.Response.ErrorList.Clear();
         await LoadAlbumsAsync();
     }
@@ -157,6 +193,19 @@ else
     {
         Album = null;
         createNewAlbum = !createNewAlbum;
+        await LoadAlbumsAsync();
+    }
+
+    async Task OnPageChanged(int page)
+    {
+        currentPage = page;
+        await LoadAlbumsAsync();
+    }
+
+    async Task OnPageSizeChanged(int size)
+    {
+        pageSize = size;
+        currentPage = 1;
         await LoadAlbumsAsync();
     }
 }

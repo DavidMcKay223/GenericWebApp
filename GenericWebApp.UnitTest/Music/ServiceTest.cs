@@ -9,6 +9,7 @@ using GenericWebApp.Model.Music;
 using Microsoft.EntityFrameworkCore;
 using GenericWebApp.UnitTest.Common;
 using System.Linq;
+using GenericWebApp.BLL.Music;
 
 namespace GenericWebApp.UnitTest.Music
 {
@@ -519,6 +520,7 @@ namespace GenericWebApp.UnitTest.Music
             assertCollection.Assert("Second CD should have correct Genre_ID", () => Assert.Equal(genreDictionary["Pop"], savedAlbum.CDList[1].Genre_ID));
             assertCollection.Verify();
         }
+
         [Fact]
         public async Task UpdateAlbum_InvalidArtistName_ShouldReturnError()
         {
@@ -541,6 +543,121 @@ namespace GenericWebApp.UnitTest.Music
                 // Assert
                 assertCollection.AssertErrorList("Error should be present for empty artist name", _service.Response.ErrorList);
             }
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task GetListAsync_SortsByArtistNameAscending()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Sorting by ArtistName ascending");
+
+            // Arrange
+            var searchDTO = new MusicSearchDTO
+            {
+                SortField = "ArtistName",
+                SortDescending = false
+            };
+
+            // Act
+            await _service.GetListAsync(searchDTO);
+
+            // Assert
+            var albums = _service.Response.List;
+            assertCollection.Assert("Albums should be sorted by ArtistName ascending", () => Assert.True(albums.SequenceEqual(albums.OrderBy(a => a.ArtistName))));
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task GetListAsync_SortsByArtistNameDescending()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Sorting by ArtistName descending");
+
+            // Arrange
+            var searchDTO = new MusicSearchDTO
+            {
+                SortField = "ArtistName",
+                SortDescending = true
+            };
+
+            // Act
+            await _service.GetListAsync(searchDTO);
+
+            // Assert
+            var albums = _service.Response.List;
+            assertCollection.Assert("Albums should be sorted by ArtistName descending", () => Assert.True(albums.SequenceEqual(albums.OrderByDescending(a => a.ArtistName))));
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task GetListAsync_SortsByCdNameAscending()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Sorting by CdName ascending");
+
+            // Arrange
+            var searchDTO = new MusicSearchDTO
+            {
+                SortField = "CdName",
+                SortDescending = false
+            };
+
+            // Act
+            await _service.GetListAsync(searchDTO);
+
+            // Assert
+            var albums = _service.Response.List;
+            assertCollection.Assert("Albums should be sorted by CdName ascending", () => Assert.True(albums.SequenceEqual(albums.OrderBy(a => a.CDList.FirstOrDefault()?.Name))));
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task GetListAsync_SortsByCdNameDescending()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Sorting by CdName descending");
+
+            // Arrange
+            var searchDTO = new MusicSearchDTO
+            {
+                SortField = "CdName",
+                SortDescending = true
+            };
+
+            // Act
+            await _service.GetListAsync(searchDTO);
+
+            // Assert
+            var albums = _service.Response.List;
+            assertCollection.Assert("Albums should be sorted by CdName descending", () => Assert.True(albums.SequenceEqual(albums.OrderByDescending(a => a.CDList.FirstOrDefault()?.Name))));
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task GetListAsync_Pagination()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Pagination test");
+
+            // Arrange
+            var searchDTO = new MusicSearchDTO
+            {
+                PageNumber = 1,
+                PageSize = 5
+            };
+
+            // Act
+            await _service.GetListAsync(searchDTO);
+
+            // Assert
+            var albums = _service.Response.List;
+            assertCollection.Assert("Should return 5 albums", () => Assert.Equal(5, albums.Count));
 
             assertCollection.Verify();
         }

@@ -163,7 +163,7 @@ namespace GenericWebApp.BLL.Management
         }
     }
 
-    public class TaskSeachDTO
+    public class TaskSeachDTO : SearchDTO
     {
         public int? ID { get; set; }
         public string TaskTitle { get; set; }
