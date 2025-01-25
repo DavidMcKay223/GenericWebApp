@@ -34,6 +34,8 @@ namespace GenericWebApp.Model.Music
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Album>()
                 .HasMany(a => a.CDList)
                 .WithOne(cd => cd.Album)
@@ -45,6 +47,15 @@ namespace GenericWebApp.Model.Music
                 .WithOne(track => track.CD)
                 .HasForeignKey(track => track.CD_ID)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Album>()
+                .HasIndex(a => a.ArtistName);
+
+            modelBuilder.Entity<CD>()
+                .HasIndex(cd => cd.Name);
+
+            modelBuilder.Entity<Track>()
+                .HasIndex(t => t.Title);
         }
     }
 }

@@ -263,6 +263,117 @@ namespace GenericWebApp.UnitTest.Music
         }
 
         [Fact]
+        public async Task GetListAsync_ReturnsOneAlbumOneCD()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Fetching one album with one CD");
+
+            // Act
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "Daft Punk", CdName = "Discovery" });
+
+            // Assert
+            assertCollection.Assert("Should return one album", () => Assert.Single(_service.Response.List));
+            assertCollection.Assert("The album should have one CD", () => Assert.Single(_service.Response.List.First().CDList));
+            assertCollection.AssertErrorList("No errors should be present", _service.Response.ErrorList);
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task GetListAsync_ReturnsOneAlbumTwoCD()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Fetching one album with two CDs");
+
+            // Act
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "Daft Punk" });
+
+            // Assert
+            assertCollection.Assert("Should return one album", () => Assert.Single(_service.Response.List));
+            assertCollection.Assert("The album should have two CDs", () => Assert.Equal(2, _service.Response.List.First().CDList.Count));
+            assertCollection.AssertErrorList("No errors should be present", _service.Response.ErrorList);
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task GetListAsync_ReturnsAllCDs()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Fetching all CDs");
+
+            // Act
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
+
+            // Assert
+            var allCDs = _service.Response.List.SelectMany(album => album.CDList).ToList();
+            assertCollection.Assert("Should return all CDs", () => Assert.Equal(8, allCDs.Count));
+            assertCollection.AssertErrorList("No errors should be present", _service.Response.ErrorList);
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task GetListAsync_ReturnsAllTracks()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Fetching all tracks");
+
+            // Act
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
+
+            // Assert
+            var allTracks = _service.Response.List
+                .SelectMany(album => album.CDList)
+                .SelectMany(cd => cd.TrackList)
+                .ToList();
+            assertCollection.Assert("Should return all tracks", () => Assert.Equal(121, allTracks.Count));
+            assertCollection.AssertErrorList("No errors should be present", _service.Response.ErrorList);
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task GetListAsync_ReturnsAllAlbumsWithGenre()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Fetching all albums with a specific genre");
+
+            var genreDictionary = _context.Genres.ToDictionary(g => g.Description, g => g.ID);
+
+            // Act
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO { GenreID = genreDictionary["Hip-Hop"] });
+            
+            // Assert
+            var allAlbumsWithGenre = _service.Response.List;
+            assertCollection.Assert("Should return all albums with the specified genre", () =>
+            {
+                Assert.All(allAlbumsWithGenre, album => Assert.True(album.CDList.Any(cd => cd.Genre_ID == genreDictionary["Hip-Hop"])));
+            });
+            assertCollection.AssertErrorList("No errors should be present", _service.Response.ErrorList);
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task GetListAsync_ReturnsOneAlbumOneCDOneTrack()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Fetching one album with one CD and one track");
+
+            // Act
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "Daft Punk", CdName = "Discovery", TrackTitle = "One More Time" });
+
+            // Assert
+            assertCollection.Assert("Should return one album", () => Assert.Single(_service.Response.List));
+            assertCollection.Assert("The album should have one CD", () => Assert.Single(_service.Response.List.First().CDList));
+            assertCollection.Assert("The CD should have one track", () => Assert.Single(_service.Response.List.First().CDList.First().TrackList, t => t.Title == "One More Time"));
+            assertCollection.AssertErrorList("No errors should be present", _service.Response.ErrorList);
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
         public async Task SaveItemAsync_AlbumWithArtist()
         {
             Initialize();
@@ -320,6 +431,103 @@ namespace GenericWebApp.UnitTest.Music
             assertCollection.Assert("New album should be found", () => Assert.NotNull(savedAlbum));
             assertCollection.Assert("New album should have one CD", () => Assert.Single(savedAlbum.CDList));
             assertCollection.Assert("CD should have correct Genre_ID", () => Assert.Equal(genreDictionary["Rock"], savedAlbum.CDList[0].Genre_ID));
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task GetListAsync_BruteForceMusicSearchDTO()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Brute force testing of MusicSearchDTO");
+
+            var genreDictionary = _context.Genres.ToDictionary(g => g.Description, g => g.ID);
+
+            var testCases = new[]
+            {
+                new
+                {
+                    SearchParams = new BLL.Music.MusicSearchDTO(),
+                    ExpectedResult = new AlbumExpectedResultDTO { ExpectedAlbumCount = 4, ExpectedCDCount = 8, ExpectedTrackCount = 121 }
+                },
+                new
+                {
+                    SearchParams = new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles" },
+                    ExpectedResult = new AlbumExpectedResultDTO { ExpectedAlbumCount = 1, ExpectedCDCount = 2, ExpectedTrackCount = 30 }
+                },
+                new
+                {
+                    SearchParams = new BLL.Music.MusicSearchDTO { CdName = "Random Access Memories" },
+                    ExpectedResult = new AlbumExpectedResultDTO { ExpectedAlbumCount = 1, ExpectedCDCount = 1, ExpectedTrackCount = 13 }
+                },
+                new
+                {
+                    SearchParams = new BLL.Music.MusicSearchDTO { TrackTitle = "One More Time" },
+                    ExpectedResult = new AlbumExpectedResultDTO { ExpectedAlbumCount = 1, ExpectedCDCount = 1, ExpectedTrackCount = 1 }
+                },
+                new
+                {
+                    SearchParams = new BLL.Music.MusicSearchDTO { GenreID = genreDictionary["Rock"] },
+                    ExpectedResult = new AlbumExpectedResultDTO { ExpectedAlbumCount = 1, ExpectedCDCount = 2, ExpectedTrackCount = 30 }
+                },
+                new
+                {
+                    SearchParams = new BLL.Music.MusicSearchDTO { ArtistName = "Daft Punk", CdName = "Discovery" },
+                    ExpectedResult = new AlbumExpectedResultDTO { ExpectedAlbumCount = 1, ExpectedCDCount = 1, ExpectedTrackCount = 14 }
+                },
+                new
+                {
+                    SearchParams = new BLL.Music.MusicSearchDTO { ArtistName = "Daft Punk", TrackTitle = "One More Time" },
+                    ExpectedResult = new AlbumExpectedResultDTO { ExpectedAlbumCount = 1, ExpectedCDCount = 1, ExpectedTrackCount = 1 }
+                },
+                new
+                {
+                    SearchParams = new BLL.Music.MusicSearchDTO { CdName = "Discovery", TrackTitle = "One More Time" },
+                    ExpectedResult = new AlbumExpectedResultDTO { ExpectedAlbumCount = 1, ExpectedCDCount = 1, ExpectedTrackCount = 1 }
+                },
+                new
+                {
+                    SearchParams = new BLL.Music.MusicSearchDTO { ArtistName = "Daft Punk", CdName = "Discovery", TrackTitle = "One More Time" },
+                    ExpectedResult = new AlbumExpectedResultDTO { ExpectedAlbumCount = 1, ExpectedCDCount = 1, ExpectedTrackCount = 1 }
+                },
+                new
+                {
+                    SearchParams = new BLL.Music.MusicSearchDTO { ArtistName = "Daft Punk", CdName = "Discovery", TrackTitle = "One More Time", GenreID = genreDictionary["Electronic"] },
+                    ExpectedResult = new AlbumExpectedResultDTO { ExpectedAlbumCount = 1, ExpectedCDCount = 1, ExpectedTrackCount = 1 }
+                }
+            };
+
+            int index = 0;
+            foreach (var testCase in testCases)
+            {
+                index++;
+
+                // Act
+                await _service.GetListAsync(testCase.SearchParams);
+
+                // Assert
+                assertCollection.AssertErrorList($"No errors should be present for {testCase.SearchParams}", _service.Response.ErrorList);
+
+                assertCollection.Assert($"Test Case: {index} - Album count should match {testCase.ExpectedResult.ExpectedAlbumCount}", () =>
+                {
+                    Assert.Equal(testCase.ExpectedResult.ExpectedAlbumCount, _service.Response.List.Count);
+                });
+
+                assertCollection.Assert($"Test Case: {index} - CD count should match {testCase.ExpectedResult.ExpectedCDCount}", () =>
+                {
+                    var allCDs = _service.Response.List.SelectMany(album => album.CDList).ToList();
+                    Assert.Equal(testCase.ExpectedResult.ExpectedCDCount, allCDs.Count);
+                });
+
+                assertCollection.Assert($"Test Case: {index} - Track count should match {testCase.ExpectedResult.ExpectedTrackCount}", () =>
+                {
+                    var allTracks = _service.Response.List
+                        .SelectMany(album => album.CDList)
+                        .SelectMany(cd => cd.TrackList)
+                        .ToList();
+                    Assert.Equal(testCase.ExpectedResult.ExpectedTrackCount, allTracks.Count);
+                });
+            }
+
             assertCollection.Verify();
         }
 
