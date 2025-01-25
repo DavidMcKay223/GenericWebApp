@@ -68,7 +68,7 @@ namespace GenericWebApp.BLL.Management
             }
         }
 
-        public override async Task GetListAsync(GenericWebApp.BLL.Management.TaskSeachDTO searchParams)
+        public override async Task GetListAsync(TaskSeachDTO searchParams)
         {
             try
             {
@@ -114,8 +114,27 @@ namespace GenericWebApp.BLL.Management
                     query = query.Where(t => t.UpdatedDate >= searchParams.UpdatedDate);
                 }
 
+                // Apply sorting
+                if (!string.IsNullOrWhiteSpace(searchParams.SortField))
+                {
+                    query = searchParams.SortField switch
+                    {
+                        "TaskTitle" => searchParams.SortDescending ? query.OrderByDescending(t => t.Title) : query.OrderBy(t => t.Title),
+                        "CreatedDate" => searchParams.SortDescending ? query.OrderByDescending(t => t.CreatedDate) : query.OrderBy(t => t.CreatedDate),
+                        "UpdatedDate" => searchParams.SortDescending ? query.OrderByDescending(t => t.UpdatedDate) : query.OrderBy(t => t.UpdatedDate),
+                        _ => query
+                    };
+                }
+
+                // Get total count before applying pagination
+                var totalItems = await query.CountAsync();
+
+                // Apply pagination
+                query = query.Skip((searchParams.PageNumber - 1) * searchParams.PageSize).Take(searchParams.PageSize);
+
                 var taskItems = await query.ToListAsync();
                 Response.List = taskItems.Select(GenericWebApp.Model.Management.TaskItem.ParseDTO).ToList();
+                Response.TotalItems = totalItems;
             }
             catch (Exception ex)
             {
