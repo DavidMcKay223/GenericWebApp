@@ -1,0 +1,12 @@
+# Ignore compiled binary files
+*.dll
+*.exe
+# Ignore build directories
+/bin/
+/obj/
+# Ignore user-specific files
+*.user
+*.suo
+# Ignore other temporary files
+*.log
+*.tmp
