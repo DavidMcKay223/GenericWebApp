@@ -719,5 +719,419 @@ namespace GenericWebApp.UnitTest.Music
             assertCollection.Assert("Track should have correct title", () => Assert.Equal("Track 1", savedAlbum.CDList[0].TrackList[0].Title));
             assertCollection.Verify();
         }
+
+        [Fact]
+        public async Task UpdateAlbum_ConcurrentUpdates_ShouldHandleRaceConditions()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Simultaneous Album Updates");
+
+            // Arrange
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles" });
+            var album = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
+
+            assertCollection.Assert("Album to update should exist", () => Assert.NotNull(album));
+
+            if (album != null)
+            {
+                var task1 = Task.Run(async () =>
+                {
+                    album.ArtistName = "The Beatles - Updated 1";
+                    await _service.SaveItemAsync(album);
+                });
+
+                var task2 = Task.Run(async () =>
+                {
+                    album.ArtistName = "The Beatles - Updated 2";
+                    await _service.SaveItemAsync(album);
+                });
+
+                // Act
+                await Task.WhenAll(task1, task2);
+
+                // Assert
+                await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles" });
+                var updatedAlbum = _service.Response.List.Find(a => a.ArtistName.StartsWith("The Beatles - Updated"));
+                assertCollection.Assert("Album should be updated", () => Assert.NotNull(updatedAlbum));
+            }
+
+            assertCollection.AssertErrorList("Error list should be empty", _service.Response.ErrorList);
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task UpdateAlbum_InvalidArtistName_ShouldReturnError()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Invalid Artist Name");
+
+            // Arrange
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles" });
+            var album = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
+
+            assertCollection.Assert("Album to update should exist", () => Assert.NotNull(album));
+
+            if (album != null)
+            {
+                album.ArtistName = "";
+
+                // Act
+                await _service.SaveItemAsync(album);
+
+                // Assert
+                assertCollection.AssertErrorList("Error should be present for empty artist name", _service.Response.ErrorList);
+            }
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task UpdateCD_InvalidCDName_ShouldReturnError()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Invalid CD Name");
+
+            // Arrange
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles" });
+            var album = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
+            var cd = album?.CDList.Find(cd => cd.Name == "Abbey Road");
+
+            assertCollection.Assert("CD to update should exist", () => Assert.NotNull(cd));
+
+            if (cd != null)
+            {
+                cd.Name = "";
+
+                // Act
+                await _service.SaveItemAsync(album);
+
+                // Assert
+                assertCollection.AssertErrorList("Error should be present for empty CD name", _service.Response.ErrorList);
+            }
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task UpdateTrack_InvalidTrackTitle_ShouldReturnError()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Invalid Track Title");
+
+            // Arrange
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles" });
+            var album = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
+            var cd = album?.CDList.Find(cd => cd.Name == "Abbey Road");
+            var track = cd?.TrackList.Find(t => t.Title == "Something");
+
+            assertCollection.Assert("Track to update should exist", () => Assert.NotNull(track));
+
+            if (track != null)
+            {
+                track.Title = "";
+
+                // Act
+                await _service.SaveItemAsync(album);
+
+                // Assert
+                assertCollection.AssertErrorList("Error should be present for empty track title", _service.Response.ErrorList);
+            }
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task UpdateAlbum_MaximumArtistNameLength_ShouldUpdateSuccessfully()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Maximum Artist Name Length");
+
+            // Arrange
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles" });
+            var album = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
+
+            assertCollection.Assert("Album to update should exist", () => Assert.NotNull(album));
+
+            if (album != null)
+            {
+                album.ArtistName = new string('A', 500); // Maximum length is 500 characters
+
+                // Act
+                await _service.SaveItemAsync(album);
+
+                // Assert
+                assertCollection.AssertErrorList("No errors should be present", _service.Response.ErrorList);
+                assertCollection.Assert("Artist name should be updated", () => Assert.Equal(500, album.ArtistName.Length));
+            }
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task UpdateTrack_MinimumAndMaximumTrackLength_ShouldUpdateSuccessfully()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Minimum and Maximum Track Length");
+
+            // Arrange
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles" });
+            var album = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
+            var cd = album?.CDList.Find(cd => cd.Name == "Abbey Road");
+            var track = cd?.TrackList.Find(t => t.Title == "Something");
+
+            assertCollection.Assert("Track to update should exist", () => Assert.NotNull(track));
+
+            if (track != null)
+            {
+                track.Length = TimeSpan.Zero;
+                await _service.SaveItemAsync(album);
+                assertCollection.AssertErrorList("Error should be present for zero track length", _service.Response.ErrorList);
+
+                track.Length = TimeSpan.FromHours(10);
+                await _service.SaveItemAsync(album);
+                assertCollection.AssertErrorList("No errors should be present for maximum track length", _service.Response.ErrorList);
+            }
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task UpdateAlbum_ArtistNameOnly_ShouldUpdateSuccessfully()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Partial Update - Artist Name");
+
+            // Arrange
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles" });
+            var album = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
+
+            assertCollection.Assert("Album to update should exist", () => Assert.NotNull(album));
+
+            if (album != null)
+            {
+                album.ArtistName = "The Beatles - Updated";
+
+                // Act
+                await _service.SaveItemAsync(album);
+
+                // Assert
+                assertCollection.AssertErrorList("No errors should be present", _service.Response.ErrorList);
+
+                // Re-fetch the album object to ensure it's updated
+                await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles - Updated" });
+                var updatedAlbum = _service.Response.List.Find(a => a.ArtistName == "The Beatles - Updated");
+                assertCollection.Assert("Artist name should be updated", () => Assert.NotNull(updatedAlbum));
+            }
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task UpdateTrack_OnlyOneTrack_ShouldUpdateSuccessfully()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Partial Update - One Track");
+
+            // Arrange
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles" });
+            var album = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
+            var cd = album?.CDList.Find(cd => cd.Name == "Abbey Road");
+            var track = cd?.TrackList.Find(t => t.Title == "Something");
+
+            assertCollection.Assert("Track to update should exist", () => Assert.NotNull(track));
+
+            if (track != null)
+            {
+                track.Title = "Something (Remastered)";
+
+                // Act
+                await _service.SaveItemAsync(album);
+
+                // Assert
+                assertCollection.AssertErrorList("No errors should be present", _service.Response.ErrorList);
+
+                // Re-fetch the album object to ensure it's updated
+                await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles" });
+                var updatedTrack = _service.Response.List
+                    .Find(a => a.ArtistName == "The Beatles")?
+                    .CDList.Find(cd => cd.Name == "Abbey Road")?
+                    .TrackList.Find(t => t.Title == "Something (Remastered)");
+
+                assertCollection.Assert("Track title should be updated", () => Assert.NotNull(updatedTrack));
+            }
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task UpdateAlbum_DuplicateArtistName_ShouldReturnError()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Unique Constraint - Duplicate Artist Name");
+
+            // Arrange
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO ());
+            var album1 = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
+            var album2 = _service.Response.List.Find(a => a.ArtistName == "Daft Punk");
+
+            assertCollection.Assert("Albums to update should exist", () =>
+            {
+                Assert.NotNull(album1);
+                Assert.NotNull(album2);
+            });
+
+            if (album1 != null && album2 != null)
+            {
+                album2.ArtistName = "The Beatles";
+
+                // Act
+                await _service.SaveItemAsync(album2);
+
+                // Assert
+                assertCollection.AssertErrorList("Error should be present for duplicate artist name", _service.Response.ErrorList);
+                assertCollection.Assert("Error code should be DuplicateAlbum", () =>
+                {
+                    Assert.Contains(_service.Response.ErrorList, e => e.Code == "DuplicateAlbum");
+                });
+            }
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task UpdateTrack_InvalidCDID_ShouldReturnError()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Foreign Key Constraint - Invalid CD ID");
+
+            // Arrange
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles" });
+            var album = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
+            var cd = album?.CDList.Find(cd => cd.Name == "Abbey Road");
+            var track = cd?.TrackList.Find(t => t.Title == "Something");
+
+            assertCollection.Assert("Track to update should exist", () => Assert.NotNull(track));
+
+            if (track != null)
+            {
+                track.CD_ID = 9999; // Assuming 9999 is an invalid CD ID
+
+                // Act
+                await _service.SaveItemAsync(album);
+
+                // Assert
+                assertCollection.AssertErrorList("Error should be present for invalid CD ID", _service.Response.ErrorList);
+                assertCollection.Assert("Error code should be ForeignKeyConstraintViolation", () =>
+                {
+                    Assert.Contains(_service.Response.ErrorList, e => e.Code == "ForeignKeyConstraintViolation");
+                });
+            }
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task UpdateAlbum_DeletedAlbum_ShouldReturnError()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Updating a Deleted Album");
+
+            // Arrange
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles" });
+            var album = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
+
+            assertCollection.Assert("Album to update should exist", () => Assert.NotNull(album));
+
+            if (album != null)
+            {
+                // Simulate album deletion using the service
+                await _service.DeleteItemAsync(album);
+
+                album.ArtistName = "The Beatles - Updated";
+
+                // Act
+                await _service.SaveItemAsync(album);
+
+                // Assert
+                assertCollection.AssertErrorList("Error should be present for updating a deleted album", _service.Response.ErrorList);
+                assertCollection.Assert("Error code should be AlbumNotFound", () =>
+                {
+                    Assert.Contains(_service.Response.ErrorList, e => e.Code == "AlbumNotFound");
+                });
+            }
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task UpdateCD_DeletedCD_ShouldReturnError()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Updating a Deleted CD");
+
+            // Arrange
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles" });
+            var album = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
+            var cd = album?.CDList.Find(cd => cd.Name == "Abbey Road");
+
+            assertCollection.Assert("CD to update should exist", () => Assert.NotNull(cd));
+
+            if (cd != null)
+            {
+                // Simulate CD deletion using the service
+                album.CDList.Remove(cd);
+                await _service.SaveItemAsync(album);
+
+                cd.Name = "Abbey Road - Updated";
+
+                // Act
+                await _service.SaveItemAsync(album);
+
+                // Assert
+                assertCollection.AssertErrorList("Error should be present for updating a deleted CD", _service.Response.ErrorList);
+                assertCollection.Assert("Error code should be CDNotFound", () =>
+                {
+                    Assert.Contains(_service.Response.ErrorList, e => e.Code == "CDNotFound");
+                });
+            }
+
+            assertCollection.Verify();
+        }
+
+        [Fact]
+        public async Task UpdateTrack_DeletedTrack_ShouldReturnError()
+        {
+            Initialize();
+            var assertCollection = new AssertCollection("Updating a Deleted Track");
+
+            // Arrange
+            await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles" });
+            var album = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
+            var cd = album?.CDList.Find(cd => cd.Name == "Abbey Road");
+            var track = cd?.TrackList.Find(t => t.Title == "Something");
+
+            assertCollection.Assert("Track to update should exist", () => Assert.NotNull(track));
+
+            if (track != null)
+            {
+                // Simulate track deletion using the service
+                cd.TrackList.Remove(track);
+                await _service.SaveItemAsync(album);
+
+                track.Title = "Something - Updated";
+
+                // Act
+                await _service.SaveItemAsync(album);
+
+                // Assert
+                assertCollection.AssertErrorList("Error should be present for updating a deleted track", _service.Response.ErrorList);
+                assertCollection.Assert("Error code should be TrackNotFound", () =>
+                {
+                    Assert.Contains(_service.Response.ErrorList, e => e.Code == "TrackNotFound");
+                });
+            }
+
+            assertCollection.Verify();
+        }
     }
 }
