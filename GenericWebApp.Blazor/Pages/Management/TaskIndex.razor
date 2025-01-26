@@ -42,17 +42,18 @@ else
             <div class="row g-3 mt-3">
                 <div class="col-md-3">
                     <div class="form-floating">
-                        <select id="sortField" class="form-select" @bind="searchParams.SortField">
+                        <InputSelect id="sortField" class="form-select" @bind-value="searchParams.SortField">
+                            <option value="">Select Sort</option>
                             <option value="TaskTitle">Task Title</option>
                             <option value="CreatedDate">Created Date</option>
                             <option value="UpdatedDate">Updated Date</option>
-                        </select>
+                        </InputSelect>
                         <label for="sortField">Sort By</label>
                     </div>
                 </div>
                 <div class="col-md-3 d-flex align-items-center">
                     <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="sortDescending" @bind="searchParams.SortDescending" />
+                        <InputCheckbox class="form-check-input" type="checkbox" id="sortDescending" @bind-value="searchParams.SortDescending" />
                         <label class="form-check-label" for="sortDescending">Descending</label>
                     </div>
                 </div>

@@ -168,9 +168,10 @@ namespace GenericWebApp.BLL.Music
                 query = searchParams.SortField switch
                 {
                     "ArtistName" => searchParams.SortDescending ? query.OrderByDescending(a => a.ArtistName) : query.OrderBy(a => a.ArtistName),
-                    "CdName" => searchParams.SortDescending ? query.OrderByDescending(a => a.CDList.FirstOrDefault().Name) : query.OrderBy(a => a.CDList.FirstOrDefault().Name),
-                    _ => query.OrderBy(a => a.ArtistName)
+                    "CdName" => searchParams.SortDescending ? query.OrderByDescending(a => a.CDList.FirstOrDefault() != null ? a.CDList.FirstOrDefault().Name : string.Empty) : query.OrderBy(a => a.CDList.FirstOrDefault() != null ? a.CDList.FirstOrDefault().Name : string.Empty),
+                    _ => query
                 };
+
 
                 // Get total count before applying pagination
                 var totalItems = await query.CountAsync();
