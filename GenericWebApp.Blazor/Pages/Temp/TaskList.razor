@@ -1,0 +1,151 @@
+﻿@page "/temp/tasks"
+@using GenericWebApp.DTO.Management
+@using GenericWebApp.BLL.Management
+@using GenericWebApp.Blazor.Shared.Common
+@inject TaskService TaskService
+
+<div class="container">
+    <h1 class="my-4 text-center">Task List</h1>
+</div>
+
+<DisplayError ErrorList="@TaskService.Response.ErrorList" />
+
+@if (isLoading)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="Search Title" @bind="searchParams.TaskTitle" />
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="Search Description" @bind="searchParams.TaskDescription" />
+        </div>
+        <div class="col-md-3">
+            <input type="date" class="form-control" placeholder="Search Created Date" @bind="searchParams.CreatedDate" />
+        </div>
+        <div class="col-md-3">
+            <input type="date" class="form-control" placeholder="Search Updated Date" @bind="searchParams.UpdatedDate" />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="ShowAddTaskModal">Add Task</button>
+        <button class="btn btn-secondary" @onclick="LoadTasks">Search</button>
+        <button class="btn btn-danger" @onclick="ResetSearch">Reset</button>
+    </div>
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th><button class="btn btn-link" @onclick="() => ToggleSort(taskTitle)">Title</button></th>
+                <th>Description</th>
+                <th>Created Date</th>
+                <th>Updated Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in tasks)
+            {
+                <tr>
+                    <td>@task.Title</td>
+                    <td>@task.Description</td>
+                    <td>@task.CreatedDate?.ToString("yyyy-MM-dd")</td>
+                    <td>@task.UpdatedDate?.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <button class="btn btn-secondary" @onclick="() => ShowEditTaskModal(task)">Edit</button>
+                        <button class="btn btn-danger" @onclick="() => DeleteTask(task)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <Pagination TItem="TaskItem" TotalItems="@totalItems" PageSize="@pageSize" CurrentPage="@currentPage" OnPageChanged="OnPageChanged" OnPageSizeChangedCallback="OnPageSizeChanged" />
+}
+
+<EditTaskModal @ref="editTaskModal" OnTaskSaved="LoadTasks" />
+
+@code {
+    private List<TaskItem> tasks;
+    private bool isLoading = true;
+    private EditTaskModal editTaskModal;
+    private int totalItems;
+    private int pageSize = 10;
+    private int currentPage = 1;
+    private string sortField = "TaskTitle";
+    private string taskTitle = "TaskTitle";
+    private bool sortDescending = false;
+    private TaskSeachDTO searchParams = new TaskSeachDTO();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTasks();
+    }
+
+    private async Task LoadTasks()
+    {
+        isLoading = true;
+        searchParams.PageNumber = currentPage;
+        searchParams.PageSize = pageSize;
+        searchParams.SortField = sortField;
+        searchParams.SortDescending = sortDescending;
+
+        await TaskService.GetListAsync(searchParams);
+        tasks = TaskService.Response.List;
+        totalItems = TaskService.Response.TotalItems;
+        isLoading = false;
+    }
+
+    private void ShowAddTaskModal()
+    {
+        editTaskModal.Show(new TaskItem());
+    }
+
+    private void ShowEditTaskModal(TaskItem task)
+    {
+        editTaskModal.Show(task);
+    }
+
+    private async Task DeleteTask(TaskItem task)
+    {
+        await TaskService.DeleteItemAsync(task);
+        await LoadTasks();
+    }
+
+    private async Task OnPageChanged(int page)
+    {
+        currentPage = page;
+        await LoadTasks();
+    }
+
+    private async Task OnPageSizeChanged(int size)
+    {
+        pageSize = size;
+        currentPage = 1;
+        await LoadTasks();
+    }
+
+    private async Task ToggleSort(string field)
+    {
+        if (sortField == field)
+        {
+            sortDescending = !sortDescending;
+        }
+        else
+        {
+            sortField = field;
+            sortDescending = false;
+        }
+        await LoadTasks();
+    }
+
+    private async Task ResetSearch()
+    {
+        searchParams = new TaskSeachDTO();
+        await LoadTasks();
+    }
+}
