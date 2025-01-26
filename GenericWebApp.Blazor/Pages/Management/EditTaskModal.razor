@@ -7,6 +7,12 @@
     [Parameter]
     public EventCallback OnTaskSaved { get; set; }
 
+    [Parameter]
+    public string? TaskObjectTypeCode { get; set; }
+
+    [Parameter]
+    public int? TaskObjectID { get; set; }
+
     private TaskItem taskItem = new TaskItem();
     private bool isVisible = false;
 
@@ -19,6 +25,12 @@
     private async Task SaveTask()
     {
         if (taskItem == null) return;
+
+        if (TaskObjectID.HasValue && !String.IsNullOrEmpty(TaskObjectTypeCode))
+        {
+            taskItem.TaskObjectType_Code = TaskObjectTypeCode;
+            taskItem.Task_Object_ID = TaskObjectID.Value;
+        }
 
         await TaskService.SaveItemAsync(taskItem);
         if (TaskService.Response.ErrorList.Count == 0)
