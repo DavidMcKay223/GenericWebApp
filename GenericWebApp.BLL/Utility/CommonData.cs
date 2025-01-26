@@ -30,7 +30,8 @@ namespace GenericWebApp.BLL.Utility
                 Href = "management",
                 ChildNavBarList = new List<DTO.Common.NavBarItem>()
                 {
-                    new DTO.Common.NavBarItem() { Description = "Task", Class = "oi-book", Href = "/management/tasks" }
+                    new DTO.Common.NavBarItem() { Description = "CMS1500", Class = "oi-book", Href = "/management/cms1500list" },
+                    new DTO.Common.NavBarItem() { Description = "Task", Class = "oi-task", Href = "/management/tasks" }
                 }
             });
 

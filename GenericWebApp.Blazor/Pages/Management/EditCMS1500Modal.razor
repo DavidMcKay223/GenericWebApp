@@ -13,6 +13,16 @@
     private string claimantTab = "claimant";
     private string tasksTab = "tasks";
 
+    public async Task Show(int? ID)
+    {
+        if (ID.HasValue)
+        {
+            await myService.GetItemAsync(new MedicalCMS1500SeachDTO() { ID = ID.Value });
+            cms1500 = myService.Response.Item;
+        }
+        isVisible = true;
+    }
+
     public void Show(CMS1500Form form)
     {
         cms1500 = form;
@@ -62,7 +72,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link @(activeTab == "claimant" ? "active" : "")" @onclick="() => SetActiveTab(claimantTab)">Claimant Information</a>
                                 </li>
-                                @if(cms1500.Claimant.ID != 0){
+                                @if(cms1500.ID != 0){
                                     <li class="nav-item">
                                         <a class="nav-link @(activeTab == "tasks" ? "active" : "")" @onclick="() => SetActiveTab(tasksTab)">Tasks</a>
                                     </li>
@@ -74,8 +84,8 @@
                                     <ClaimantForm Claimant="@cms1500.Claimant" />
                                 </div>
                                 <div class="tab-pane fade @(activeTab == "tasks" ? "show active" : "")">
-                                    @if (cms1500.Claimant.ID != 0){
-                                        <GenericWebApp.Blazor.Pages.Management.TaskList TaskObjectTypeCode="CLAIM" TaskObjectID="@cms1500.Claimant.ID" />
+                                    @if (cms1500.ID != 0){
+                                        <TaskList TaskObjectTypeCode="CLAIM" TaskObjectID="@cms1500.ID" />
                                     }
                                 </div>
                             </div>

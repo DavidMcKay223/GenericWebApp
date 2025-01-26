@@ -2,6 +2,13 @@
 @code {
     [Parameter]
     public Address Address { get; set; }
+
+    private List<DTO.Common.ValuePair>? myStateList;
+
+    protected override void OnInitialized()
+    {
+        myStateList = BLL.Utility.CommonData.GetStateList();
+    }
 }
 
 <div class="card mb-3">
@@ -25,7 +32,13 @@
             <ValidationMessage For="@(() => Address.City)" />
         </div>
         <div class="mb-3 form-floating">
-            <InputText id="state" class="form-control" @bind-Value="Address.State" />
+            <InputSelect id="state" class="form-select" @bind-Value="Address.State">
+                <option value="">Select State</option>
+                @foreach (var myState in myStateList)
+                {
+                    <option value="@myState.Value">@myState.Description</option>
+                }
+            </InputSelect>
             <label for="state">State</label>
             <ValidationMessage For="@(() => Address.State)" />
         </div>
@@ -46,10 +59,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .card {
-        max-width: 400px;
-        margin: auto;
-    }
-</style>
