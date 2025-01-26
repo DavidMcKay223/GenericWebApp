@@ -16,6 +16,9 @@ namespace GenericWebApp.Model.Management
         public DbSet<TaskSubType> TaskSubTypes { get; set; }
         public DbSet<TaskObjectType> TaskObjectTypes { get; set; }
         public DbSet<TaskActivity> TaskActivities { get; set; }
+        public DbSet<CMS1500Form> CMS1500Forms { get; set; }
+        public DbSet<Claimant> Claimants { get; set; }
+        public DbSet<Address> Addresses { get; set; }
 
         public ManagementContext(DbContextOptions<ManagementContext> options) : base(options)
         {
@@ -35,7 +38,23 @@ namespace GenericWebApp.Model.Management
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Claimant>()
+                .HasOne(c => c.PrimaryAddress)
+                .WithMany()
+                .HasForeignKey(c => c.PrimaryAddressID)
+                .OnDelete(DeleteBehavior.Restrict); // Use Restrict to avoid multiple cascade paths
 
+            modelBuilder.Entity<Claimant>()
+                .HasOne(c => c.SecondaryAddress)
+                .WithMany()
+                .HasForeignKey(c => c.SecondaryAddressID)
+                .OnDelete(DeleteBehavior.Restrict); // Use Restrict to avoid multiple cascade paths
+
+            modelBuilder.Entity<CMS1500Form>()
+                .HasOne(f => f.Claimant)
+                .WithMany()
+                .HasForeignKey(f => f.ClaimantID)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

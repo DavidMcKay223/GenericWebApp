@@ -1,0 +1,128 @@
+﻿@page "/cms1500list"
+@using GenericWebApp.DTO.Management
+@using GenericWebApp.BLL.Management
+@using GenericWebApp.Blazor.Shared.Common
+@inject MedicalService myService
+
+<div class="container">
+    <h1 class="my-4 text-center">CMS1500 List</h1>
+</div>
+
+<DisplayError ErrorList="@myService.Response.ErrorList" />
+
+@if (isLoading)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="ShowAddCMS1500Modal">Add CMS1500</button>
+        <button class="btn btn-secondary" @onclick="LoadCMS1500Forms">Search</button>
+        <button class="btn btn-danger" @onclick="ResetSearch">Reset</button>
+    </div>
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Date of Birth</th>
+                <th>Insurance Policy Number</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var form in cms1500Forms)
+            {
+                <tr>
+                    <td>@form.Claimant.Name</td>
+                    <td>@form.Claimant.Gender</td>
+                    <td>@form.Claimant.DateOfBirth.ToString("yyyy-MM-dd")</td>
+                    <td>@form.Claimant.InsurancePolicyNumber</td>
+                    <td>
+                        <button class="btn btn-secondary" @onclick="() => ShowEditCMS1500Modal(form)">Edit</button>
+                        <button class="btn btn-danger" @onclick="() => DeleteCMS1500(form)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <Pagination TItem="CMS1500Form" TotalItems="@totalItems" PageSize="@pageSize" CurrentPage="@currentPage" OnPageChanged="OnPageChanged" OnPageSizeChangedCallback="OnPageSizeChanged" />
+}
+
+<EditCMS1500Modal @ref="editCMS1500Modal" OnCMS1500Saved="LoadCMS1500Forms" />
+
+@code {
+    private List<CMS1500Form> cms1500Forms;
+    private bool isLoading = true;
+    private EditCMS1500Modal editCMS1500Modal;
+    private int totalItems;
+    private int pageSize = 10;
+    private int currentPage = 1;
+    private string sortField = "Claimant.Name";
+    private bool sortDescending = false;
+    private MedicalSeachDTO searchParams = new MedicalSeachDTO();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCMS1500Forms();
+    }
+
+    private async Task LoadCMS1500Forms()
+    {
+        isLoading = true;
+        searchParams.PageNumber = currentPage;
+        searchParams.PageSize = pageSize;
+        searchParams.SortField = sortField;
+        searchParams.SortDescending = sortDescending;
+
+        await myService.GetListAsync(searchParams);
+        cms1500Forms = myService.Response.List;
+        totalItems = myService.Response.TotalItems;
+        isLoading = false;
+    }
+
+    private void ShowAddCMS1500Modal()
+    {
+        editCMS1500Modal.Show(new CMS1500Form() { 
+            Claimant = new Claimant() 
+            {
+                DateOfBirth = DateTime.Now,
+                PrimaryAddress = new Address(), 
+                SecondaryAddress = new Address()}
+            }
+        );
+    }
+
+    private void ShowEditCMS1500Modal(CMS1500Form form)
+    {
+        editCMS1500Modal.Show(form);
+    }
+
+    private async Task DeleteCMS1500(CMS1500Form form)
+    {
+        await myService.DeleteItemAsync(form);
+        await LoadCMS1500Forms();
+    }
+
+    private async Task OnPageChanged(int page)
+    {
+        currentPage = page;
+        await LoadCMS1500Forms();
+    }
+
+    private async Task OnPageSizeChanged(int size)
+    {
+        pageSize = size;
+        currentPage = 1;
+        await LoadCMS1500Forms();
+    }
+
+    private async Task ResetSearch()
+    {
+        searchParams = new MedicalSeachDTO();
+        await LoadCMS1500Forms();
+    }
+}

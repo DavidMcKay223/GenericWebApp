@@ -151,5 +151,93 @@ namespace GenericWebApp.Model.Common
 
             return taskActivity;
         }
+
+        public static GenericWebApp.DTO.Management.CMS1500Form ParseDTO(GenericWebApp.Model.Management.CMS1500Form cms1500Form)
+        {
+            if (cms1500Form == null) return null;
+
+            return new GenericWebApp.DTO.Management.CMS1500Form
+            {
+                ID = cms1500Form.ID,
+                Claimant = ParseDTO(cms1500Form.Claimant),
+                CreatedDate = cms1500Form.CreatedDate,
+                UpdatedDate = cms1500Form.UpdatedDate
+            };
+        }
+
+        public static GenericWebApp.Model.Management.CMS1500Form ParseModel(GenericWebApp.DTO.Management.CMS1500Form dto)
+        {
+            if (dto == null) return null;
+
+            return new GenericWebApp.Model.Management.CMS1500Form
+            {
+                ID = dto.ID,
+                Claimant = ParseModel(dto.Claimant),
+                CreatedDate = dto.CreatedDate,
+                UpdatedDate = dto.UpdatedDate
+            };
+        }
+
+        public static GenericWebApp.DTO.Management.Claimant ParseDTO(GenericWebApp.Model.Management.Claimant claimant)
+        {
+            if (claimant == null) return null;
+
+            return new GenericWebApp.DTO.Management.Claimant
+            {
+                Name = claimant.Name,
+                Gender = claimant.Gender,
+                DateOfBirth = claimant.DateOfBirth,
+                InsurancePolicyNumber = claimant.InsurancePolicyNumber,
+                PrimaryAddress = ParseDTO(claimant.PrimaryAddress),
+                SecondaryAddress = ParseDTO(claimant.SecondaryAddress)
+            };
+        }
+
+        public static GenericWebApp.Model.Management.Claimant ParseModel(GenericWebApp.DTO.Management.Claimant dto)
+        {
+            if (dto == null) return null;
+
+            return new GenericWebApp.Model.Management.Claimant
+            {
+                Name = dto.Name,
+                Gender = dto.Gender,
+                DateOfBirth = dto.DateOfBirth,
+                InsurancePolicyNumber = dto.InsurancePolicyNumber,
+                PrimaryAddress = ParseModel(dto.PrimaryAddress),
+                SecondaryAddress = ParseModel(dto.SecondaryAddress)
+            };
+        }
+
+        public static GenericWebApp.DTO.Management.Address ParseDTO(GenericWebApp.Model.Management.Address address)
+        {
+            if (address == null) return null;
+
+            return new GenericWebApp.DTO.Management.Address
+            {
+                Address1 = address.Address1,
+                Address2 = address.Address2,
+                City = address.City,
+                State = address.State,
+                Zip = address.Zip,
+                Phone = address.Phone,
+                Fax = address.Fax
+            };
+        }
+
+        public static GenericWebApp.Model.Management.Address ParseModel(GenericWebApp.DTO.Management.Address dto)
+        {
+            if (dto == null) return null;
+
+            return new GenericWebApp.Model.Management.Address
+            {
+                Address1 = dto.Address1,
+                Address2 = dto.Address2,
+                City = dto.City,
+                State = dto.State,
+                Zip = dto.Zip,
+                Phone = dto.Phone,
+                Fax = dto.Fax
+            };
+        }
     }
 }
