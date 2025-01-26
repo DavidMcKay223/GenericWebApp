@@ -175,7 +175,7 @@ namespace GenericWebApp.BLL.Music
 
                 // Apply pagination
                 var albums = await query
-                    .Skip((searchParams.PageNumber - 1) * searchParams.PageSize)
+                    .Skip((searchParams.PageNumber) * searchParams.PageSize)
                     .Take(searchParams.PageSize)
                     .ToListAsync();
 

@@ -130,7 +130,7 @@ namespace GenericWebApp.BLL.Management
                 var totalItems = await query.CountAsync();
 
                 // Apply pagination
-                query = query.Skip((searchParams.PageNumber - 1) * searchParams.PageSize).Take(searchParams.PageSize);
+                query = query.Skip((searchParams.PageNumber) * searchParams.PageSize).Take(searchParams.PageSize);
 
                 var taskItems = await query.ToListAsync();
                 Response.List = taskItems.Select(GenericWebApp.Model.Common.ManagementParser.ParseDTO).ToList();

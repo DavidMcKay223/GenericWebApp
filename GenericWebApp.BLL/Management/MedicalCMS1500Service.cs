@@ -43,6 +43,29 @@ namespace GenericWebApp.BLL.Management
             }
         }
 
+        public void GetItem(MedicalCMS1500SeachDTO searchParams)
+        {
+            Response.ErrorList.Clear();
+
+            try
+            {
+                var entity = _context.CMS1500Forms
+                    .Include(c => c.Claimant)
+                        .ThenInclude(claimant => claimant.PrimaryAddress)
+                    .Include(c => c.Claimant)
+                        .ThenInclude(claimant => claimant.SecondaryAddress)
+                    .FirstOrDefault(c =>
+                        (searchParams.ID.HasValue && c.ID == searchParams.ID.Value));
+
+                Response.Item = ManagementParser.ParseDTO(entity);
+            }
+            catch (Exception ex)
+            {
+                Response.ErrorList.Add(new Error { Code = ex.Source, Message = ex.Message });
+                Response.Item = null;
+            }
+        }
+
         public override async Task GetItemAsync(MedicalCMS1500SeachDTO searchParams)
         {
             Response.ErrorList.Clear();
@@ -116,7 +139,7 @@ namespace GenericWebApp.BLL.Management
                 var totalItems = await query.CountAsync();
 
                 // Apply pagination
-                query = query.Skip((searchParams.PageNumber - 1) * searchParams.PageSize).Take(searchParams.PageSize);
+                query = query.Skip((searchParams.PageNumber) * searchParams.PageSize).Take(searchParams.PageSize);
 
                 var entities = await query.ToListAsync();
                 Response.List = entities.Select(ManagementParser.ParseDTO).ToList();

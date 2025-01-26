@@ -39,7 +39,7 @@ else
 
     <div class="mb-3">
         <button class="btn btn-primary" @onclick="ShowAddCMS1500Modal">Add CMS1500</button>
-        <button class="btn btn-secondary" @onclick="LoadCMS1500Forms">Search</button>
+        <button class="btn btn-secondary" @onclick="SearchCMS1500">Search</button>
         <button class="btn btn-danger" @onclick="ResetSearchCMS1500">Reset</button>
     </div>
 
@@ -81,7 +81,7 @@ else
     <Pagination TItem="CMS1500Form" TotalItems="@totalItems" PageSize="@pageSize" CurrentPage="@currentPage" OnPageChanged="OnPageChangedCMS1500" OnPageSizeChangedCallback="OnPageSizeChangedCMS1500" />
 }
 
-<EditCMS1500Modal @ref="editCMS1500Modal" OnCMS1500Saved="LoadCMS1500Forms" />
+<EditCMS1500Modal @ref="editCMS1500Modal" OnCMS1500Saved="LoadCMS1500Page" />
 
 @code {
     private List<CMS1500Form> cms1500Forms;
@@ -89,7 +89,7 @@ else
     private EditCMS1500Modal editCMS1500Modal;
     private int totalItems;
     private int pageSize = 10;
-    private int currentPage = 1;
+    private int currentPage = 0;
     private string sortField = "ClaimantName";
     private string claimantName = "ClaimantName";
     private bool sortDescending = false;
@@ -97,10 +97,10 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadCMS1500Forms();
+        await LoadCMS1500Page();
     }
 
-    private async Task LoadCMS1500Forms()
+    private async Task LoadCMS1500Page()
     {
         isLoading = true;
         searchParams.PageNumber = currentPage;
@@ -135,20 +135,20 @@ else
     private async Task DeleteCMS1500(CMS1500Form form)
     {
         await myService.DeleteItemAsync(form);
-        await LoadCMS1500Forms();
+        await LoadCMS1500Page();
     }
 
     private async Task OnPageChangedCMS1500(int page)
     {
         currentPage = page;
-        await LoadCMS1500Forms();
+        await LoadCMS1500Page();
     }
 
     private async Task OnPageSizeChangedCMS1500(int size)
     {
         pageSize = size;
-        currentPage = 1;
-        await LoadCMS1500Forms();
+        currentPage = 0;
+        await LoadCMS1500Page();
     }
 
     private async Task ToggleSortCMS1500(string field)
@@ -162,12 +162,18 @@ else
             sortField = field;
             sortDescending = false;
         }
-        await LoadCMS1500Forms();
+        await LoadCMS1500Page();
+    }
+
+    private async Task SearchCMS1500()
+    {
+        currentPage = 0;
+        await LoadCMS1500Page();
     }
 
     private async Task ResetSearchCMS1500()
     {
         searchParams = new MedicalCMS1500SeachDTO();
-        await LoadCMS1500Forms();
+        await LoadCMS1500Page();
     }
 }

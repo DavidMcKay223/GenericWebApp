@@ -3,9 +3,12 @@
 @using GenericWebApp.Blazor.Shared.Common
 @inject TaskService TaskService
 
-<div class="container">
-    <h1 class="my-4 text-center">Task List</h1>
-</div>
+@if (!IsSubModal)
+{
+    <div class="container">
+        <h1 class="my-4 text-center">Task List</h1>
+    </div>
+}
 
 <DisplayError ErrorList="@TaskService.Response.ErrorList" />
 
@@ -44,7 +47,7 @@ else
 
     <div class="mb-3">
         <button class="btn btn-primary" @onclick="ShowAddTaskModal">Add Task</button>
-        <button class="btn btn-secondary" @onclick="LoadTasks">Search</button>
+        <button class="btn btn-secondary" @onclick="SearchTask">Search</button>
         <button class="btn btn-danger" @onclick="ResetSearchTask">Reset</button>
     </div>
 
@@ -55,6 +58,10 @@ else
                 <th>Description</th>
                 <th>Created Date</th>
                 <th>Updated Date</th>
+                @if (!IsSubModal)
+                {
+                    <th>Object Type</th>
+                }
                 <th>Actions</th>
             </tr>
         </thead>
@@ -66,6 +73,15 @@ else
                     <td>@task.Description</td>
                     <td>@task.CreatedDate?.ToString("yyyy-MM-dd")</td>
                     <td>@task.UpdatedDate?.ToString("yyyy-MM-dd")</td>
+                    @if (!IsSubModal)
+                    {
+                        <td>
+                            @if (!String.IsNullOrEmpty(task.TaskObjectType_Code))
+                            {
+                                <button class="btn btn-link" @onclick="() => ShowEditObjectTypeModal(task.TaskObjectType_Code, task.Task_Object_ID)">@task.TaskObjectType_Code</button>
+                            }
+                        </td>
+                    }
                     <td>
                         <button class="btn btn-secondary" @onclick="() => ShowEditTaskModal(task)">Edit</button>
                         <button class="btn btn-danger" @onclick="() => DeleteTask(task)">Delete</button>
@@ -80,19 +96,29 @@ else
 
 <EditTaskModal @ref="editTaskModal" TaskObjectTypeCode="@TaskObjectTypeCode" TaskObjectID="@TaskObjectID" OnTaskSaved="LoadTasks" />
 
+@if (!IsSubModal)
+{
+    <EditGenericModal @ref="editGenericModal" OnGenericSaved="LoadTasks" />
+}
+
 @code {
     [Parameter]
     public string? TaskObjectTypeCode { get; set; }
-    
+
     [Parameter]
     public int? TaskObjectID { get; set; }
+
+    [Parameter]
+    public Boolean IsSubModal { get; set; } = false;
+    public Boolean IsSubModalLoaded { get; set; } = false;
 
     private List<TaskItem> tasks;
     private bool isLoading = true;
     private EditTaskModal editTaskModal;
+    private EditGenericModal editGenericModal;
     private int totalItems;
     private int pageSize = 10;
-    private int currentPage = 1;
+    private int currentPage = 0;
     private string sortField = "TaskTitle";
     private string taskTitle = "TaskTitle";
     private bool sortDescending = false;
@@ -130,6 +156,14 @@ else
         editTaskModal.ShowTaskModal(task);
     }
 
+    private void ShowEditObjectTypeModal(string? gridObjectTypeCode, int? gridObjectID)
+    {
+        if (!IsSubModal)
+        {
+            editGenericModal.ShowGenericModal(gridObjectTypeCode, gridObjectID);
+        }
+    }
+
     private async Task DeleteTask(TaskItem task)
     {
         await TaskService.DeleteItemAsync(task);
@@ -145,7 +179,7 @@ else
     private async Task OnPageSizeChangedTask(int size)
     {
         pageSize = size;
-        currentPage = 1;
+        currentPage = 0;
         await LoadTasks();
     }
 
@@ -160,6 +194,12 @@ else
             sortField = field;
             sortDescending = false;
         }
+        await LoadTasks();
+    }
+
+    private async Task SearchTask()
+    {
+        currentPage = 0;
         await LoadTasks();
     }
 

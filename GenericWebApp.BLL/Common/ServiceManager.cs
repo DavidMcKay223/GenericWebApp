@@ -6,7 +6,7 @@ namespace GenericWebApp.BLL.Common
 {
     public abstract class SearchDTO
     {
-        public virtual int PageNumber { get; set; } = 1;
+        public virtual int PageNumber { get; set; } = 0;
         public virtual int PageSize { get; set; } = 10;
         public virtual string SortField { get; set; }
         public virtual bool SortDescending { get; set; } = false;

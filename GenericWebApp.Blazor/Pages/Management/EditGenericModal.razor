@@ -1,0 +1,36 @@
+﻿<DynamicComponent Type="currentComponent" @ref="dynamicComponent" @rendermode="RenderMode.InteractiveServer"></DynamicComponent>
+
+@code {
+    [Parameter]
+    public EventCallback OnGenericSaved { get; set; }
+
+    private DynamicComponent? dynamicComponent;
+    private Type? currentComponent { get; set; } = typeof(EditCMS1500Modal);
+
+    public string? ObjectTypeCode { get; set; }
+    public int? ObjectID { get; set; }
+
+    public void ShowGenericModal(string? gridObjectTypeCode, int? gridObjectID)
+    {
+        ObjectTypeCode = gridObjectTypeCode;
+        ObjectID = gridObjectID;
+
+        switch (ObjectTypeCode)
+        {
+            case "CLAIM":
+                currentComponent = typeof(EditCMS1500Modal);
+
+                if (dynamicComponent?.Instance is EditCMS1500Modal editCMS1500Modal)
+                {
+                    var parameters = new Dictionary<string, object?>
+                    {
+                        { nameof(EditCMS1500Modal.OnCMS1500Saved), OnGenericSaved },
+                    };
+
+                    editCMS1500Modal.SetParametersAsync(ParameterView.FromDictionary(parameters));
+                    editCMS1500Modal.Show(ObjectID);
+                }
+                break;
+        }
+    }
+}

@@ -13,19 +13,24 @@
     private string claimantTab = "claimant";
     private string tasksTab = "tasks";
 
-    public async Task Show(int? ID)
+    public void Show(int? ID)
     {
         if (ID.HasValue)
         {
-            await myService.GetItemAsync(new MedicalCMS1500SeachDTO() { ID = ID.Value });
+            myService.GetItem(new MedicalCMS1500SeachDTO() { ID = ID.Value });
             cms1500 = myService.Response.Item;
         }
+
+        SetActiveTab(claimantTab);
         isVisible = true;
+        this.StateHasChanged();
     }
 
     public void Show(CMS1500Form form)
     {
         cms1500 = form;
+
+        SetActiveTab(claimantTab);
         isVisible = true;
     }
 
@@ -41,9 +46,10 @@
         }
     }
 
-    private void Cancel()
+    private async Task CancelCMS1500()
     {
         isVisible = false;
+        await OnCMS1500Saved.InvokeAsync();
     }
 
     private void SetActiveTab(string tabName)
@@ -60,7 +66,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Edit CMS1500 Form</h5>
-                        <button type="button" class="btn-close" @onclick="Cancel"></button>
+                        <button type="button" class="btn-close" @onclick="CancelCMS1500"></button>
                     </div>
                     <EditForm Model="@cms1500">
                         <div class="modal-body">
@@ -85,14 +91,14 @@
                                 </div>
                                 <div class="tab-pane fade @(activeTab == "tasks" ? "show active" : "")">
                                     @if (cms1500.ID != 0){
-                                        <TaskList TaskObjectTypeCode="CLAIM" TaskObjectID="@cms1500.ID" />
+                                        <TaskList IsSubModal="true" TaskObjectTypeCode="CLAIM" TaskObjectID="@cms1500.ID" />
                                     }
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary" @onclick=SaveCMS1500>Save</button>
-                            <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+                            <button type="button" class="btn btn-secondary" @onclick="CancelCMS1500">Cancel</button>
                         </div>
                     </EditForm>
                 </div>
