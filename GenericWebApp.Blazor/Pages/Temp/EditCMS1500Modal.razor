@@ -1,7 +1,7 @@
 ﻿@using GenericWebApp.DTO.Management
 @using GenericWebApp.BLL.Management
 @using GenericWebApp.Blazor.Shared.Common
-@inject MedicalService myService
+@inject MedicalCMS1500Service myService
 
 @code {
     [Parameter]
@@ -9,6 +9,9 @@
 
     private CMS1500Form cms1500;
     private bool isVisible = false;
+    private string activeTab = "claimant";
+    private string claimantTab = "claimant";
+    private string tasksTab = "tasks";
 
     public void Show(CMS1500Form form)
     {
@@ -32,6 +35,11 @@
     {
         isVisible = false;
     }
+
+    private void SetActiveTab(string tabName)
+    {
+        activeTab = tabName;
+    }
 }
 
 @if (isVisible)
@@ -44,64 +52,36 @@
                         <h5 class="modal-title">Edit CMS1500 Form</h5>
                         <button type="button" class="btn-close" @onclick="Cancel"></button>
                     </div>
-                    <EditForm Model="@cms1500" OnValidSubmit="SaveCMS1500">
+                    <EditForm Model="@cms1500">
                         <div class="modal-body">
+                            <DisplayError ErrorList="@myService.Response.ErrorList" />
                             <DataAnnotationsValidator />
                             <ValidationSummary />
 
-                            <div class="card mb-3">
-                                <div class="card-header">
-                                    <h5 class="card-title">Claimant Information</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div class="mb-3 form-floating">
-                                        <InputText id="claimantName" class="form-control" @bind-Value="cms1500.Claimant.Name" />
-                                        <label for="claimantName">Name</label>
-                                        <ValidationMessage For="@(() => cms1500.Claimant.Name)" />
-                                    </div>
-                                    <div class="mb-3 form-floating">
-                                        <InputText id="claimantGender" class="form-control" @bind-Value="cms1500.Claimant.Gender" />
-                                        <label for="claimantGender">Gender</label>
-                                        <ValidationMessage For="@(() => cms1500.Claimant.Gender)" />
-                                    </div>
-                                    <div class="mb-3 form-floating">
-                                        <InputDate id="claimantDOB" class="form-control" @bind-Value="cms1500.Claimant.DateOfBirth" />
-                                        <label for="claimantDOB">Date of Birth</label>
-                                        <ValidationMessage For="@(() => cms1500.Claimant.DateOfBirth)" />
-                                    </div>
-                                    <div class="mb-3 form-floating">
-                                        <InputText id="insurancePolicyNumber" class="form-control" @bind-Value="cms1500.Claimant.InsurancePolicyNumber" />
-                                        <label for="insurancePolicyNumber">Insurance Policy Number</label>
-                                        <ValidationMessage For="@(() => cms1500.Claimant.InsurancePolicyNumber)" />
-                                    </div>
-                                </div>
-                            </div>
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item">
+                                    <a class="nav-link @(activeTab == "claimant" ? "active" : "")" @onclick="() => SetActiveTab(claimantTab)">Claimant Information</a>
+                                </li>
+                                @if(cms1500.Claimant.ID != 0){
+                                    <li class="nav-item">
+                                        <a class="nav-link @(activeTab == "tasks" ? "active" : "")" @onclick="() => SetActiveTab(tasksTab)">Tasks</a>
+                                    </li>
+                                }
+                            </ul>
 
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="card mb-3">
-                                        <div class="card-header">
-                                            <h5 class="card-title">Primary Address</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <AddressForm Address="@cms1500.Claimant.PrimaryAddress" />
-                                        </div>
-                                    </div>
+                            <div class="tab-content mt-3">
+                                <div class="tab-pane fade @(activeTab == "claimant" ? "show active" : "")">
+                                    <ClaimantForm Claimant="@cms1500.Claimant" />
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="card mb-3">
-                                        <div class="card-header">
-                                            <h5 class="card-title">Secondary Address</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <AddressForm Address="@cms1500.Claimant.SecondaryAddress" />
-                                        </div>
-                                    </div>
+                                <div class="tab-pane fade @(activeTab == "tasks" ? "show active" : "")">
+                                    @if (cms1500.Claimant.ID != 0){
+                                        <GenericWebApp.Blazor.Pages.Management.TaskList TaskObjectTypeCode="CLAIM" TaskObjectID="@cms1500.Claimant.ID" />
+                                    }
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary" @onclick=SaveCMS1500>Save</button>
                             <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
                         </div>
                     </EditForm>

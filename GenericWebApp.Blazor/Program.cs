@@ -42,7 +42,7 @@ builder.Services.AddScoped<Service>();
 builder.Services.AddScoped<TaskService>();
 builder.Services.AddScoped<DashboardAlbumService>();
 builder.Services.AddScoped<DashboardManagementService>();
-builder.Services.AddScoped<MedicalService>();
+builder.Services.AddScoped<MedicalCMS1500Service>();
 
 var app = builder.Build();
 

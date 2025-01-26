@@ -2,7 +2,7 @@
 @using GenericWebApp.DTO.Management
 @using GenericWebApp.BLL.Management
 @using GenericWebApp.Blazor.Shared.Common
-@inject MedicalService myService
+@inject MedicalCMS1500Service myService
 
 <div class="container">
     <h1 class="my-4 text-center">CMS1500 List</h1>
@@ -16,19 +16,44 @@
 }
 else
 {
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <div class="mb-3 form-floating">
+                <input type="text" class="form-control" @bind="searchParams.ClaimantName" />
+                <label>Search Claimant Name</label>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="mb-3 form-floating">
+                <input type="date" class="form-control" @bind="searchParams.CreatedDate" />
+                <label>Search Created Date</label>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="mb-3 form-floating">
+                <input type="date" class="form-control" @bind="searchParams.UpdatedDate" />
+                <label>Search Updated Date</label>
+            </div>
+        </div>
+    </div>
+
     <div class="mb-3">
         <button class="btn btn-primary" @onclick="ShowAddCMS1500Modal">Add CMS1500</button>
         <button class="btn btn-secondary" @onclick="LoadCMS1500Forms">Search</button>
-        <button class="btn btn-danger" @onclick="ResetSearch">Reset</button>
+        <button class="btn btn-danger" @onclick="ResetSearchCMS1500">Reset</button>
     </div>
 
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th>Name</th>
+                <th><button class="btn btn-link" @onclick="() => ToggleSortCMS1500(claimantName)">Name</button></th>
                 <th>Gender</th>
                 <th>Date of Birth</th>
                 <th>Insurance Policy Number</th>
+                <th>Primary Address</th>
+                <th>Secondary Address</th>
+                <th>Created Date</th>
+                <th>Updated Date</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -38,8 +63,12 @@ else
                 <tr>
                     <td>@form.Claimant.Name</td>
                     <td>@form.Claimant.Gender</td>
-                    <td>@form.Claimant.DateOfBirth.ToString("yyyy-MM-dd")</td>
+                    <td>@form.Claimant.DateOfBirth?.ToString("yyyy-MM-dd")</td>
                     <td>@form.Claimant.InsurancePolicyNumber</td>
+                    <td>@form.Claimant.PrimaryAddress.Address1</td>
+                    <td>@form.Claimant.SecondaryAddress.Address1</td>
+                    <td>@form.CreatedDate?.ToString("yyyy-MM-dd")</td>
+                    <td>@form.UpdatedDate?.ToString("yyyy-MM-dd")</td>
                     <td>
                         <button class="btn btn-secondary" @onclick="() => ShowEditCMS1500Modal(form)">Edit</button>
                         <button class="btn btn-danger" @onclick="() => DeleteCMS1500(form)">Delete</button>
@@ -49,7 +78,7 @@ else
         </tbody>
     </table>
 
-    <Pagination TItem="CMS1500Form" TotalItems="@totalItems" PageSize="@pageSize" CurrentPage="@currentPage" OnPageChanged="OnPageChanged" OnPageSizeChangedCallback="OnPageSizeChanged" />
+    <Pagination TItem="CMS1500Form" TotalItems="@totalItems" PageSize="@pageSize" CurrentPage="@currentPage" OnPageChanged="OnPageChangedCMS1500" OnPageSizeChangedCallback="OnPageSizeChangedCMS1500" />
 }
 
 <EditCMS1500Modal @ref="editCMS1500Modal" OnCMS1500Saved="LoadCMS1500Forms" />
@@ -61,9 +90,10 @@ else
     private int totalItems;
     private int pageSize = 10;
     private int currentPage = 1;
-    private string sortField = "Claimant.Name";
+    private string sortField = "ClaimantName";
+    private string claimantName = "ClaimantName";
     private bool sortDescending = false;
-    private MedicalSeachDTO searchParams = new MedicalSeachDTO();
+    private MedicalCMS1500SeachDTO searchParams = new MedicalCMS1500SeachDTO();
 
     protected override async Task OnInitializedAsync()
     {
@@ -86,12 +116,13 @@ else
 
     private void ShowAddCMS1500Modal()
     {
-        editCMS1500Modal.Show(new CMS1500Form() { 
-            Claimant = new Claimant() 
+        editCMS1500Modal.Show(new CMS1500Form()
             {
-                DateOfBirth = DateTime.Now,
-                PrimaryAddress = new Address(), 
-                SecondaryAddress = new Address()}
+                Claimant = new Claimant()
+                {
+                    PrimaryAddress = new Address(),
+                    SecondaryAddress = new Address()
+                }
             }
         );
     }
@@ -107,22 +138,36 @@ else
         await LoadCMS1500Forms();
     }
 
-    private async Task OnPageChanged(int page)
+    private async Task OnPageChangedCMS1500(int page)
     {
         currentPage = page;
         await LoadCMS1500Forms();
     }
 
-    private async Task OnPageSizeChanged(int size)
+    private async Task OnPageSizeChangedCMS1500(int size)
     {
         pageSize = size;
         currentPage = 1;
         await LoadCMS1500Forms();
     }
 
-    private async Task ResetSearch()
+    private async Task ToggleSortCMS1500(string field)
     {
-        searchParams = new MedicalSeachDTO();
+        if (sortField == field)
+        {
+            sortDescending = !sortDescending;
+        }
+        else
+        {
+            sortField = field;
+            sortDescending = false;
+        }
+        await LoadCMS1500Forms();
+    }
+
+    private async Task ResetSearchCMS1500()
+    {
+        searchParams = new MedicalCMS1500SeachDTO();
         await LoadCMS1500Forms();
     }
 }

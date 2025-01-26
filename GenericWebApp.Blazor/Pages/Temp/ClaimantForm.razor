@@ -1,0 +1,56 @@
+﻿@using GenericWebApp.DTO.Management
+@code {
+    [Parameter]
+    public Claimant Claimant { get; set; }
+}
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h5 class="card-title">Claimant Information</h5>
+    </div>
+    <div class="card-body">
+        <div class="mb-3 form-floating">
+            <InputText id="claimantName" class="form-control" @bind-Value="Claimant.Name" />
+            <label for="claimantName">Name</label>
+            <ValidationMessage For="@(() => Claimant.Name)" />
+        </div>
+        <div class="mb-3 form-floating">
+            <InputText id="claimantGender" class="form-control" @bind-Value="Claimant.Gender" />
+            <label for="claimantGender">Gender</label>
+            <ValidationMessage For="@(() => Claimant.Gender)" />
+        </div>
+        <div class="mb-3 form-floating">
+            <InputDate id="claimantDOB" class="form-control" @bind-Value="Claimant.DateOfBirth" />
+            <label for="claimantDOB">Date of Birth</label>
+            <ValidationMessage For="@(() => Claimant.DateOfBirth)" />
+        </div>
+        <div class="mb-3 form-floating">
+            <InputText id="insurancePolicyNumber" class="form-control" @bind-Value="Claimant.InsurancePolicyNumber" />
+            <label for="insurancePolicyNumber">Insurance Policy Number</label>
+            <ValidationMessage For="@(() => Claimant.InsurancePolicyNumber)" />
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="card-title">Primary Address</h5>
+            </div>
+            <div class="card-body">
+                <AddressForm Address="@Claimant.PrimaryAddress" />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="card-title">Secondary Address</h5>
+            </div>
+            <div class="card-body">
+                <AddressForm Address="@Claimant.SecondaryAddress" />
+            </div>
+        </div>
+    </div>
+</div>

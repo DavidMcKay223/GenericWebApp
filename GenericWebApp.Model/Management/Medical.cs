@@ -13,8 +13,8 @@ namespace GenericWebApp.Model.Management
         public int ID { get; set; }
         public int ClaimantID { get; set; }
         public Claimant Claimant { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
     }
 
     [Table("Management_Claimant")]
@@ -23,14 +23,14 @@ namespace GenericWebApp.Model.Management
         [Key]
         public int ID { get; set; }
         [MaxLength(500)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [MaxLength(20)]
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
         [MaxLength(10)]
-        public string Gender { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public string? Gender { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         [MaxLength(50)]
-        public string InsurancePolicyNumber { get; set; }
+        public string? InsurancePolicyNumber { get; set; }
         public int PrimaryAddressID { get; set; }
         public int SecondaryAddressID { get; set; }
         public Address PrimaryAddress { get; set; }
@@ -43,18 +43,18 @@ namespace GenericWebApp.Model.Management
         [Key]
         public int ID { get; set; }
         [MaxLength(500)]
-        public string Address1 { get; set; }
+        public string? Address1 { get; set; }
         [MaxLength(500)]
-        public string Address2 { get; set; }
+        public string? Address2 { get; set; }
         [MaxLength(100)]
-        public string City { get; set; }
+        public string? City { get; set; }
         [MaxLength(100)]
-        public string State { get; set; }
+        public string? State { get; set; }
         [MaxLength(20)]
-        public string Zip { get; set; }
+        public string? Zip { get; set; }
         [MaxLength(20)]
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
         [MaxLength(20)]
-        public string Fax { get; set; }
+        public string? Fax { get; set; }
     }
 }

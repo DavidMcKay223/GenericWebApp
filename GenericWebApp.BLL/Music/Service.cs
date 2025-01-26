@@ -20,8 +20,6 @@ namespace GenericWebApp.BLL.Music
 
         public async Task<List<DTO.Common.ValuePair>> GetGenreList()
         {
-            //return new List<DTO.Common.ValuePair>();
-
             return await _context.Genres
                 .Select(genre => new DTO.Common.ValuePair
                 {

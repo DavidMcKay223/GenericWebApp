@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace GenericWebApp.BLL.Management
 {
-    public class MedicalService : ServiceManager<DTO.Management.CMS1500Form, MedicalSeachDTO>
+    public class MedicalCMS1500Service : ServiceManager<DTO.Management.CMS1500Form, MedicalCMS1500SeachDTO>
     {
         private readonly ManagementContext _context;
 
-        public MedicalService(ManagementContext context)
+        public MedicalCMS1500Service(ManagementContext context)
         {
             _context = context;
         }
@@ -43,7 +43,7 @@ namespace GenericWebApp.BLL.Management
             }
         }
 
-        public override async Task GetItemAsync(MedicalSeachDTO searchParams)
+        public override async Task GetItemAsync(MedicalCMS1500SeachDTO searchParams)
         {
             Response.ErrorList.Clear();
 
@@ -51,6 +51,9 @@ namespace GenericWebApp.BLL.Management
             {
                 var entity = await _context.CMS1500Forms
                     .Include(c => c.Claimant)
+                        .ThenInclude(claimant => claimant.PrimaryAddress)
+                    .Include(c => c.Claimant)
+                        .ThenInclude(claimant => claimant.SecondaryAddress)
                     .FirstOrDefaultAsync(c =>
                         (searchParams.ID.HasValue && c.ID == searchParams.ID) ||
                         (!string.IsNullOrWhiteSpace(searchParams.ClaimantName) && c.Claimant.Name.ToLower().Contains(searchParams.ClaimantName.ToLower())) ||
@@ -66,11 +69,16 @@ namespace GenericWebApp.BLL.Management
             }
         }
 
-        public override async Task GetListAsync(MedicalSeachDTO searchParams)
+        public override async Task GetListAsync(MedicalCMS1500SeachDTO searchParams)
         {
             try
             {
-                var query = _context.CMS1500Forms.AsQueryable();
+                var query = _context.CMS1500Forms
+                    .Include(c => c.Claimant)
+                        .ThenInclude(claimant => claimant.PrimaryAddress)
+                    .Include(c => c.Claimant)
+                        .ThenInclude(claimant => claimant.SecondaryAddress)
+                    .AsQueryable();
 
                 if (searchParams.ID.HasValue)
                 {
@@ -156,7 +164,7 @@ namespace GenericWebApp.BLL.Management
         }
     }
 
-    public class MedicalSeachDTO : SearchDTO
+    public class MedicalCMS1500SeachDTO : SearchDTO
     {
         public int? ID { get; set; }
         public string ClaimantName { get; set; }

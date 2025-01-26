@@ -45,13 +45,13 @@ else
     <div class="mb-3">
         <button class="btn btn-primary" @onclick="ShowAddTaskModal">Add Task</button>
         <button class="btn btn-secondary" @onclick="LoadTasks">Search</button>
-        <button class="btn btn-danger" @onclick="ResetSearch">Reset</button>
+        <button class="btn btn-danger" @onclick="ResetSearchTask">Reset</button>
     </div>
 
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th><button class="btn btn-link" @onclick="() => ToggleSort(taskTitle)">Title</button></th>
+                <th><button class="btn btn-link" @onclick="() => ToggleSortTask(taskTitle)">Title</button></th>
                 <th>Description</th>
                 <th>Created Date</th>
                 <th>Updated Date</th>
@@ -75,7 +75,7 @@ else
         </tbody>
     </table>
 
-    <Pagination TItem="TaskItem" TotalItems="@totalItems" PageSize="@pageSize" CurrentPage="@currentPage" OnPageChanged="OnPageChanged" OnPageSizeChangedCallback="OnPageSizeChanged" />
+    <Pagination TItem="TaskItem" TotalItems="@totalItems" PageSize="@pageSize" CurrentPage="@currentPage" OnPageChanged="OnPageChangedTask" OnPageSizeChangedCallback="OnPageSizeChangedTask" />
 }
 
 <EditTaskModal @ref="editTaskModal" TaskObjectTypeCode="@TaskObjectTypeCode" TaskObjectID="@TaskObjectID" OnTaskSaved="LoadTasks" />
@@ -122,12 +122,12 @@ else
 
     private void ShowAddTaskModal()
     {
-        editTaskModal.Show(new TaskItem());
+        editTaskModal.ShowTaskModal(new TaskItem());
     }
 
     private void ShowEditTaskModal(TaskItem task)
     {
-        editTaskModal.Show(task);
+        editTaskModal.ShowTaskModal(task);
     }
 
     private async Task DeleteTask(TaskItem task)
@@ -136,20 +136,20 @@ else
         await LoadTasks();
     }
 
-    private async Task OnPageChanged(int page)
+    private async Task OnPageChangedTask(int page)
     {
         currentPage = page;
         await LoadTasks();
     }
 
-    private async Task OnPageSizeChanged(int size)
+    private async Task OnPageSizeChangedTask(int size)
     {
         pageSize = size;
         currentPage = 1;
         await LoadTasks();
     }
 
-    private async Task ToggleSort(string field)
+    private async Task ToggleSortTask(string field)
     {
         if (sortField == field)
         {
@@ -163,7 +163,7 @@ else
         await LoadTasks();
     }
 
-    private async Task ResetSearch()
+    private async Task ResetSearchTask()
     {
         searchParams = new TaskSeachDTO();
         await LoadTasks();

@@ -16,7 +16,7 @@
     private TaskItem taskItem = new TaskItem();
     private bool isVisible = false;
 
-    public void Show(TaskItem task)
+    public void ShowTaskModal(TaskItem task)
     {
         taskItem = task;
         isVisible = true;
@@ -40,7 +40,7 @@
         }
     }
 
-    private void Cancel()
+    private void CancelTaskModal()
     {
         isVisible = false;
     }
@@ -54,9 +54,9 @@
                 <div class="modal-content" style="height: 80%;">
                     <div class="modal-header">
                         <h5 class="modal-title">Edit Task</h5>
-                        <button type="button" class="btn-close" @onclick="Cancel"></button>
+                        <button type="button" class="btn-close" @onclick="CancelTaskModal"></button>
                     </div>                    
-                    <EditForm Model="@taskItem" OnValidSubmit="SaveTask">
+                    <EditForm Model="@taskItem">
                         <div class="modal-body">
                             <DataAnnotationsValidator />
                             <div class="mb-3 form-floating">
@@ -72,8 +72,8 @@
                             
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                            <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+                            <button type="submit" class="btn btn-primary" @onclick="SaveTask">Save</button>
+                            <button type="button" class="btn btn-secondary" @onclick="CancelTaskModal">Cancel</button>
                         </div>
                     </EditForm>
                 </div>

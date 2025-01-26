@@ -184,8 +184,10 @@ namespace GenericWebApp.Model.Common
 
             return new GenericWebApp.DTO.Management.Claimant
             {
+                ID = claimant.ID,
                 Name = claimant.Name,
                 Gender = claimant.Gender,
+                Phone = claimant.Phone,
                 DateOfBirth = claimant.DateOfBirth,
                 InsurancePolicyNumber = claimant.InsurancePolicyNumber,
                 PrimaryAddress = ParseDTO(claimant.PrimaryAddress),
@@ -199,6 +201,8 @@ namespace GenericWebApp.Model.Common
 
             return new GenericWebApp.Model.Management.Claimant
             {
+                ID = dto.ID,
+                Phone = dto.Phone,
                 Name = dto.Name,
                 Gender = dto.Gender,
                 DateOfBirth = dto.DateOfBirth,
@@ -214,6 +218,7 @@ namespace GenericWebApp.Model.Common
 
             return new GenericWebApp.DTO.Management.Address
             {
+                ID = address.ID,
                 Address1 = address.Address1,
                 Address2 = address.Address2,
                 City = address.City,
@@ -230,6 +235,7 @@ namespace GenericWebApp.Model.Common
 
             return new GenericWebApp.Model.Management.Address
             {
+                ID = dto.ID,
                 Address1 = dto.Address1,
                 Address2 = dto.Address2,
                 City = dto.City,
