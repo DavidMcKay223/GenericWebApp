@@ -57,10 +57,12 @@ else
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th><button class="btn btn-link" @onclick="() => ToggleSort(artistName)">Artist Name</button></th>
+                <th>Artist Name</th>
                 <th>CD Name</th>
-                <th>Track Title</th>
                 <th>Genre</th>
+                <th>Track Title</th>
+                <th>Track Number</th>
+                <th>Track Length</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -69,9 +71,33 @@ else
             {
                 <tr>
                     <td>@album.ArtistName</td>
-                    <td>@album.CDList.FirstOrDefault()?.Name</td>
-                    <td>@album.CDList.FirstOrDefault()?.TrackList.FirstOrDefault()?.Title</td>
-                    <td>@myGenreList?.FirstOrDefault(x => x.ID == album.CDList.FirstOrDefault()?.Genre_ID)?.Description</td>
+                    <td colspan="5">
+                        <table class="table table-bordered nested-table">
+                            <tbody>
+                                @foreach (var cd in album.CDList)
+                                {
+                                    <tr>
+                                        <td>@cd.Name</td>
+                                        <td>@myGenreList?.FirstOrDefault(x => x.ID == cd.Genre_ID)?.Description</td>
+                                        <td colspan="4">
+                                            <table class="table table-bordered nested-table">
+                                                <tbody>
+                                                    @foreach (var track in cd.TrackList)
+                                                    {
+                                                        <tr>
+                                                            <td>@track.Title</td>
+                                                            <td>@track.Number</td>
+                                                            <td>@track.Length</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
                     <td>
                         <button class="btn btn-secondary" @onclick="() => ShowEditMusicModal(album)">Edit</button>
                         <button class="btn btn-danger" @onclick="() => DeleteMusic(album)">Delete</button>
@@ -168,3 +194,60 @@ else
         await LoadMusic();
     }
 }
+
+<style>
+    .table {
+        width: 100%;
+    }
+
+    .nested-table {
+        margin-bottom: 0;
+    }
+
+        .nested-table th, .nested-table td {
+            border: 1px solid #dee2e6;
+        }
+
+        .nested-table thead {
+            background-color: #f8f9fa;
+        }
+
+        .nested-table tbody tr {
+            background-color: #fff;
+        }
+
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1050;
+    }
+
+    .modal-dialog-centered {
+        max-width: 80%;
+        height: 80%;
+    }
+
+    .modal-content {
+        display: flex;
+        flex-direction: column;
+        max-height: 100%;
+        overflow: hidden;
+    }
+
+    .modal-body {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        max-height: calc(100vh - 325px); /* Adjust height to leave space for header and footer */
+    }
+
+    .modal-footer {
+        flex-shrink: 0;
+    }
+</style>
