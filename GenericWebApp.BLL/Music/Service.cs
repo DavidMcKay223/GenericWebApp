@@ -67,7 +67,7 @@ namespace GenericWebApp.BLL.Music
             {
                 try
                 {
-                    var album = GenericWebApp.Model.Music.Album.ParseModel(dto);
+                    var album = GenericWebApp.Model.Common.AlbumParser.ParseModel(dto);
 
                     if (dto.ID == null)
                     {
@@ -116,7 +116,7 @@ namespace GenericWebApp.BLL.Music
                         .ThenInclude(cd => cd.TrackList)
                     .FirstOrDefaultAsync(a => a.ArtistName.ToLower() == searchParams.ArtistName.ToLower());
 
-                Response.Item = GenericWebApp.Model.Music.Album.ParseDTO(album);
+                Response.Item = GenericWebApp.Model.Common.AlbumParser.ParseDTO(album);
             }
             catch (Exception ex)
             {
@@ -209,7 +209,7 @@ namespace GenericWebApp.BLL.Music
                     }
                 }
 
-                Response.List = albums.Select(Model.Music.Album.ParseDTO).ToList();
+                Response.List = albums.Select(GenericWebApp.Model.Common.AlbumParser.ParseDTO).ToList();
                 Response.TotalItems = totalItems; // Set the total items count in the response
             }
             catch (Exception ex)

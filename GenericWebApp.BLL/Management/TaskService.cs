@@ -59,7 +59,7 @@ namespace GenericWebApp.BLL.Management
                         (searchParams.CreatedDate.HasValue && t.CreatedDate >= searchParams.CreatedDate) ||
                         (searchParams.UpdatedDate.HasValue && t.UpdatedDate >= searchParams.UpdatedDate));
 
-                Response.Item = GenericWebApp.Model.Management.TaskItem.ParseDTO(taskItem);
+                Response.Item = GenericWebApp.Model.Common.ManagementParser.ParseDTO(taskItem);
             }
             catch (Exception ex)
             {
@@ -133,7 +133,7 @@ namespace GenericWebApp.BLL.Management
                 query = query.Skip((searchParams.PageNumber - 1) * searchParams.PageSize).Take(searchParams.PageSize);
 
                 var taskItems = await query.ToListAsync();
-                Response.List = taskItems.Select(GenericWebApp.Model.Management.TaskItem.ParseDTO).ToList();
+                Response.List = taskItems.Select(GenericWebApp.Model.Common.ManagementParser.ParseDTO).ToList();
                 Response.TotalItems = totalItems;
             }
             catch (Exception ex)
@@ -151,7 +151,7 @@ namespace GenericWebApp.BLL.Management
             {
                 try
                 {
-                    var taskItem = GenericWebApp.Model.Management.TaskItem.ParseModel(dto);
+                    var taskItem = GenericWebApp.Model.Common.ManagementParser.ParseModel(dto);
 
                     var existingTaskItem = await _context.TaskItems.FirstOrDefaultAsync(t => t.ID == dto.ID);
                     if (existingTaskItem != null)

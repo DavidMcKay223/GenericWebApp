@@ -348,7 +348,7 @@ namespace GenericWebApp.UnitTest.Management
             task.Title = "Updated Task Title";
 
             // Act
-            await _service.SaveItemAsync(Model.Management.TaskItem.ParseDTO(task));
+            await _service.SaveItemAsync(Model.Common.ManagementParser.ParseDTO(task));
             await _service.GetListAsync(new TaskSeachDTO());
 
             // Assert
