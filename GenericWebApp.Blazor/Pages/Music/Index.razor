@@ -155,7 +155,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        myGenreList = myService.GetGenreList();
+        myGenreList = await myService.GetGenreList();
         searchParams = new BLL.Music.MusicSearchDTO();
         await LoadAlbumsAsync();
     }

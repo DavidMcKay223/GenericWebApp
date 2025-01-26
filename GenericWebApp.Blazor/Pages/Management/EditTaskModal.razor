@@ -1,7 +1,7 @@
 ﻿@using GenericWebApp.DTO.Management
 @using GenericWebApp.BLL.Management
 @using GenericWebApp.Blazor.Shared.Common
-@inject TaskService TaskService
+@inject TaskService myService
 
 @code {
     [Parameter]
@@ -32,8 +32,8 @@
             taskItem.Task_Object_ID = TaskObjectID.Value;
         }
 
-        await TaskService.SaveItemAsync(taskItem);
-        if (TaskService.Response.ErrorList.Count == 0)
+        await myService.SaveItemAsync(taskItem);
+        if (myService.Response.ErrorList.Count == 0)
         {
             isVisible = false;
             await OnTaskSaved.InvokeAsync();

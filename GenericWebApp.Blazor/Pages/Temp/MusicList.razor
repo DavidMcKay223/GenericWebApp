@@ -1,0 +1,170 @@
+﻿@using GenericWebApp.DTO.Music
+@using GenericWebApp.BLL.Music
+@using GenericWebApp.Blazor.Shared.Common
+@inject Service myService
+
+<div class="container">
+    <h1 class="my-4 text-center">Music List</h1>
+</div>
+
+<DisplayError ErrorList="@myService.Response.ErrorList" />
+
+@if (isLoading)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <div class="mb-3 form-floating">
+                <input type="text" class="form-control" @bind="searchParams.ArtistName" />
+                <label>Search Artist Name</label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="mb-3 form-floating">
+                <input type="text" class="form-control" @bind="searchParams.CdName" />
+                <label>Search CD Name</label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="mb-3 form-floating">
+                <input type="text" class="form-control" @bind="searchParams.TrackTitle" />
+                <label>Search Track Title</label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="mb-3 form-floating">
+                <InputSelect id="ddl_genre" class="form-select" @bind-Value="searchParams.GenreID">
+                    <option value="">Select Genre</option>
+                    @foreach (var myGenre in myGenreList)
+                    {
+                        <option value="@myGenre.ID">@myGenre.Description</option>
+                    }
+                </InputSelect>
+                <label for="ddl_genre">Genre</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="ShowAddMusicModal">Add Music</button>
+        <button class="btn btn-secondary" @onclick="LoadMusic">Search</button>
+        <button class="btn btn-danger" @onclick="ResetSearch">Reset</button>
+    </div>
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th><button class="btn btn-link" @onclick="() => ToggleSort(artistName)">Artist Name</button></th>
+                <th>CD Name</th>
+                <th>Track Title</th>
+                <th>Genre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var album in albums)
+            {
+                <tr>
+                    <td>@album.ArtistName</td>
+                    <td>@album.CDList.FirstOrDefault()?.Name</td>
+                    <td>@album.CDList.FirstOrDefault()?.TrackList.FirstOrDefault()?.Title</td>
+                    <td>@myGenreList?.FirstOrDefault(x => x.ID == album.CDList.FirstOrDefault()?.Genre_ID)?.Description</td>
+                    <td>
+                        <button class="btn btn-secondary" @onclick="() => ShowEditMusicModal(album)">Edit</button>
+                        <button class="btn btn-danger" @onclick="() => DeleteMusic(album)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <Pagination TItem="Album" TotalItems="@totalItems" PageSize="@pageSize" CurrentPage="@currentPage" OnPageChanged="OnPageChanged" OnPageSizeChangedCallback="OnPageSizeChanged" />
+}
+
+<EditMusicModal @ref="editMusicModal" myGenreList="@myGenreList" OnMusicSaved="LoadMusic" />
+
+@code {
+    private List<Album> albums;
+    private bool isLoading = true;
+    private EditMusicModal editMusicModal;
+    private int totalItems;
+    private int pageSize = 10;
+    private int currentPage = 1;
+    private string sortField = "ArtistName";
+    private string artistName = "ArtistName";
+    private bool sortDescending = false;
+    private MusicSearchDTO searchParams = new MusicSearchDTO();
+    private List<DTO.Common.ValuePair>? myGenreList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        myGenreList = await myService.GetGenreList();
+        await LoadMusic();
+    }
+
+    private async Task LoadMusic()
+    {
+        isLoading = true;
+        searchParams.PageNumber = currentPage;
+        searchParams.PageSize = pageSize;
+        searchParams.SortField = sortField;
+        searchParams.SortDescending = sortDescending;
+
+        await myService.GetListAsync(searchParams);
+        albums = myService.Response.List;
+        totalItems = myService.Response.TotalItems;
+        isLoading = false;
+    }
+
+    private void ShowAddMusicModal()
+    {
+        editMusicModal.Show(new Album());
+    }
+
+    private void ShowEditMusicModal(Album album)
+    {
+        editMusicModal.Show(album);
+    }
+
+    private async Task DeleteMusic(Album album)
+    {
+        await myService.DeleteItemAsync(album);
+        await LoadMusic();
+    }
+
+    private async Task OnPageChanged(int page)
+    {
+        currentPage = page;
+        await LoadMusic();
+    }
+
+    private async Task OnPageSizeChanged(int size)
+    {
+        pageSize = size;
+        currentPage = 1;
+        await LoadMusic();
+    }
+
+    private async Task ToggleSort(string field)
+    {
+        if (sortField == field)
+        {
+            sortDescending = !sortDescending;
+        }
+        else
+        {
+            sortField = field;
+            sortDescending = false;
+        }
+        await LoadMusic();
+    }
+
+    private async Task ResetSearch()
+    {
+        searchParams = new MusicSearchDTO();
+        await LoadMusic();
+    }
+}

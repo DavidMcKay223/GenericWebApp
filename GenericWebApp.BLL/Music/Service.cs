@@ -18,18 +18,17 @@ namespace GenericWebApp.BLL.Music
             _context = context;
         }
 
-        public List<DTO.Common.ValuePair> GetGenreList()
+        public async Task<List<DTO.Common.ValuePair>> GetGenreList()
         {
-            List<DTO.Common.ValuePair> myList = new List<DTO.Common.ValuePair>();
+            //return new List<DTO.Common.ValuePair>();
 
-            var genres = _context.Genres.ToList();
-
-            foreach (var genre in genres)
-            {
-                myList.Add(new DTO.Common.ValuePair { Description = genre.Description, ID = genre.ID });
-            }
-
-            return myList;
+            return await _context.Genres
+                .Select(genre => new DTO.Common.ValuePair
+                {
+                    Description = genre.Description,
+                    ID = genre.ID
+                })
+                .ToListAsync();
         }
 
         public override async Task DeleteItemAsync(GenericWebApp.DTO.Music.Album dto)

@@ -1,0 +1,194 @@
+﻿@using GenericWebApp.DTO.Music
+@using GenericWebApp.BLL.Music
+@using GenericWebApp.Blazor.Shared.Common
+@inject BLL.Music.Service myService
+
+@code {
+    [Parameter]
+    public EventCallback OnMusicSaved { get; set; }
+
+    private DTO.Music.Album albumItem { get; set; }
+    private bool isVisible = false;
+
+    [Parameter]
+    public List<DTO.Common.ValuePair> myGenreList { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+
+    public void Show(DTO.Music.Album album)
+    {
+        albumItem = album;
+        isVisible = true;
+    }
+
+    private void AddNewCD()
+    {
+        albumItem.CDList ??= new List<DTO.Music.CD>();
+        albumItem.CDList.Add(new DTO.Music.CD { TrackList = new List<DTO.Music.Track>() });
+    }
+
+    private void AddNewTrack(DTO.Music.CD cd)
+    {
+        cd.TrackList ??= new List<DTO.Music.Track>();
+        cd.TrackList.Add(new DTO.Music.Track { Number = cd.TrackList.Count + 1 });
+    }
+
+    private async Task SaveTask()
+    {
+        if (albumItem == null) return;
+
+        await myService.SaveItemAsync(albumItem);
+        if (myService.Response.ErrorList.Count == 0)
+        {
+            isVisible = false;
+            await OnMusicSaved.InvokeAsync();
+        }
+    }
+
+    private void Cancel()
+    {
+        isVisible = false;
+    }
+}
+
+@if (isVisible)
+{
+    <div class="modal-backdrop">
+        <div class="modal show d-block" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content" style="height: 80%;">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Music</h5>
+                        <button type="button" class="btn-close" @onclick="Cancel"></button>
+                    </div>
+                    <EditForm Model="@albumItem" OnValidSubmit="@SaveTask">
+                        <div class="modal-body">
+                            <DataAnnotationsValidator />
+
+                            <div class="mb-3">
+                                <div class="mb-3 form-floating">
+                                    <InputText id="artistName" class="form-control" @bind-Value="albumItem.ArtistName" />
+                                    <label>Artist Name</label>
+                                    <ValidationMessage For="@(() => albumItem.ArtistName)" />
+                                </div>
+                            </div>
+
+                            @if (albumItem.CDList != null)
+                            {
+                                @foreach (var cd in albumItem.CDList)
+                                {
+                                    <div class="card mb-3">
+                                        <div class="card-header">
+                                            <h5>CD Details</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3">
+                                                <div class="mb-3 form-floating">
+                                                    <InputText id="cdName" class="form-control" @bind-Value="cd.Name" />
+                                                    <label>CD Name</label>
+                                                    <ValidationMessage For="@(() => cd.Name)" />
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="mb-3 form-floating">
+                                                    <InputSelect class="form-select" @bind-Value="cd.Genre_ID">
+                                                        <option value="">Select Genre</option>
+                                                        @foreach (var genre in myGenreList)
+                                                        {
+                                                            <option value="@genre.ID">@genre.Description</option>
+                                                        }
+                                                    </InputSelect>
+                                                    <label>Genre</label>
+                                                </div>
+                                            </div>
+
+                                            @if (cd.TrackList != null)
+                                            {
+                                                @foreach (var track in cd.TrackList)
+                                                {
+                                                    <div class="row g-3">
+                                                        <div class="col-md-2">
+                                                            <div class="mb-3 form-floating">
+                                                                <InputNumber id="trackNumber" class="form-control" @bind-Value="track.Number" />
+                                                                <label>Track Number</label>
+                                                                <ValidationMessage For="@(() => track.Number)" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            <div class="mb-3 form-floating">
+                                                                <InputText id="trackTitle" class="form-control" @bind-Value="track.Title" />
+                                                                <label>Track Title</label>
+                                                                <ValidationMessage For="@(() => track.Title)" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            <div class="mb-3 form-floating">
+                                                                <CustomTimeInput TValue="TimeSpan" @bind-Value="track.Length" class="form-control" />
+                                                                <label>Track Length</label>
+                                                                <ValidationMessage For="@(() => track.Length)" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                            <div class="mt-3">
+                                                <button type="button" class="btn btn-primary" @onclick="() => AddNewTrack(cd)">Add New Track</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            <div class="mt-3">
+                                <button type="button" class="btn btn-primary" @onclick="AddNewCD">Add New CD</button>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1050;
+    }
+
+    .modal-dialog-centered {
+        max-width: 80%;
+        height: 80%;
+    }
+
+    .modal-content {
+        display: flex;
+        flex-direction: column;
+        max-height: 100%;
+        overflow: hidden;
+    }
+
+    .modal-body {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        max-height: calc(100vh - 325px);
+    }
+
+    .modal-footer {
+        flex-shrink: 0;
+    }
+</style>

@@ -22,7 +22,8 @@ builder.Services.AddDbContext<AlbumContext>(options =>
                 maxRetryCount: 5,
                 maxRetryDelay: TimeSpan.FromSeconds(30),
                 errorNumbersToAdd: null);
-        }));
+        }),
+        ServiceLifetime.Scoped);
 
 builder.Services.AddDbContext<ManagementContext>(options =>
     options.UseSqlServer(
@@ -34,7 +35,8 @@ builder.Services.AddDbContext<ManagementContext>(options =>
                 maxRetryCount: 5,
                 maxRetryDelay: TimeSpan.FromSeconds(30),
                 errorNumbersToAdd: null);
-        }));
+        }),
+        ServiceLifetime.Scoped);
 
 builder.Services.AddScoped<Service>();
 builder.Services.AddScoped<TaskService>();
