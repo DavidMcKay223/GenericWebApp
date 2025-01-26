@@ -21,13 +21,12 @@ namespace GenericWebApp.UnitTest.Common
             Context = new Model.Management.ManagementContext(options);
             Context.Database.OpenConnection();
             Context.Database.EnsureCreated();
-            SeedData();
         }
 
-        public void SeedData()
+        public async Task SeedDataAsync()
         {
             Context.TaskItems.RemoveRange(Context.TaskItems);
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
 
             var tasksItem = new List<TaskItem>
             {
@@ -37,7 +36,7 @@ namespace GenericWebApp.UnitTest.Common
             };
 
             Context.TaskItems.AddRange(tasksItem);
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
         }
 
         public void Dispose()

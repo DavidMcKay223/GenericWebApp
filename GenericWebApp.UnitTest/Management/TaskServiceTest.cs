@@ -14,7 +14,7 @@ using GenericWebApp.Model.Music;
 
 namespace GenericWebApp.UnitTest.Management
 {
-    public class TaskServiceTest : IClassFixture<Common.ManagementDatabaseFixture>
+    public class TaskServiceTest : IClassFixture<Common.ManagementDatabaseFixture>, IAsyncLifetime
     {
         private readonly ManagementContext _context;
         private readonly BLL.Management.TaskService _service;
@@ -27,15 +27,20 @@ namespace GenericWebApp.UnitTest.Management
             _fixture = fixture;
         }
 
-        public void Initialize()
+        public async Task InitializeAsync()
         {
-            _fixture.SeedData();
+            await _fixture.SeedDataAsync();
+        }
+
+        public Task DisposeAsync()
+        {
+            // Cleanup if necessary
+            return Task.CompletedTask;
         }
 
         [Fact]
         public async Task GetListAsync_ReturnsAllTasks()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Retrieving all tasks");
 
             // Act
@@ -51,7 +56,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task SaveItemAsync_TaskWithTitleAndDescription()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Saving task with title and description");
 
             // Arrange
@@ -72,7 +76,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task DeleteItemAsync_DeletesTaskCorrectly()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Deleting task correctly");
 
             // Arrange
@@ -95,7 +98,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task GetItemAsync_ReturnsCorrectTask()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Retrieving correct task");
 
             // Arrange
@@ -115,7 +117,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task SaveItemAsync_InvalidTask_ShouldReturnError()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Saving invalid task");
 
             // Arrange
@@ -135,7 +136,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task GetListAsync_WithEmptySearchParams_ReturnsAllTasks()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Retrieving all tasks with empty search params");
 
             // Act
@@ -151,7 +151,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task GetListAsync_WithPagination_ReturnsCorrectTasks()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Retrieving tasks with pagination");
 
             // Act
@@ -167,7 +166,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task GetListAsync_ByDateRange_ReturnsCorrectTasks()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Retrieving tasks by date range");
 
             // Act
@@ -182,7 +180,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task GetListAsync_WithInvalidParams_ReturnsError()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Retrieving tasks with invalid params");
 
             // Act
@@ -197,7 +194,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task GetItemAsync_WithValidID_ReturnsCorrectTask()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Retrieving task by valid ID");
 
             // Arrange
@@ -217,7 +213,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task GetItemAsync_WithNonExistentID_ReturnsNull()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Retrieving task by non-existent ID");
 
             // Act
@@ -233,7 +228,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task GetItemAsync_ByPartialTitle_ReturnsCorrectTask()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Retrieving task by partial title");
 
             // Act
@@ -250,7 +244,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task GetItemAsync_WithInvalidParams_ReturnsError()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Retrieving task with invalid params");
 
             // Act
@@ -265,7 +258,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task SaveItemAsync_WithValidTask_AddsTaskSuccessfully()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Saving valid task");
 
             // Arrange
@@ -286,7 +278,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task SaveItemAsync_WithEmptyTitle_ReturnsValidationError()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Saving task with empty title");
 
             // Arrange
@@ -304,7 +295,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task SaveItemAsync_WithEmptyDescription_ReturnsValidationError()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Saving task with empty description");
 
             // Arrange
@@ -322,7 +312,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task SaveItemAsync_WithDuplicateTask_ReturnsError()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Saving duplicate task");
 
             // Arrange
@@ -340,7 +329,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task SaveItemAsync_WithUpdatedTask_UpdatesTaskCorrectly()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Updating existing task");
 
             // Arrange
@@ -361,7 +349,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task DeleteItemAsync_WithValidID_DeletesTaskSuccessfully()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Deleting task with valid ID");
 
             // Arrange
@@ -381,7 +368,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task DeleteItemAsync_WithNonExistentID_ReturnsError()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Deleting task with non-existent ID");
 
             // Act
@@ -396,7 +382,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task DeleteItemAsync_WithInvalidID_ReturnsError()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Deleting task with invalid ID");
 
             // Act
@@ -411,7 +396,6 @@ namespace GenericWebApp.UnitTest.Management
         [Fact]
         public async Task DeleteItemAsync_WithConcurrentUpdates_HandlesGracefully()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Deleting task with concurrent updates");
 
             // Arrange

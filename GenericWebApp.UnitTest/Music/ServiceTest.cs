@@ -13,7 +13,7 @@ using GenericWebApp.BLL.Music;
 
 namespace GenericWebApp.UnitTest.Music
 {
-    public class ServiceTest : IClassFixture<Common.AlbumDatabaseFixture>
+    public class ServiceTest : IClassFixture<Common.AlbumDatabaseFixture>, IAsyncLifetime
     {
         private readonly AlbumContext _context;
         private readonly BLL.Music.Service _service;
@@ -26,15 +26,20 @@ namespace GenericWebApp.UnitTest.Music
             _fixture = fixture;
         }
 
-        public void Initialize()
+        public async Task InitializeAsync()
         {
-            _fixture.SeedData();
+            await _fixture.SeedDataAsync();
+        }
+
+        public Task DisposeAsync()
+        {
+            // Cleanup if necessary
+            return Task.CompletedTask;
         }
 
         [Fact]
         public async Task DeleteItemAsync_DeletesAlbumCorrectly()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Deleting album correctly");
 
             // Arrange
@@ -68,7 +73,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task DeleteItemAsync_DeletesAlbumIncorrectly()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Attempt to delete a non-existent album");
 
             // Arrange
@@ -102,7 +106,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task DeleteItemAsync_DeletesAlbumWithCD()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Deleting album with CDs");
 
             // Arrange
@@ -136,7 +139,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task DeleteItemAsync_DeletesTracks()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Deleting track from CD");
 
             // Arrange
@@ -174,7 +176,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task GetItemAsync_ReturnsCorrectAlbum()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Retrieving correct album");
 
             // Arrange
@@ -201,7 +202,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task GetListAsync_ReturnsAllAlbums()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Retrieving all albums");
 
             // Act
@@ -224,7 +224,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task GetListAsync_ReturnsOneAlbumOneCD()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Fetching one album with one CD");
 
             // Act
@@ -241,7 +240,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task GetListAsync_ReturnsOneAlbumTwoCD()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Fetching one album with two CDs");
 
             // Act
@@ -258,7 +256,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task GetListAsync_ReturnsAllCDs()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Fetching all CDs");
 
             // Act
@@ -275,7 +272,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task GetListAsync_ReturnsAllTracks()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Fetching all tracks");
 
             // Act
@@ -295,7 +291,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task GetListAsync_ReturnsAllAlbumsWithGenre()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Fetching all albums with a specific genre");
 
             var genreDictionary = _context.Genres.ToDictionary(g => g.Description, g => g.ID);
@@ -317,7 +312,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task GetListAsync_ReturnsOneAlbumOneCDOneTrack()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Fetching one album with one CD and one track");
 
             // Act
@@ -335,7 +329,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task SaveItemAsync_AlbumWithArtist()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Saving album with artist");
 
             // Arrange
@@ -355,7 +348,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task SaveItemAsync_AlbumWithCDGenreID()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Saving album with CD having Genre_ID");
 
             // Retrieve the genre IDs from the database
@@ -396,7 +388,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task SaveItemAsync_AlbumWithCDNoTitle()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Saving album with CD having no title");
 
             // Arrange
@@ -419,7 +410,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task SaveItemAsync_AlbumWithCDTitle()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Saving album with CD having title");
 
             // Arrange
@@ -446,7 +436,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task SaveItemAsync_AlbumWithCDTrackNoDescription()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Saving album with CD track having no description");
 
             // Arrange
@@ -473,7 +462,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task SaveItemAsync_AlbumWithMultipleCDsAndGenreIDs()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Saving album with multiple CDs and Genre_IDs");
 
             // Retrieve the genre IDs from the database
@@ -524,7 +512,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task UpdateAlbum_InvalidArtistName_ShouldReturnError()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Invalid Artist Name");
 
             // Arrange
@@ -550,7 +537,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task GetListAsync_SortsByArtistNameAscending()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Sorting by ArtistName ascending");
 
             // Arrange
@@ -573,7 +559,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task GetListAsync_SortsByArtistNameDescending()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Sorting by ArtistName descending");
 
             // Arrange
@@ -596,7 +581,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task GetListAsync_SortsByCdNameAscending()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Sorting by CdName ascending");
 
             // Arrange
@@ -619,7 +603,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task GetListAsync_SortsByCdNameDescending()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Sorting by CdName descending");
 
             // Arrange
@@ -642,7 +625,6 @@ namespace GenericWebApp.UnitTest.Music
         [Fact]
         public async Task GetListAsync_Pagination()
         {
-            Initialize();
             var assertCollection = new AssertCollection("Pagination test");
 
             // Arrange

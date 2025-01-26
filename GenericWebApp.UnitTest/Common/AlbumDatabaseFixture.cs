@@ -21,13 +21,12 @@ namespace GenericWebApp.UnitTest.Common
             Context = new Model.Music.AlbumContext(options);
             Context.Database.OpenConnection();
             Context.Database.EnsureCreated();
-            SeedData();
         }
 
-        public void SeedData()
+        public async Task SeedDataAsync()
         {
             Context.Albums.RemoveRange(Context.Albums);
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
 
             if (Context.Genres.Count() == 0)
             {
@@ -47,7 +46,7 @@ namespace GenericWebApp.UnitTest.Common
                 };
 
                 Context.Genres.AddRange(genres);
-                Context.SaveChanges();
+                await Context.SaveChangesAsync();
             }
 
             // Retrieve the genre IDs from the database
@@ -483,7 +482,7 @@ namespace GenericWebApp.UnitTest.Common
             };
 
             Context.Albums.AddRange(albums);
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
         }
 
         public void Dispose()
