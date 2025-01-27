@@ -18,7 +18,7 @@
         if (ID.HasValue)
         {
             myService.GetItem(new MedicalCMS1500SeachDTO() { ID = ID.Value });
-            cms1500 = myService.Response.Item;
+            cms1500 = myService.Response.Item!;
         }
 
         SetActiveTab(claimantTab);
@@ -58,7 +58,7 @@
     }
 }
 
-@if (isVisible)
+@if (isVisible && cms1500 != null)
 {
     <div class="modal-backdrop">
         <div class="modal show d-block" tabindex="-1">
