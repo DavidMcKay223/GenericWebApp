@@ -15,6 +15,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericWebApp.ConsoleApp", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericWebApp.UnitTest", "..\GenericWebApp.UnitTest\GenericWebApp.UnitTest.csproj", "{BE2DA374-1FD0-42EC-A032-F7CDE56CB16F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GenericWebApp.Template", "GenericWebApp.Template", "{FE68A801-F0DA-4D30-8852-2993372FF093}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{5D5DF296-F061-42CC-9305-04C2AD79B627}"
+	ProjectSection(SolutionItems) = preProject
+		TempSqlScripts.md = TempSqlScripts.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EntityFramework", "EntityFramework", "{6D6103B7-8B57-4700-9AC8-3CC5CAA77CA5}"
+	ProjectSection(SolutionItems) = preProject
+		EntityFramework.md = EntityFramework.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +60,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5D5DF296-F061-42CC-9305-04C2AD79B627} = {FE68A801-F0DA-4D30-8852-2993372FF093}
+		{6D6103B7-8B57-4700-9AC8-3CC5CAA77CA5} = {FE68A801-F0DA-4D30-8852-2993372FF093}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9C0B1F56-5770-44E0-8748-51AE426B4D94}
