@@ -23,7 +23,7 @@ namespace GenericWebApp.Model.Common
 
                 if (cdModel == null)
                 {
-                    cdModel = new Model.Music.CD() { Name = String.Empty };
+                    cdModel = new Model.Music.CD() { Name = String.Empty, TrackList = [] };
                     model.CDList.Add(cdModel);
                 }
 

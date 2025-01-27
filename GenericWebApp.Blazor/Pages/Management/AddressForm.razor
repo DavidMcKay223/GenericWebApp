@@ -1,7 +1,8 @@
 ﻿@using GenericWebApp.DTO.Management
+
 @code {
     [Parameter]
-    public Address Address { get; set; }
+    public required Address Address { get; set; }
 
     private List<DTO.Common.ValuePair>? myStateList;
 
@@ -34,7 +35,7 @@
         <div class="mb-3 form-floating">
             <InputSelect id="state" class="form-select" @bind-Value="Address.State">
                 <option value="">Select State</option>
-                @foreach (var myState in myStateList)
+                @foreach (var myState in myStateList ?? [])
                 {
                     <option value="@myState.Value">@myState.Description</option>
                 }

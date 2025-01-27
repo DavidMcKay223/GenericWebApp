@@ -17,7 +17,7 @@
                 <label for="ddl_state" class="form-label">State</label>
                 <InputSelect id="ddl_state" class="form-select" @bind-Value="mySearch.State">
                     <option value="">Select State</option>
-                    @foreach (var myState in myStateList)
+                    @foreach (var myState in myStateList ?? [])
                     {
                         <option value="@myState.Value">@myState.Description</option>
                     }

@@ -96,7 +96,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
+                        <div class="modal-footer fade @(activeTab == "claimant" ? "show active" : "")">
                             <button type="submit" class="btn btn-primary" @onclick=SaveCMS1500>Save</button>
                             <button type="button" class="btn btn-secondary" @onclick="CancelCMS1500">Cancel</button>
                         </div>

@@ -66,15 +66,12 @@ namespace GenericWebApp.BLL.Management
 
                 var taskItem = await _context.TaskItems.FirstOrDefaultAsync(t =>
                         (searchParams.ID.HasValue && t.ID == searchParams.ID) ||
-                        (!string.IsNullOrWhiteSpace(searchParams.TaskTitle) && t.Title.Contains(searchParams.TaskTitle, StringComparison.OrdinalIgnoreCase)) ||
-                        (!string.IsNullOrWhiteSpace(searchParams.TaskDescription) && t.Description.Contains(searchParams.TaskDescription, StringComparison.OrdinalIgnoreCase)) ||
-                        (!string.IsNullOrWhiteSpace(searchParams.TaskObjectType_Code) && t.TaskObjectType_Code != null && t.TaskObjectType_Code.Contains(searchParams.TaskObjectType_Code, StringComparison.CurrentCultureIgnoreCase)) ||
-                        (searchParams.Task_Object_ID.HasValue && t.Task_Object_ID == searchParams.Task_Object_ID) ||
-                        (searchParams.TaskActivity_ID.HasValue && t.TaskActivity_ID == searchParams.TaskActivity_ID) ||
-                        (searchParams.CreatedDate.HasValue && t.CreatedDate >= searchParams.CreatedDate) ||
-                        (searchParams.UpdatedDate.HasValue && t.UpdatedDate >= searchParams.UpdatedDate));
+                        (!string.IsNullOrWhiteSpace(searchParams.TaskTitle) && t.Title.ToLower().Contains(searchParams.TaskTitle.ToLower())) ||
+                        (!string.IsNullOrWhiteSpace(searchParams.TaskDescription) && t.Description.ToLower().Contains(searchParams.TaskDescription.ToLower()))
+                    );
 
-                Response.Item = GenericWebApp.Model.Common.ManagementDTOParser.ParseDTO(taskItem ?? new Model.Management.TaskItem() { Title = String.Empty, Description = String.Empty });
+
+                Response.Item = GenericWebApp.Model.Common.ManagementDTOParser.ParseDTO(taskItem!);
             }
             catch (Exception ex)
             {
@@ -112,7 +109,7 @@ namespace GenericWebApp.BLL.Management
 
                 if (!string.IsNullOrWhiteSpace(searchParams.TaskObjectType_Code))
                 {
-                    query = query.Where(t => t.TaskObjectType_Code != null && EF.Functions.Like(t.TaskObjectType_Code, $"%{searchParams.TaskObjectType_Code}%"));
+                    query = query.Where(t => t.TaskObjectType_Code != null && t.TaskObjectType_Code.ToLower().Contains(searchParams.TaskObjectType_Code.ToLower()));
                 }
 
                 if (searchParams.Task_Object_ID.HasValue)

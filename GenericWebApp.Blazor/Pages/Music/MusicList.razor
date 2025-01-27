@@ -38,7 +38,7 @@ else
             <div class="mb-3 form-floating">
                 <InputSelect id="ddl_genre" class="form-select" @bind-Value="searchParams.GenreID">
                     <option value="">Select Genre</option>
-                    @foreach (var myGenre in myGenreList)
+                    @foreach (var myGenre in myGenreList ?? [])
                     {
                         <option value="@myGenre.ID">@myGenre.Description</option>
                     }
@@ -57,7 +57,7 @@ else
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th>Artist Name</th>
+                <th><button class="btn btn-link" @onclick="() => ToggleSort(artistName)">Artist Name</button></th>
                 <th>CD Name</th>
                 <th>Genre</th>
                 <th>Track Title</th>
@@ -74,7 +74,7 @@ else
                     <td colspan="5">
                         <table class="table table-bordered nested-table">
                             <tbody>
-                                @foreach (var cd in album.CDList)
+                                @foreach (var cd in album.CDList ?? [])
                                 {
                                     <tr>
                                         <td>@cd.Name</td>
@@ -82,11 +82,11 @@ else
                                         <td colspan="4">
                                             <table class="table table-bordered nested-table">
                                                 <tbody>
-                                                    @foreach (var track in cd.TrackList)
+                                                    @foreach (var track in cd.TrackList ?? [])
                                                     {
                                                         <tr>
-                                                            <td>@track.Title</td>
                                                             <td>@track.Number</td>
+                                                            <td>@track.Title</td>
                                                             <td>@track.Length</td>
                                                         </tr>
                                                     }
@@ -120,7 +120,7 @@ else
     private int pageSize = 10;
     private int currentPage = 0;
     private string sortField = "ArtistName";
-    private string artistName = "ArtistName";
+    private readonly string artistName = "ArtistName";
     private bool sortDescending = false;
     private MusicSearchDTO searchParams = new MusicSearchDTO();
     private List<DTO.Common.ValuePair>? myGenreList;
@@ -140,7 +140,7 @@ else
         searchParams.SortDescending = sortDescending;
 
         await myService.GetListAsync(searchParams);
-        albums = myService.Response.List;
+        albums = myService.Response.List ?? [];
         totalItems = myService.Response.TotalItems;
         isLoading = false;
     }

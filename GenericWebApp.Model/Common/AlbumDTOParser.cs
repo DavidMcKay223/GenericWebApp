@@ -12,7 +12,7 @@ namespace GenericWebApp.Model.Common
         {
             if (album == null) return null;
 
-            DTO.Music.Album dto = new DTO.Music.Album
+            DTO.Music.Album dto = new()
             {
                 ID = album.ID,
                 ArtistName = album.ArtistName,
@@ -26,7 +26,7 @@ namespace GenericWebApp.Model.Common
         {
             if (cd == null) return null;
 
-            DTO.Music.CD dto = new DTO.Music.CD
+            DTO.Music.CD dto = new()
             {
                 ID = cd.ID,
                 Name = cd.Name,
@@ -42,7 +42,7 @@ namespace GenericWebApp.Model.Common
         {
             if (track == null) return null;
 
-            DTO.Music.Track dto = new DTO.Music.Track
+            DTO.Music.Track dto = new()
             {
                 ID = track.ID,
                 Number = track.Number,
@@ -58,7 +58,7 @@ namespace GenericWebApp.Model.Common
         {
             if (genre == null) return null;
 
-            DTO.Music.Genre dto = new DTO.Music.Genre
+            DTO.Music.Genre dto = new()
             {
                 ID = genre.ID,
                 Description = genre.Description

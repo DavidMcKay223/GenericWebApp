@@ -4,38 +4,55 @@ using System.Linq;
 using GenericWebApp.Model.Music;
 using Microsoft.EntityFrameworkCore;
 
-public class Program
+namespace GenericWebApp.ConsoleApp
 {
-    public static void Main()
+    public class Program
     {
-        if (false)
+        public static void Main()
+        {
+            //SeedTestData_MusicGenre();
+            //SeedTestData_MusicAlbums();
+        }
+
+        public static void SeedTestData_MusicGenre()
         {
             var options = new DbContextOptionsBuilder<AlbumContext>()
-                .UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=GenericWebApp;Trusted_Connection=True;")
-                .Options;
+                    .UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=GenericWebApp;Trusted_Connection=True;")
+                    .Options;
+
+            using var context = new AlbumContext(options);
+            // Ensure the database is created
+            context.Database.EnsureCreated();
+
+            // Create and add genres
+            var genres = new List<Genre>
+            {
+                new() { Description = "Rock" },
+                new() { Description = "Pop" },
+                new() { Description = "Jazz" },
+                new() { Description = "Classical" },
+                new() { Description = "Hip-Hop" },
+                new() { Description = "Electronic" },
+                new() { Description = "Country" },
+                new() { Description = "Reggae" },
+                new() { Description = "Blues" },
+                new() { Description = "Metal" }
+            };
+
+            context.Genres.AddRange(genres);
+            context.SaveChanges();
+        }
+
+        public static void SeedTestData_MusicAlbums()
+        {
+            var options = new DbContextOptionsBuilder<AlbumContext>()
+                    .UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=GenericWebApp;Trusted_Connection=True;")
+                    .Options;
 
             using (var context = new AlbumContext(options))
             {
                 // Ensure the database is created
                 context.Database.EnsureCreated();
-
-                // Create and add genres
-                //var genres = new List<Genre>
-                //{
-                //    new Genre { Description = "Rock" },
-                //    new Genre { Description = "Pop" },
-                //    new Genre { Description = "Jazz" },
-                //    new Genre { Description = "Classical" },
-                //    new Genre { Description = "Hip-Hop" },
-                //    new Genre { Description = "Electronic" },
-                //    new Genre { Description = "Country" },
-                //    new Genre { Description = "Reggae" },
-                //    new Genre { Description = "Blues" },
-                //    new Genre { Description = "Metal" }
-                //};
-
-                //context.Genres.AddRange(genres);
-                //context.SaveChanges();
 
                 // Retrieve the genre IDs from the database
                 var genreDictionary = context.Genres.ToDictionary(g => g.Description, g => g.ID);
@@ -43,8 +60,7 @@ public class Program
                 // Create and add albums, CDs, and tracks
                 var albums = new List<Album>
                 {
-                    new Album
-                    {
+                    new() {
                         ArtistName = "The Beatles",
                         CDList =
                         [
@@ -96,8 +112,7 @@ public class Program
                             }
                         ]
                     },
-                    new Album
-                    {
+                    new() {
                         ArtistName = "Daft Punk",
                         CDList =
                         [
@@ -146,8 +161,7 @@ public class Program
                             }
                         ]
                     },
-                    new Album
-                    {
+                    new() {
                         ArtistName = "Beyoncé",
                         CDList =
                         [
@@ -195,8 +209,7 @@ public class Program
                             }
                         ]
                     },
-                    new Album
-                    {
+                    new() {
                         ArtistName = "Eminem",
                         CDList =
                         [
@@ -256,8 +269,7 @@ public class Program
                             }
                         ]
                     },
-                    new Album
-                    {
+                    new() {
                         ArtistName = "Miles Davis",
                         CDList =
                         [
@@ -290,8 +302,7 @@ public class Program
                             }
                         ]
                     },
-                    new Album
-                    {
+                    new() {
                         ArtistName = "Pink Floyd",
                         CDList =
                         [
@@ -328,8 +339,7 @@ public class Program
                             }
                         ]
                     },
-                    new Album
-                    {
+                    new() {
                         ArtistName = "Led Zeppelin",
                         CDList =
                         [
@@ -374,8 +384,7 @@ public class Program
                             }
                         ]
                     },
-                    new Album
-                    {
+                    new() {
                         ArtistName = "Michael Jackson",
                         CDList =
                         [
@@ -416,8 +425,7 @@ public class Program
                             }
                         ]
                     },
-                    new Album
-                    {
+                    new() {
                         ArtistName = "Queen",
                         CDList =
                         [

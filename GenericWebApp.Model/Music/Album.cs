@@ -18,7 +18,7 @@ namespace GenericWebApp.Model.Music
         [MaxLength(500)]
         public required string ArtistName { get; set; }
 
-        public List<CD>? CDList { get; set; }
+        public required List<CD> CDList { get; set; }
     }
 
     [Table("Music_CD")]
@@ -34,7 +34,7 @@ namespace GenericWebApp.Model.Music
 
         public int? Genre_ID { get; set; }
 
-        public List<Track>? TrackList { get; set; }
+        public required List<Track> TrackList { get; set; }
         public Album? Album { get; set; }
     }
 

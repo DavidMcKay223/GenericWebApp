@@ -33,16 +33,16 @@ namespace GenericWebApp.UnitTest.Common
                 // Create and add genres
                 var genres = new List<Genre>
                 {
-                    new Genre { Description = "Rock" },
-                    new Genre { Description = "Pop" },
-                    new Genre { Description = "Jazz" },
-                    new Genre { Description = "Classical" },
-                    new Genre { Description = "Hip-Hop" },
-                    new Genre { Description = "Electronic" },
-                    new Genre { Description = "Country" },
-                    new Genre { Description = "Reggae" },
-                    new Genre { Description = "Blues" },
-                    new Genre { Description = "Metal" }
+                    new() { Description = "Rock" },
+                    new() { Description = "Pop" },
+                    new() { Description = "Jazz" },
+                    new() { Description = "Classical" },
+                    new() { Description = "Hip-Hop" },
+                    new() { Description = "Electronic" },
+                    new() { Description = "Country" },
+                    new() { Description = "Reggae" },
+                    new() { Description = "Blues" },
+                    new() { Description = "Metal" }
                 };
 
                 Context.Genres.AddRange(genres);
@@ -55,8 +55,7 @@ namespace GenericWebApp.UnitTest.Common
             // Create and add albums, CDs, and tracks
             var albums = new List<Album>
             {
-                new Album
-                {
+                new() {
                     ArtistName = "The Beatles",
                     CDList =
                     [
@@ -108,8 +107,7 @@ namespace GenericWebApp.UnitTest.Common
                         }
                     ]
                 },
-                new Album
-                {
+                new() {
                     ArtistName = "Daft Punk",
                     CDList =
                     [
@@ -159,8 +157,7 @@ namespace GenericWebApp.UnitTest.Common
                     ]
                 },
 
-                new Album
-                {
+                new() {
                     ArtistName = "Beyoncé",
                     CDList =
                     [
@@ -209,8 +206,7 @@ namespace GenericWebApp.UnitTest.Common
                     ]
                 },
 
-                new Album
-                {
+                new() {
                     ArtistName = "Eminem",
                     CDList =
                     [
@@ -271,8 +267,7 @@ namespace GenericWebApp.UnitTest.Common
                     ]
                 },
 
-                new Album
-                {
+                new() {
                     ArtistName = "Miles Davis",
                     CDList =
                     [
@@ -306,8 +301,7 @@ namespace GenericWebApp.UnitTest.Common
                     ]
                 },
 
-                new Album
-                {
+                new() {
                     ArtistName = "Pink Floyd",
                     CDList =
                     [
@@ -345,8 +339,7 @@ namespace GenericWebApp.UnitTest.Common
                     ]
                 },
 
-                new Album
-                {
+                new() {
                     ArtistName = "Led Zeppelin",
                     CDList =
                     [
@@ -392,8 +385,7 @@ namespace GenericWebApp.UnitTest.Common
                     ]
                 },
 
-                new Album
-                {
+                new() {
                     ArtistName = "Michael Jackson",
                     CDList =
                     [
@@ -434,8 +426,7 @@ namespace GenericWebApp.UnitTest.Common
                         }
                     ]
                 },
-                new Album
-                {
+                new() {
                     ArtistName = "Queen",
                     CDList =
                     [

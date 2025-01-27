@@ -45,8 +45,8 @@
 
 @code {
     [Parameter]
-    public BLL.Management.DashboardAlbumService Service { get; set; }
-    private List<DTO.Management.Dashboard_MusicSummary> MusicSummary;
+    public required BLL.Management.DashboardAlbumService Service { get; set; }
+    private List<DTO.Management.Dashboard_MusicSummary>? MusicSummary;
 
     protected override async Task OnInitializedAsync()
     {

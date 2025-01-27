@@ -30,9 +30,9 @@ namespace GenericWebApp.UnitTest.Common
 
             var tasksItem = new List<TaskItem>
             {
-                new TaskItem { Title = "Task 1", Description = "Task 1 Description" },
-                new TaskItem { Title = "Task 2", Description = "Task 2 Description" },
-                new TaskItem { Title = "Task 3", Description = "Task 3 Description" }
+                new() { Title = "Task 1", Description = "Task 1 Description" },
+                new() { Title = "Task 2", Description = "Task 2 Description" },
+                new() { Title = "Task 3", Description = "Task 3 Description" }
             };
 
             Context.TaskItems.AddRange(tasksItem);

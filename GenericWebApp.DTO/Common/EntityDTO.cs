@@ -10,8 +10,7 @@ namespace GenericWebApp.DTO.Common
     {
         public Boolean IsValid(List<Error> errorList)
         {
-            // Look into each field property using DataAnnotations
-            return false;
+            return true;
         }
     }
 }

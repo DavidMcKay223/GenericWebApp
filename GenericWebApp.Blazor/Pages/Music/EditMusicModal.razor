@@ -7,7 +7,7 @@
     [Parameter]
     public EventCallback OnMusicSaved { get; set; }
 
-    private DTO.Music.Album albumItem { get; set; }
+    private DTO.Music.Album? albumItem { get; set; }
     private bool isVisible = false;
 
     [Parameter]
@@ -26,17 +26,17 @@
 
     private void AddNewCD()
     {
-        albumItem.CDList ??= new List<DTO.Music.CD>();
+        albumItem!.CDList ??= new List<DTO.Music.CD>();
         albumItem.CDList.Add(new DTO.Music.CD { Name = String.Empty, TrackList = new List<DTO.Music.Track>() });
     }
 
     private void AddNewTrack(DTO.Music.CD cd)
     {
-        cd.TrackList ??= new List<DTO.Music.Track>();
+        cd!.TrackList ??= new List<DTO.Music.Track>();
         cd.TrackList.Add(new DTO.Music.Track { Title = String.Empty, Number = cd.TrackList.Count + 1 });
     }
 
-    private async Task SaveTask()
+    private async Task SaveAlbum()
     {
         if (albumItem == null) return;
 
@@ -54,7 +54,7 @@
     }
 }
 
-@if (isVisible)
+@if (isVisible && albumItem != null)
 {
     <div class="modal-backdrop">
         <div class="modal show d-block" tabindex="-1">
@@ -64,7 +64,7 @@
                         <h5 class="modal-title">Edit Music</h5>
                         <button type="button" class="btn-close" @onclick="Cancel"></button>
                     </div>                    
-                    <EditForm Model="@albumItem" OnValidSubmit="@SaveTask">
+                    <EditForm Model="@albumItem">
                         <div class="modal-body">
                             <DisplayError ErrorList="@myService.Response.ErrorList" />
                             <DataAnnotationsValidator />
@@ -147,7 +147,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary" @onclick="SaveAlbum">Save</button>
                             <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
                         </div>
                     </EditForm>

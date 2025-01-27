@@ -35,7 +35,7 @@ namespace GenericWebApp.BLL.Common
 
         public static String GetLetterOrDigit(this string input)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
 
             foreach (char x in input.SafeString().Where(x => Char.IsLetterOrDigit(x) || Char.IsWhiteSpace(x)))
             {

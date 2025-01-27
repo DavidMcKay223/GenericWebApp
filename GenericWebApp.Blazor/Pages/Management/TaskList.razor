@@ -66,7 +66,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var task in tasks)
+            @foreach (var task in tasks ?? [])
             {
                 <tr>
                     <td>@task.Title</td>
@@ -112,10 +112,10 @@ else
     public Boolean IsSubModal { get; set; } = false;
     public Boolean IsSubModalLoaded { get; set; } = false;
 
-    private List<TaskItem> tasks;
+    private List<TaskItem>? tasks;
     private bool isLoading = true;
-    private EditTaskModal editTaskModal;
-    private EditGenericModal editGenericModal;
+    private EditTaskModal? editTaskModal;
+    private EditGenericModal? editGenericModal;
     private int totalItems;
     private int pageSize = 10;
     private int currentPage = 0;
@@ -141,26 +141,26 @@ else
         searchParams.Task_Object_ID = TaskObjectID;
 
         await TaskService.GetListAsync(searchParams);
-        tasks = TaskService.Response.List;
+        tasks = TaskService.Response.List ?? [];
         totalItems = TaskService.Response.TotalItems;
         isLoading = false;
     }
 
     private void ShowAddTaskModal()
     {
-        editTaskModal.ShowTaskModal(new TaskItem() { Title = String.Empty, Description = String.Empty });
+        editTaskModal?.ShowTaskModal(new TaskItem() { Title = String.Empty, Description = String.Empty });
     }
 
     private void ShowEditTaskModal(TaskItem task)
     {
-        editTaskModal.ShowTaskModal(task);
+        editTaskModal?.ShowTaskModal(task);
     }
 
     private void ShowEditObjectTypeModal(string? gridObjectTypeCode, int? gridObjectID)
     {
         if (!IsSubModal)
         {
-            editGenericModal.ShowGenericModal(gridObjectTypeCode, gridObjectID);
+            editGenericModal?.ShowGenericModal(gridObjectTypeCode, gridObjectID);
         }
     }
 

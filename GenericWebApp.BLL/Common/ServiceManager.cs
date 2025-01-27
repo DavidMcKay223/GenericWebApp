@@ -16,7 +16,7 @@ namespace GenericWebApp.BLL.Common
         where T : DTO.Common.EntityDTO
         where TSearchDTO : SearchDTO
     {
-        public virtual DTO.Common.Response<T> Response { get; set; }
+        public virtual required DTO.Common.Response<T> Response { get; set; }
 
         public ServiceManager()
         {

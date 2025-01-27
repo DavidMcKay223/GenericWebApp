@@ -7,9 +7,14 @@ namespace GenericWebApp.UnitTest.Common
     public class AssertCollection
     {
         private readonly List<(string Description, Exception Exception)> _exceptions = [];
-        private readonly string _description;
+        private readonly string? _description;
 
-        public AssertCollection(string description = null)
+        public AssertCollection()
+        {
+
+        }
+
+        public AssertCollection(string description)
         {
             _description = description;
         }

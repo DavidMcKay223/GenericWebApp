@@ -1,5 +1,6 @@
 ﻿@using System.Globalization
 @using System.Text.RegularExpressions
+@using System.Diagnostics.CodeAnalysis
 @typeparam TValue
 @inherits InputBase<TValue>
 
@@ -10,11 +11,11 @@
 
     private string _lastValue = String.Empty;
 
-    protected override bool TryParseValueFromString(string value, out TValue result, out string validationErrorMessage)
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TValue result, [NotNullWhen(false)] out string? validationErrorMessage)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            result = default;
+            result = default!;
             validationErrorMessage = null;
             return true;
         }
@@ -53,12 +54,12 @@
             }
         }
 
-        result = default;
+        result = default!;
         validationErrorMessage = "Invalid time format";
         return false;
     }
 
-    protected override string FormatValueAsString(TValue value)
+    protected override string? FormatValueAsString(TValue? value)
     {
         if (value is TimeOnly timeOnly)
         {
@@ -74,7 +75,7 @@
 
     private void OnKeyDown(KeyboardEventArgs e)
     {
-        _lastValue = CurrentValueAsString;
+        _lastValue = CurrentValueAsString ?? String.Empty;
     }
 
     private void OnKeyUp(KeyboardEventArgs e)

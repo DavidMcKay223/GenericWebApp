@@ -65,8 +65,8 @@ else
                     <td>@form.Claimant.Gender</td>
                     <td>@form.Claimant.DateOfBirth?.ToString("yyyy-MM-dd")</td>
                     <td>@form.Claimant.InsurancePolicyNumber</td>
-                    <td>@form.Claimant.PrimaryAddress.Address1</td>
-                    <td>@form.Claimant.SecondaryAddress.Address1</td>
+                    <td>@form.Claimant.PrimaryAddress?.Address1</td>
+                    <td>@form.Claimant.SecondaryAddress?.Address1</td>
                     <td>@form.CreatedDate?.ToString("yyyy-MM-dd")</td>
                     <td>@form.UpdatedDate?.ToString("yyyy-MM-dd")</td>
                     <td>

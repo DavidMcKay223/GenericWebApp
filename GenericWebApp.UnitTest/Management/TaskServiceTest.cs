@@ -23,7 +23,7 @@ namespace GenericWebApp.UnitTest.Management
         public TaskServiceTest(Common.ManagementDatabaseFixture fixture)
         {
             _context = fixture.Context;
-            _service = new BLL.Management.TaskService(_context);
+            _service = new BLL.Management.TaskService(_context) { Response = new Response<DTO.Management.TaskItem>() { ErrorList = [] } };
             _fixture = fixture;
         }
 
@@ -89,7 +89,7 @@ namespace GenericWebApp.UnitTest.Management
             var updatedTasks = _service.Response.List;
 
             // Assert
-            assertCollection.Assert("Task should be deleted", () => Assert.DoesNotContain(updatedTasks, t => t.ID == task.ID));
+            assertCollection.Assert("Task should be deleted", () => Assert.DoesNotContain(updatedTasks ?? [], t => t.ID == task.ID));
             assertCollection.AssertErrorList("Error list should be empty", _service.Response.ErrorList);
 
             assertCollection.Verify();
@@ -172,7 +172,7 @@ namespace GenericWebApp.UnitTest.Management
             await _service.GetListAsync(new TaskSeachDTO { CreatedDate = DateTime.UtcNow.AddDays(-7), UpdatedDate = DateTime.UtcNow });
 
             // Assert
-            assertCollection.Assert("Tasks within date range should be retrieved", () => Assert.All(_service.Response.List, t => Assert.True(t.CreatedDate >= DateTime.UtcNow.AddDays(-7) && t.UpdatedDate <= DateTime.UtcNow)));
+            assertCollection.Assert("Tasks within date range should be retrieved", () => Assert.All(_service.Response.List ?? [], t => Assert.True(t.CreatedDate >= DateTime.UtcNow.AddDays(-7) && t.UpdatedDate <= DateTime.UtcNow)));
             assertCollection.Assert("Error list should be empty", () => Assert.Empty(_service.Response.ErrorList));
 
             assertCollection.Verify();
@@ -271,7 +271,7 @@ namespace GenericWebApp.UnitTest.Management
             // Assert
             assertCollection.Assert("New task should be added", () => Assert.Equal(4, _service.Response.List!.Count));
             assertCollection.Assert("Error list should be empty", () => Assert.Empty(_service.Response.ErrorList));
-            assertCollection.Assert("New task should be in the list", () => Assert.Contains(_service.Response.List, t => t.Title == "New Task"));
+            assertCollection.Assert("New task should be in the list", () => Assert.Contains(_service.Response.List ?? [], t => t.Title == "New Task"));
 
             assertCollection.Verify();
         }
@@ -333,15 +333,16 @@ namespace GenericWebApp.UnitTest.Management
             var assertCollection = new AssertCollection("Updating existing task");
 
             // Arrange
-            var task = _context.TaskItems.First();
-            task.Title = "Updated Task Title";
+            await _service.GetListAsync(new TaskSeachDTO());
+            var task = _service.Response.List!.First();
+            task!.Title = "Updated Task Title";
 
             // Act
-            await _service.SaveItemAsync(Model.Common.ManagementDTOParser.ParseDTO(task));
+            await _service.SaveItemAsync(task);
             await _service.GetListAsync(new TaskSeachDTO());
 
             // Assert
-            assertCollection.Assert("Task should be updated", () => Assert.Contains(_service.Response.List, t => t.Title == "Updated Task Title"));
+            assertCollection.Assert("Task should be updated", () => Assert.Contains(_service.Response.List ?? [], t => t.Title == "Updated Task Title"));
             assertCollection.Assert("Error list should be empty", () => Assert.Empty(_service.Response.ErrorList));
 
             assertCollection.Verify();
@@ -360,7 +361,7 @@ namespace GenericWebApp.UnitTest.Management
             await _service.GetListAsync(new TaskSeachDTO());
 
             // Assert
-            assertCollection.Assert("Task should be deleted", () => Assert.DoesNotContain(_service.Response.List, t => t.ID == task.ID));
+            assertCollection.Assert("Task should be deleted", () => Assert.DoesNotContain(_service.Response.List ?? [], t => t.ID == task.ID));
             assertCollection.Assert("Error list should be empty", () => Assert.Empty(_service.Response.ErrorList));
 
             assertCollection.Verify();
@@ -409,7 +410,7 @@ namespace GenericWebApp.UnitTest.Management
             await _context.SaveChangesAsync();
 
             // Assert
-            assertCollection.Assert("Task should be deleted", () => Assert.DoesNotContain(_service.Response.List, t => t.ID == task.ID));
+            assertCollection.Assert("Task should be deleted", () => Assert.DoesNotContain(_service.Response.List ?? [], t => t.ID == task.ID));
             assertCollection.Assert("Error list should be empty", () => Assert.Empty(_service.Response.ErrorList));
 
             assertCollection.Verify();

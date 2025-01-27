@@ -7,7 +7,7 @@ namespace GenericWebApp.BLL.NPI
     {
         private const string Endpoint = "https://npiregistry.cms.hhs.gov/api/";
 
-        public static async Task<DTO.Common.Response<DTO.NPI.Provider>> GetProviderList(RegistrySearchDTO searchDTO = null)
+        public static async Task<DTO.Common.Response<DTO.NPI.Provider>> GetProviderList(RegistrySearchDTO? searchDTO = null)
         {
             var response = new DTO.Common.Response<DTO.NPI.Provider>() { ErrorList = [] };
 
@@ -32,11 +32,11 @@ namespace GenericWebApp.BLL.NPI
 
         private static DTO.NPI.Provider ParseProvider(Parser.Result provider)
         {
-            if (provider == null) return null;
+            if (provider == null) return new DTO.NPI.Provider() { NPI = ""};
 
             var npiProvider = new DTO.NPI.Provider
             {
-                NPI = provider.Number,
+                NPI = provider.Number!,
                 Name = provider.Basic?.Name,
                 ProviderName = $"{provider.Basic?.Last_name}, {provider.Basic?.First_name}",
                 ProviderFirstName = provider.Basic?.First_name,
