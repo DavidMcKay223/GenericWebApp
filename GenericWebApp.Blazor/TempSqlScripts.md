@@ -1,6 +1,6 @@
 # Generic SQL Scripts:
 
-{code:sql}
+```
 --Display Data to Feed to AI for Unit Test Cases
 SELECT 
     --album.ID AS AlbumID,
@@ -20,4 +20,4 @@ FROM
     LEFT JOIN [GenericWebApp].[dbo].[Music_Track] track ON cd.ID = track.CD_ID
 ORDER BY 
     album.ID, cd.ID, track.ID;
-{code}
+```
