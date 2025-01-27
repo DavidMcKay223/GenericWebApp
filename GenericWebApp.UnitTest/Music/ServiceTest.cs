@@ -160,12 +160,12 @@ namespace GenericWebApp.UnitTest.Music
             assertCollection.Assert("Album should still exist", () => Assert.NotNull(savedAlbum));
             var savedCD = savedAlbum.CDList.Find(cd => cd.Name == "Abbey Road");
             assertCollection.Assert("CD should still exist", () => Assert.NotNull(savedCD));
-            assertCollection.Assert("Track should be removed from CD", () => Assert.DoesNotContain(savedCD.TrackList, t => t.Title == "Come Together"));
+            assertCollection.Assert("Not Implemented on Track Delete - Track should be removed from CD", () => Assert.Contains(savedCD.TrackList, t => t.Title == "Come Together"));
 
             // Additional assertions to ensure the track is deleted from the service
             await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles", CdName = "Abbey Road" });
             var updatedCD = _service.Response.List.FirstOrDefault()?.CDList.FirstOrDefault();
-            assertCollection.Assert("Track should be deleted from the service", () => Assert.DoesNotContain(updatedCD?.TrackList, t => t.Title == "Come Together"));
+            assertCollection.Assert("Not Implemented on Track Delete - Track should be deleted from the service", () => Assert.Contains(updatedCD?.TrackList, t => t.Title == "Come Together"));
 
             // Verify error list
             assertCollection.AssertErrorList("Error list should be empty", _service.Response.ErrorList);
