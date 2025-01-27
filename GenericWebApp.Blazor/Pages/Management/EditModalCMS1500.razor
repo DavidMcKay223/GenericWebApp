@@ -87,11 +87,11 @@
 
                             <div class="tab-content mt-3">
                                 <div class="tab-pane fade @(activeTab == "claimant" ? "show active" : "")">
-                                    <ClaimantForm Claimant="@cms1500.Claimant" />
+                                    <FormClaimant Claimant="@cms1500.Claimant" />
                                 </div>
                                 <div class="tab-pane fade @(activeTab == "tasks" ? "show active" : "")">
                                     @if (cms1500.ID != 0){
-                                        <TaskList IsSubModal="true" TaskObjectTypeCode="CLAIM" TaskObjectID="@cms1500.ID" />
+                                        <ListTask IsSubModal="true" TaskObjectTypeCode="CLAIM" TaskObjectID="@cms1500.ID" />
                                     }
                                 </div>
                             </div>

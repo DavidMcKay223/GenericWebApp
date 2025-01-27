@@ -83,7 +83,7 @@ else
                         </td>
                     }
                     <td>
-                        <button class="btn btn-secondary" @onclick="() => ShowEditTaskModal(task)">Edit</button>
+                        <button class="btn btn-secondary" @onclick="() => ShowEditModalTask(task)">Edit</button>
                         <button class="btn btn-danger" @onclick="() => DeleteTask(task)">Delete</button>
                     </td>
                 </tr>
@@ -94,11 +94,11 @@ else
     <Pagination TItem="TaskItem" TotalItems="@totalItems" PageSize="@pageSize" CurrentPage="@currentPage" OnPageChanged="OnPageChangedTask" OnPageSizeChangedCallback="OnPageSizeChangedTask" />
 }
 
-<EditTaskModal @ref="editTaskModal" TaskObjectTypeCode="@TaskObjectTypeCode" TaskObjectID="@TaskObjectID" OnTaskSaved="LoadTasks" />
+<EditModalTask @ref="editTaskModal" TaskObjectTypeCode="@TaskObjectTypeCode" TaskObjectID="@TaskObjectID" OnTaskSaved="LoadTasks" />
 
 @if (!IsSubModal)
 {
-    <EditGenericModal @ref="editGenericModal" OnGenericSaved="LoadTasks" />
+    <EditModalGeneric @ref="editGenericModal" OnGenericSaved="LoadTasks" />
 }
 
 @code {
@@ -114,8 +114,8 @@ else
 
     private List<TaskItem>? tasks;
     private bool isLoading = true;
-    private EditTaskModal? editTaskModal;
-    private EditGenericModal? editGenericModal;
+    private EditModalTask? editTaskModal;
+    private EditModalGeneric? editGenericModal;
     private int totalItems;
     private int pageSize = 10;
     private int currentPage = 0;
@@ -151,7 +151,7 @@ else
         editTaskModal?.ShowTaskModal(new TaskItem() { Title = String.Empty, Description = String.Empty });
     }
 
-    private void ShowEditTaskModal(TaskItem task)
+    private void ShowEditModalTask(TaskItem task)
     {
         editTaskModal?.ShowTaskModal(task);
     }

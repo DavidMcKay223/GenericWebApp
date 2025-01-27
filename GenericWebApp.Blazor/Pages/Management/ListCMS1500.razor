@@ -70,7 +70,7 @@ else
                     <td>@form.CreatedDate?.ToString("yyyy-MM-dd")</td>
                     <td>@form.UpdatedDate?.ToString("yyyy-MM-dd")</td>
                     <td>
-                        <button class="btn btn-secondary" @onclick="() => ShowEditCMS1500Modal(form)">Edit</button>
+                        <button class="btn btn-secondary" @onclick="() => ShowEditModalCMS1500(form)">Edit</button>
                         <button class="btn btn-danger" @onclick="() => DeleteCMS1500(form)">Delete</button>
                     </td>
                 </tr>
@@ -81,12 +81,12 @@ else
     <Pagination TItem="CMS1500Form" TotalItems="@totalItems" PageSize="@pageSize" CurrentPage="@currentPage" OnPageChanged="OnPageChangedCMS1500" OnPageSizeChangedCallback="OnPageSizeChangedCMS1500" />
 }
 
-<EditCMS1500Modal @ref="editCMS1500Modal" OnCMS1500Saved="LoadCMS1500Page" />
+<EditModalCMS1500 @ref="editCMS1500Modal" OnCMS1500Saved="LoadCMS1500Page" />
 
 @code {
     private List<CMS1500Form>? cms1500Forms;
     private bool isLoading = true;
-    private EditCMS1500Modal? editCMS1500Modal;
+    private EditModalCMS1500? editCMS1500Modal;
     private int totalItems;
     private int pageSize = 10;
     private int currentPage = 0;
@@ -128,7 +128,7 @@ else
         );
     }
 
-    private void ShowEditCMS1500Modal(CMS1500Form form)
+    private void ShowEditModalCMS1500(CMS1500Form form)
     {
         editCMS1500Modal!.Show(form);
     }

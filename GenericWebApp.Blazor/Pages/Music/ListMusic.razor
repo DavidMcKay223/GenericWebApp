@@ -99,7 +99,7 @@ else
                         </table>
                     </td>
                     <td>
-                        <button class="btn btn-secondary" @onclick="() => ShowEditMusicModal(album)">Edit</button>
+                        <button class="btn btn-secondary" @onclick="() => ShowEditModalMusic(album)">Edit</button>
                         <button class="btn btn-danger" @onclick="() => DeleteMusic(album)">Delete</button>
                     </td>
                 </tr>
@@ -110,12 +110,12 @@ else
     <Pagination TItem="Album" TotalItems="@totalItems" PageSize="@pageSize" CurrentPage="@currentPage" OnPageChanged="OnPageChanged" OnPageSizeChangedCallback="OnPageSizeChanged" />
 }
 
-<EditMusicModal @ref="editMusicModal" myGenreList="@myGenreList" OnMusicSaved="LoadMusic" />
+<EditModalMusic @ref="editMusicModal" myGenreList="@myGenreList" OnMusicSaved="LoadMusic" />
 
 @code {
     private List<Album>? albums;
     private bool isLoading = true;
-    private EditMusicModal? editMusicModal;
+    private EditModalMusic? editMusicModal;
     private int totalItems;
     private int pageSize = 10;
     private int currentPage = 0;
@@ -150,7 +150,7 @@ else
         editMusicModal!.Show(new Album() { ArtistName = String.Empty });
     }
 
-    private void ShowEditMusicModal(Album album)
+    private void ShowEditModalMusic(Album album)
     {
         editMusicModal!.Show(album);
     }

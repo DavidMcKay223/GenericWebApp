@@ -5,7 +5,7 @@
     public EventCallback OnGenericSaved { get; set; }
 
     private DynamicComponent? dynamicComponent;
-    private Type? currentComponent { get; set; } = typeof(EditCMS1500Modal);
+    private Type? currentComponent { get; set; } = typeof(EditModalCMS1500);
 
     public string? ObjectTypeCode { get; set; }
     public int? ObjectID { get; set; }
@@ -18,13 +18,13 @@
         switch (ObjectTypeCode)
         {
             case "CLAIM":
-                currentComponent = typeof(EditCMS1500Modal);
+                currentComponent = typeof(EditModalCMS1500);
 
-                if (dynamicComponent?.Instance is EditCMS1500Modal editCMS1500Modal)
+                if (dynamicComponent?.Instance is EditModalCMS1500 editCMS1500Modal)
                 {
                     var parameters = new Dictionary<string, object?>
                     {
-                        { nameof(EditCMS1500Modal.OnCMS1500Saved), OnGenericSaved },
+                        { nameof(EditModalCMS1500.OnCMS1500Saved), OnGenericSaved },
                     };
 
                     editCMS1500Modal.SetParametersAsync(ParameterView.FromDictionary(parameters));
