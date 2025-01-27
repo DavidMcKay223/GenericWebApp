@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net.Http.Headers;
 
 namespace GenericWebApp.BLL.Common
@@ -11,7 +8,7 @@ namespace GenericWebApp.BLL.Common
     {
         public static async Task<String> GetUriToJson(this String BaseAddress, String SearchParameter)
         {
-            String myJsonResponse = "";
+            String myJsonResponse = String.Empty;
 
             using (var client = new HttpClient())
             {

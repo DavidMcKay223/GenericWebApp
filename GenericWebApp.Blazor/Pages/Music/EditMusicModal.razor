@@ -27,13 +27,13 @@
     private void AddNewCD()
     {
         albumItem.CDList ??= new List<DTO.Music.CD>();
-        albumItem.CDList.Add(new DTO.Music.CD { TrackList = new List<DTO.Music.Track>() });
+        albumItem.CDList.Add(new DTO.Music.CD { Name = String.Empty, TrackList = new List<DTO.Music.Track>() });
     }
 
     private void AddNewTrack(DTO.Music.CD cd)
     {
         cd.TrackList ??= new List<DTO.Music.Track>();
-        cd.TrackList.Add(new DTO.Music.Track { Number = cd.TrackList.Count + 1 });
+        cd.TrackList.Add(new DTO.Music.Track { Title = String.Empty, Number = cd.TrackList.Count + 1 });
     }
 
     private async Task SaveTask()

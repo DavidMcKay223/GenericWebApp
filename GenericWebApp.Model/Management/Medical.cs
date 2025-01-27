@@ -12,7 +12,7 @@ namespace GenericWebApp.Model.Management
         [Key]
         public int ID { get; set; }
         public int ClaimantID { get; set; }
-        public Claimant Claimant { get; set; }
+        public required Claimant Claimant { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
     }
@@ -23,7 +23,7 @@ namespace GenericWebApp.Model.Management
         [Key]
         public int ID { get; set; }
         [MaxLength(500)]
-        public string? Name { get; set; }
+        public required string Name { get; set; }
         [MaxLength(20)]
         public string? Phone { get; set; }
         [MaxLength(10)]
@@ -33,8 +33,8 @@ namespace GenericWebApp.Model.Management
         public string? InsurancePolicyNumber { get; set; }
         public int PrimaryAddressID { get; set; }
         public int SecondaryAddressID { get; set; }
-        public Address PrimaryAddress { get; set; }
-        public Address SecondaryAddress { get; set; }
+        public required Address PrimaryAddress { get; set; }
+        public required Address SecondaryAddress { get; set; }
     }
 
     [Table("Management_Address")]

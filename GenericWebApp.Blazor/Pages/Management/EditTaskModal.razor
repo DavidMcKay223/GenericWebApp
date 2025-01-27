@@ -13,7 +13,7 @@
     [Parameter]
     public int? TaskObjectID { get; set; }
 
-    private TaskItem taskItem = new TaskItem();
+    private TaskItem taskItem;
     private bool isVisible = false;
 
     public void ShowTaskModal(TaskItem task)

@@ -9,29 +9,29 @@ namespace GenericWebApp.DTO.Common
     public class ValuePair
     {
         public int ID { get; set; }
-        public string Description { get; set; }
-        public string Value { get; set; }
+        public string? Description { get; set; }
+        public string? Value { get; set; }
     }
 
     public class Response<T>
     {
-        public T Item { get; set; }
-        public List<T> List { get; set; }
+        public T? Item { get; set; }
+        public List<T>? List { get; set; }
         public int TotalItems { get; set; } = 0;
-        public List<Common.Error> ErrorList { get; set; }
+        public required List<Common.Error> ErrorList { get; set; }
     }
 
     public class Error
     {
-        public string Code { get; set; }
-        public string Message { get; set; }
+        public string? Code { get; set; }
+        public string? Message { get; set; }
     }
 
     public class NavBarItem
     {
-        public List<NavBarItem> ChildNavBarList { get; set; }
-        public string Description { get; set; }
-        public string Class { get; set; }
-        public string Href { get; set; }
+        public List<NavBarItem>? ChildNavBarList { get; set; }
+        public string? Description { get; set; }
+        public string? Class { get; set; }
+        public string? Href { get; set; }
     }
 }

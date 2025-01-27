@@ -35,10 +35,16 @@ namespace GenericWebApp.BLL.Music
 
             try
             {
+                if (_context == null)
+                {
+                    Response.ErrorList.Add(new DTO.Common.Error { Code = "ContextIsNull", Message = "Context is null" });
+                    return;
+                }
+
                 var album = await _context.Albums
-                    .Include(a => a.CDList)
-                        .ThenInclude(cd => cd.TrackList)
-                    .FirstOrDefaultAsync(a => a.ArtistName.ToLower() == dto.ArtistName.ToLower());
+                    .Include(a => a.CDList!)
+                        .ThenInclude(cd => cd.TrackList!)
+                    .FirstOrDefaultAsync(a => EF.Functions.Like(a.ArtistName, dto.ArtistName));
 
                 if (album != null)
                 {
@@ -69,7 +75,7 @@ namespace GenericWebApp.BLL.Music
                     if (dto.ID == null || dto.ID == 0)
                     {
                         var existingAlbum = await _context.Albums
-                            .Include(a => a.CDList)
+                            .Include(a => a.CDList!)
                             .FirstOrDefaultAsync(a => a.ArtistName.ToLower() == dto.ArtistName.ToLower());
 
                         if (existingAlbum != null)
@@ -78,16 +84,24 @@ namespace GenericWebApp.BLL.Music
                             return;
                         }
 
-                        album = new Model.Music.Album();
+                        album = new Model.Music.Album() { ArtistName = String.Empty };
                         GenericWebApp.Model.Common.AlbumModelParser.ParseModel(album, dto);
                         await _context.Albums.AddAsync(album);
                     }
                     else
                     {
+                        if(_context == null)
+                        {
+                            Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = "ContextIsNull", Message = "Context is null" });
+                            return;
+                        }
+
                         album = await _context.Albums
-                            .Include(a => a.CDList)
-                            .ThenInclude(cd => cd.TrackList)
+                            .Include(a => a.CDList!)
+                                .ThenInclude(cd => cd.TrackList!)
                             .FirstOrDefaultAsync(a => a.ID == dto.ID);
+
+
 
                         if (album != null)
                         {
@@ -117,11 +131,19 @@ namespace GenericWebApp.BLL.Music
             try
             {
                 var album = await _context.Albums
-                    .Include(a => a.CDList)
-                        .ThenInclude(cd => cd.TrackList)
-                    .FirstOrDefaultAsync(a => a.ArtistName.ToLower() == searchParams.ArtistName.ToLower());
+                    .Include(a => a.CDList!)
+                        .ThenInclude(cd => cd.TrackList!)
+                    .FirstOrDefaultAsync(a => a.ArtistName.ToLower() == searchParams.ArtistName!.ToLower());
 
-                Response.Item = GenericWebApp.Model.Common.AlbumDTOParser.ParseDTO(album);
+                if (album != null)
+                {
+                    Response.Item = GenericWebApp.Model.Common.AlbumDTOParser.ParseDTO(album);
+                }
+                else
+                {
+                    Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = "AlbumNotFound", Message = "Album not found." });
+                    Response.Item = null;
+                }
             }
             catch (Exception ex)
             {
@@ -137,14 +159,20 @@ namespace GenericWebApp.BLL.Music
                 if (searchParams == null)
                 {
                     Response.ErrorList.Add(new DTO.Common.Error { Code = "NullSearchParams", Message = "Search parameters are null" });
-                    Response.List = new List<DTO.Music.Album>();
+                    Response.List = [];
+                    return;
+                }
+
+                if (_context == null)
+                {
+                    Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = "ContextIsNull", Message = "Context is null" });
                     return;
                 }
 
                 // Start with a fresh query
                 var query = _context.Albums
-                    .Include(a => a.CDList)
-                        .ThenInclude(cd => cd.TrackList)
+                    .Include(a => a.CDList!)
+                        .ThenInclude(cd => cd.TrackList!)
                     .AsNoTracking()
                     .AsQueryable();
 
@@ -156,27 +184,26 @@ namespace GenericWebApp.BLL.Music
 
                 if (searchParams.GenreID.HasValue)
                 {
-                    query = query.Where(a => a.CDList.Any(cd => cd.Genre_ID == searchParams.GenreID.Value));
+                    query = query.Where(a => a.CDList!.Any(cd => cd.Genre_ID == searchParams.GenreID.Value));
                 }
 
                 if (!string.IsNullOrWhiteSpace(searchParams.CdName))
                 {
-                    query = query.Where(a => a.CDList.Any(cd => EF.Functions.Like(cd.Name.ToLower(), $"%{searchParams.CdName.ToLower()}%")));
+                    query = query.Where(a => a.CDList!.Any(cd => EF.Functions.Like(cd.Name.ToLower(), $"%{searchParams.CdName.ToLower()}%")));
                 }
 
                 if (!string.IsNullOrWhiteSpace(searchParams.TrackTitle))
                 {
-                    query = query.Where(a => a.CDList.Any(cd => cd.TrackList.Any(t => EF.Functions.Like(t.Title.ToLower(), $"%{searchParams.TrackTitle.ToLower()}%"))));
+                    query = query.Where(a => a.CDList!.Any(cd => cd.TrackList!.Any(t => EF.Functions.Like(t.Title.ToLower(), $"%{searchParams.TrackTitle.ToLower()}%"))));
                 }
 
                 // Apply sorting
                 query = searchParams.SortField switch
                 {
                     "ArtistName" => searchParams.SortDescending ? query.OrderByDescending(a => a.ArtistName) : query.OrderBy(a => a.ArtistName),
-                    "CdName" => searchParams.SortDescending ? query.OrderByDescending(a => a.CDList.FirstOrDefault() != null ? a.CDList.FirstOrDefault().Name : string.Empty) : query.OrderBy(a => a.CDList.FirstOrDefault() != null ? a.CDList.FirstOrDefault().Name : string.Empty),
+                    "CdName" => searchParams.SortDescending ? query.OrderByDescending(a => a.CDList!.FirstOrDefault() != null ? a.CDList!.FirstOrDefault()!.Name : String.Empty) : query.OrderBy(a => a.CDList!.FirstOrDefault() != null ? a.CDList!.FirstOrDefault()!.Name : String.Empty),
                     _ => query
                 };
-
 
                 // Get total count before applying pagination
                 var totalItems = await query.CountAsync();
@@ -210,27 +237,27 @@ namespace GenericWebApp.BLL.Music
                                         .ToList();
                                 }
                             }
-                            album.CDList = album.CDList.Where(cd => cd.TrackList.Any()).ToList();
+                            album.CDList = album.CDList!.Where(cd => cd.TrackList!.Any()).ToList();
                         }
                     }
                 }
 
-                Response.List = albums.Select(GenericWebApp.Model.Common.AlbumDTOParser.ParseDTO).ToList();
+                Response.List = [.. albums.ConvertAll(Model.Common.AlbumDTOParser.ParseDTO)];
                 Response.TotalItems = totalItems; // Set the total items count in the response
             }
             catch (Exception ex)
             {
                 Response.ErrorList.Add(new DTO.Common.Error { Code = ex.Source, Message = ex.Message });
-                Response.List = new List<DTO.Music.Album>();
+                Response.List = [];
             }
         }
     }
 
     public class MusicSearchDTO : SearchDTO
     {
-        public string ArtistName { get; set; }
-        public string CdName { get; set; }
-        public string TrackTitle { get; set; }
+        public string? ArtistName { get; set; }
+        public string? CdName { get; set; }
+        public string? TrackTitle { get; set; }
         public int? GenreID { get; set; }
     }
 }

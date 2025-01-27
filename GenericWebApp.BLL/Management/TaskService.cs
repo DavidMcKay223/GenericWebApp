@@ -12,7 +12,11 @@ namespace GenericWebApp.BLL.Management
 {
     public class TaskService : ServiceManager<GenericWebApp.DTO.Management.TaskItem, GenericWebApp.BLL.Management.TaskSeachDTO>
     {
-        private readonly GenericWebApp.Model.Management.ManagementContext _context;
+        private readonly GenericWebApp.Model.Management.ManagementContext? _context;
+
+        public TaskService()
+        {
+        }
 
         public TaskService(GenericWebApp.Model.Management.ManagementContext context)
         {
@@ -25,6 +29,12 @@ namespace GenericWebApp.BLL.Management
 
             try
             {
+                if (_context == null)
+                {
+                    Response.ErrorList.Add(new Error { Code = "ContextIsNull", Message = "Context is null" });
+                    return;
+                }
+
                 var taskItem = await _context.TaskItems.FirstOrDefaultAsync(t => t.ID == dto.ID);
                 if (taskItem != null)
                 {
@@ -48,18 +58,23 @@ namespace GenericWebApp.BLL.Management
 
             try
             {
-                var taskItem = await _context.TaskItems
-                    .FirstOrDefaultAsync(t =>
+                if (_context == null)
+                {
+                    Response.ErrorList.Add(new Error { Code = "ContextIsNull", Message = "Context is null" });
+                    return;
+                }
+
+                var taskItem = await _context.TaskItems.FirstOrDefaultAsync(t =>
                         (searchParams.ID.HasValue && t.ID == searchParams.ID) ||
-                        (!string.IsNullOrWhiteSpace(searchParams.TaskTitle) && t.Title.ToLower().Contains(searchParams.TaskTitle.ToLower())) ||
-                        (!string.IsNullOrWhiteSpace(searchParams.TaskDescription) && t.Description.ToLower().Contains(searchParams.TaskDescription.ToLower())) ||
-                        (!string.IsNullOrWhiteSpace(searchParams.TaskObjectType_Code) && t.TaskObjectType_Code.ToLower().Contains(searchParams.TaskObjectType_Code.ToLower())) ||
+                        (!string.IsNullOrWhiteSpace(searchParams.TaskTitle) && t.Title.Contains(searchParams.TaskTitle, StringComparison.OrdinalIgnoreCase)) ||
+                        (!string.IsNullOrWhiteSpace(searchParams.TaskDescription) && t.Description.Contains(searchParams.TaskDescription, StringComparison.OrdinalIgnoreCase)) ||
+                        (!string.IsNullOrWhiteSpace(searchParams.TaskObjectType_Code) && t.TaskObjectType_Code != null && t.TaskObjectType_Code.Contains(searchParams.TaskObjectType_Code, StringComparison.CurrentCultureIgnoreCase)) ||
                         (searchParams.Task_Object_ID.HasValue && t.Task_Object_ID == searchParams.Task_Object_ID) ||
                         (searchParams.TaskActivity_ID.HasValue && t.TaskActivity_ID == searchParams.TaskActivity_ID) ||
                         (searchParams.CreatedDate.HasValue && t.CreatedDate >= searchParams.CreatedDate) ||
                         (searchParams.UpdatedDate.HasValue && t.UpdatedDate >= searchParams.UpdatedDate));
 
-                Response.Item = GenericWebApp.Model.Common.ManagementParser.ParseDTO(taskItem);
+                Response.Item = GenericWebApp.Model.Common.ManagementDTOParser.ParseDTO(taskItem ?? new Model.Management.TaskItem() { Title = String.Empty, Description = String.Empty });
             }
             catch (Exception ex)
             {
@@ -72,6 +87,12 @@ namespace GenericWebApp.BLL.Management
         {
             try
             {
+                if (_context == null)
+                {
+                    Response.ErrorList.Add(new Error { Code = "ContextIsNull", Message = "Context is null" });
+                    return;
+                }
+
                 var query = _context.TaskItems.AsQueryable();
 
                 if (searchParams.ID.HasValue)
@@ -91,7 +112,7 @@ namespace GenericWebApp.BLL.Management
 
                 if (!string.IsNullOrWhiteSpace(searchParams.TaskObjectType_Code))
                 {
-                    query = query.Where(t => t.TaskObjectType_Code.ToLower().Contains(searchParams.TaskObjectType_Code.ToLower()));
+                    query = query.Where(t => t.TaskObjectType_Code != null && EF.Functions.Like(t.TaskObjectType_Code, $"%{searchParams.TaskObjectType_Code}%"));
                 }
 
                 if (searchParams.Task_Object_ID.HasValue)
@@ -133,13 +154,13 @@ namespace GenericWebApp.BLL.Management
                 query = query.Skip((searchParams.PageNumber) * searchParams.PageSize).Take(searchParams.PageSize);
 
                 var taskItems = await query.ToListAsync();
-                Response.List = taskItems.Select(GenericWebApp.Model.Common.ManagementParser.ParseDTO).ToList();
+                Response.List = [.. taskItems.ConvertAll(GenericWebApp.Model.Common.ManagementDTOParser.ParseDTO)];
                 Response.TotalItems = totalItems;
             }
             catch (Exception ex)
             {
                 Response.ErrorList.Add(new Error { Code = ex.Source, Message = ex.Message });
-                Response.List = new List<GenericWebApp.DTO.Management.TaskItem>();
+                Response.List = [];
             }
         }
 
@@ -151,25 +172,27 @@ namespace GenericWebApp.BLL.Management
             {
                 try
                 {
-                    var taskItem = GenericWebApp.Model.Common.ManagementParser.ParseModel(dto);
+                    if (_context == null)
+                    {
+                        Response.ErrorList.Add(new DTO.Common.Error { Code = "ContextIsNull", Message = "Context is null" });
+                        return;
+                    }
 
                     var existingTaskItem = await _context.TaskItems.FirstOrDefaultAsync(t => t.ID == dto.ID);
                     if (existingTaskItem != null)
                     {
-                        existingTaskItem.Title = taskItem.Title;
-                        existingTaskItem.Description = taskItem.Description;
-                        existingTaskItem.TaskObjectType_Code = taskItem.TaskObjectType_Code;
-                        existingTaskItem.Task_Object_ID = taskItem.Task_Object_ID;
-                        existingTaskItem.TaskActivity_ID = taskItem.TaskActivity_ID;
+                        GenericWebApp.Model.Common.ManagementModelParser.ParseModel(existingTaskItem, dto);
                         existingTaskItem.UpdatedDate = DateTime.UtcNow;
 
                         _context.TaskItems.Update(existingTaskItem);
                     }
                     else
                     {
-                        taskItem.CreatedDate = DateTime.UtcNow;
-                        taskItem.UpdatedDate = DateTime.UtcNow;
-                        await _context.TaskItems.AddAsync(taskItem);
+                        existingTaskItem ??= new Model.Management.TaskItem() { Title = String.Empty , Description = String.Empty };
+                        GenericWebApp.Model.Common.ManagementModelParser.ParseModel(existingTaskItem, dto);
+                        existingTaskItem.CreatedDate = DateTime.UtcNow;
+                        existingTaskItem.UpdatedDate = DateTime.UtcNow;
+                        await _context.TaskItems.AddAsync(existingTaskItem);
                     }
 
                     await _context.SaveChangesAsync();
@@ -185,9 +208,9 @@ namespace GenericWebApp.BLL.Management
     public class TaskSeachDTO : SearchDTO
     {
         public int? ID { get; set; }
-        public string TaskTitle { get; set; }
-        public string TaskDescription { get; set; }
-        public string TaskObjectType_Code { get; set; }
+        public string? TaskTitle { get; set; }
+        public string? TaskDescription { get; set; }
+        public string? TaskObjectType_Code { get; set; }
         public int? Task_Object_ID { get; set; }
         public int? TaskActivity_ID { get; set; }
         public DateTime? CreatedDate { get; set; }

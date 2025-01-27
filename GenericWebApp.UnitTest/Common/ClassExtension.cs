@@ -13,7 +13,7 @@ namespace GenericWebApp.UnitTest.Common
         {
             if(errorList != null && errorList.Count > 0)
             {
-                List<string> tempList = new List<string>();
+                List<string> tempList = [];
 
                 foreach (var error in errorList)
                 {

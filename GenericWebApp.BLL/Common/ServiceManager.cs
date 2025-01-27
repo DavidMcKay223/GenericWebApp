@@ -8,17 +8,19 @@ namespace GenericWebApp.BLL.Common
     {
         public virtual int PageNumber { get; set; } = 0;
         public virtual int PageSize { get; set; } = 10;
-        public virtual string SortField { get; set; }
+        public virtual string? SortField { get; set; }
         public virtual bool SortDescending { get; set; } = false;
     }
 
-    public abstract class ServiceManager<T, TSearchDTO> where TSearchDTO : SearchDTO
+    public abstract class ServiceManager<T, TSearchDTO> 
+        where T : DTO.Common.EntityDTO
+        where TSearchDTO : SearchDTO
     {
         public virtual DTO.Common.Response<T> Response { get; set; }
 
         public ServiceManager()
         {
-            Response = new DTO.Common.Response<T>() { List = new List<T>(), ErrorList = new List<DTO.Common.Error>() };
+            Response = new DTO.Common.Response<T>() { List = [], ErrorList = [] };
         }
 
         public abstract Task GetListAsync(TSearchDTO searchParams);

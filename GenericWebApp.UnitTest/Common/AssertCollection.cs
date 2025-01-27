@@ -6,7 +6,7 @@ namespace GenericWebApp.UnitTest.Common
 {
     public class AssertCollection
     {
-        private readonly List<(string Description, Exception Exception)> _exceptions = new List<(string, Exception)>();
+        private readonly List<(string Description, Exception Exception)> _exceptions = [];
         private readonly string _description;
 
         public AssertCollection(string description = null)

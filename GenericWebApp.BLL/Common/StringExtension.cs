@@ -49,7 +49,7 @@ namespace GenericWebApp.BLL.Common
         {
             input = input.SafeString();
 
-            List<String> tempList = new List<String>();
+            List<String> tempList = [];
             for (int i = 0; i < input.Length; i += chunkSize)
             {
                 tempList.Add(input.Substring(i, Math.Min(chunkSize, input.Length - i)));
@@ -71,7 +71,7 @@ namespace GenericWebApp.BLL.Common
 
     public static class ParseExtensions
     {
-        public static String TryParseBlankStringAsNull(this string input)
+        public static String? TryParseBlankStringAsNull(this string input)
         {
             if (input.IsNullOrWhiteSpace()) return null;
 

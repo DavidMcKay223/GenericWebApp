@@ -16,9 +16,9 @@ namespace GenericWebApp.Model.Music
         public int ID { get; set; }
 
         [MaxLength(500)]
-        public string ArtistName { get; set; }
+        public required string ArtistName { get; set; }
 
-        public List<CD> CDList { get; set; }
+        public List<CD>? CDList { get; set; }
     }
 
     [Table("Music_CD")]
@@ -28,14 +28,14 @@ namespace GenericWebApp.Model.Music
         public int ID { get; set; }
 
         [MaxLength(500)]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         public int? Album_ID { get; set; }
 
         public int? Genre_ID { get; set; }
 
-        public List<Track> TrackList { get; set; }
-        public Album Album { get; set; }
+        public List<Track>? TrackList { get; set; }
+        public Album? Album { get; set; }
     }
 
     [Table("Music_Track")]
@@ -47,12 +47,12 @@ namespace GenericWebApp.Model.Music
         public int Number { get; set; }
 
         [MaxLength(500)]
-        public string Title { get; set; }
+        public required string Title { get; set; }
 
         public int CD_ID { get; set; }
 
         public TimeSpan Length { get; set; }
-        public CD CD { get; set; }
+        public CD? CD { get; set; }
     }
 
     [Table("Music_Genre")]
@@ -62,6 +62,6 @@ namespace GenericWebApp.Model.Music
         public int ID { get; set; }
 
         [MaxLength(500)]
-        public string Description { get; set; }
+        public required string Description { get; set; }
     }
 }

@@ -8,7 +8,7 @@
 @code {
     private static readonly Regex TimeFormatRegex = new Regex(@"^(\d{1,2}):?(\d{0,2})$", RegexOptions.Compiled);
 
-    private string _lastValue = string.Empty;
+    private string _lastValue = String.Empty;
 
     protected override bool TryParseValueFromString(string value, out TValue result, out string validationErrorMessage)
     {
@@ -69,7 +69,7 @@
             return timeSpan.ToString("m\\:ss", CultureInfo.InvariantCulture);
         }
 
-        return string.Empty;
+        return String.Empty;
     }
 
     private void OnKeyDown(KeyboardEventArgs e)

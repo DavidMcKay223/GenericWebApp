@@ -11,11 +11,11 @@
         <div class="row g-3">
             <div class="col-md-4">
                 <label for="text_city" class="form-label">City</label>
-                <InputText id="text_city" class="form-control" @bind-Value="mySearch.city" />
+                <InputText id="text_city" class="form-control" @bind-Value="mySearch.City" />
             </div>
             <div class="col-md-4">
                 <label for="ddl_state" class="form-label">State</label>
-                <InputSelect id="ddl_state" class="form-select" @bind-Value="mySearch.state">
+                <InputSelect id="ddl_state" class="form-select" @bind-Value="mySearch.State">
                     <option value="">Select State</option>
                     @foreach (var myState in myStateList)
                     {
@@ -25,32 +25,32 @@
             </div>
             <div class="col-md-4">
                 <label for="text_postal_code" class="form-label">Zip</label>
-                <InputText id="text_postal_code" class="form-control" @bind-Value="mySearch.postal_code" />
+                <InputText id="text_postal_code" class="form-control" @bind-Value="mySearch.Postal_code" />
             </div>
             <div class="col-md-4">
                 <label for="text_npi_number" class="form-label">NPI</label>
-                <InputText id="text_npi_number" class="form-control" @bind-Value="mySearch.number" />
+                <InputText id="text_npi_number" class="form-control" @bind-Value="mySearch.Number" />
             </div>
             <div class="col-md-4">
                 <label for="text_organization_name" class="form-label">Organization Name</label>
-                <InputText id="text_organization_name" class="form-control" @bind-Value="mySearch.organization_name" />
+                <InputText id="text_organization_name" class="form-control" @bind-Value="mySearch.Organization_name" />
                 <small class="form-text text-muted">Wild Card Search: Add * at the end.</small>
             </div>
             <div class="col-md-4">
                 <label for="text_first_name" class="form-label">First Name</label>
-                <InputText id="text_first_name" class="form-control" @bind-Value="mySearch.first_name" />
+                <InputText id="text_first_name" class="form-control" @bind-Value="mySearch.First_name" />
             </div>
             <div class="col-md-4">
                 <label for="text_last_name" class="form-label">Last Name</label>
-                <InputText id="text_last_name" class="form-control" @bind-Value="mySearch.last_name" />
+                <InputText id="text_last_name" class="form-control" @bind-Value="mySearch.Last_name" />
             </div>
             <div class="col-md-4">
                 <label for="text_limit" class="form-label">Limit</label>
-                <InputText id="text_limit" class="form-control" @bind-Value="mySearch.limit" />
+                <InputText id="text_limit" class="form-control" @bind-Value="mySearch.Limit" />
             </div>
             <div class="col-md-4">
                 <label for="text_skip" class="form-label">Skip</label>
-                <InputText id="text_skip" class="form-control" @bind-Value="mySearch.skip" />
+                <InputText id="text_skip" class="form-control" @bind-Value="mySearch.Skip" />
             </div>
         </div>
     </EditForm>

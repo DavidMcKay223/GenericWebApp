@@ -147,7 +147,7 @@ else
 
     private void ShowAddMusicModal()
     {
-        editMusicModal.Show(new Album());
+        editMusicModal.Show(new Album() { ArtistName = String.Empty });
     }
 
     private void ShowEditMusicModal(Album album)

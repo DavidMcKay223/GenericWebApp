@@ -15,18 +15,15 @@ namespace GenericWebApp.Model.Common
             model.ID = dto.ID ?? 0;
             model.ArtistName = dto.ArtistName;
 
-            if(model.CDList == null)
-            {
-                model.CDList = new List<Model.Music.CD>();
-            }
+            model.CDList ??= [];
 
-            foreach (DTO.Music.CD cdDto in dto.CDList ?? new List<DTO.Music.CD>())
+            foreach (DTO.Music.CD cdDto in dto.CDList ?? [])
             {
                 var cdModel = model.CDList.FirstOrDefault(model => model.ID == cdDto.ID && cdDto.ID != 0);
 
-                if(cdModel == null)
+                if (cdModel == null)
                 {
-                    cdModel = new Model.Music.CD();
+                    cdModel = new Model.Music.CD() { Name = String.Empty };
                     model.CDList.Add(cdModel);
                 }
 
@@ -43,18 +40,15 @@ namespace GenericWebApp.Model.Common
             model.Album_ID = dto.Album_ID;
             model.Genre_ID = dto.Genre_ID;
 
-            if (model.TrackList == null)
-            {
-                model.TrackList = new List<Model.Music.Track>();
-            }
+            model.TrackList ??= [];
 
-            foreach (DTO.Music.Track trackDto in dto.TrackList ?? new List<DTO.Music.Track>())
+            foreach (DTO.Music.Track trackDto in dto.TrackList ?? [])
             {
                 var trackModel = model.TrackList.FirstOrDefault(model => model.ID == trackDto.ID && trackDto.ID != 0);
 
                 if (trackModel == null)
                 {
-                    trackModel = new Model.Music.Track();
+                    trackModel = new Model.Music.Track() { Title = String.Empty };
                     model.TrackList.Add(trackModel);
                 }
 

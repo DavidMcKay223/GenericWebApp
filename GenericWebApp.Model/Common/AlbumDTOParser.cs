@@ -8,7 +8,7 @@ namespace GenericWebApp.Model.Common
 {
     public static class AlbumDTOParser
     {
-        public static DTO.Music.Album ParseDTO(Model.Music.Album album)
+        public static DTO.Music.Album? ParseDTO(Model.Music.Album album)
         {
             if (album == null) return null;
 
@@ -16,13 +16,13 @@ namespace GenericWebApp.Model.Common
             {
                 ID = album.ID,
                 ArtistName = album.ArtistName,
-                CDList = album.CDList?.Select(cd => ParseDTO(cd)).ToList()
+                CDList = album.CDList?.Select(ParseDTO).Where(cd => cd != null).Cast<DTO.Music.CD>().ToList()
             };
 
             return dto;
         }
 
-        public static DTO.Music.CD ParseDTO(Model.Music.CD cd)
+        public static DTO.Music.CD? ParseDTO(Model.Music.CD cd)
         {
             if (cd == null) return null;
 
@@ -32,13 +32,13 @@ namespace GenericWebApp.Model.Common
                 Name = cd.Name,
                 Album_ID = cd.Album_ID,
                 Genre_ID = cd.Genre_ID,
-                TrackList = cd.TrackList?.Select(track => ParseDTO(track)).ToList()
+                TrackList = cd.TrackList?.Select(track => ParseDTO(track)).Where(track => track != null).Cast<DTO.Music.Track>().ToList()
             };
 
             return dto;
         }
 
-        public static DTO.Music.Track ParseDTO(Model.Music.Track track)
+        public static DTO.Music.Track? ParseDTO(Model.Music.Track track)
         {
             if (track == null) return null;
 
@@ -54,7 +54,7 @@ namespace GenericWebApp.Model.Common
             return dto;
         }
 
-        public static DTO.Music.Genre ParseDTO(Model.Music.Genre genre)
+        public static DTO.Music.Genre? ParseDTO(Model.Music.Genre genre)
         {
             if (genre == null) return null;
 

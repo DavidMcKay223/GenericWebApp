@@ -148,7 +148,7 @@ else
 
     private void ShowAddTaskModal()
     {
-        editTaskModal.ShowTaskModal(new TaskItem());
+        editTaskModal.ShowTaskModal(new TaskItem() { Title = String.Empty, Description = String.Empty });
     }
 
     private void ShowEditTaskModal(TaskItem task)

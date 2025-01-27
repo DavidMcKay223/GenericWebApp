@@ -13,7 +13,11 @@ namespace GenericWebApp.BLL.Management
 {
     public class MedicalCMS1500Service : ServiceManager<DTO.Management.CMS1500Form, MedicalCMS1500SeachDTO>
     {
-        private readonly ManagementContext _context;
+        private readonly ManagementContext? _context;
+
+        public MedicalCMS1500Service()
+        {
+        }
 
         public MedicalCMS1500Service(ManagementContext context)
         {
@@ -26,6 +30,12 @@ namespace GenericWebApp.BLL.Management
 
             try
             {
+                if(_context == null)
+                {
+                    Response.ErrorList.Add(new Error { Code = "ContextIsNull", Message = "Context is null" });
+                    return;
+                }
+
                 var entity = await _context.CMS1500Forms.FirstOrDefaultAsync(c => c.ID == dto.ID);
                 if (entity != null)
                 {
@@ -49,15 +59,21 @@ namespace GenericWebApp.BLL.Management
 
             try
             {
+                if (_context == null)
+                {
+                    Response.ErrorList.Add(new Error { Code = "ContextIsNull", Message = "Context is null" });
+                    return;
+                }
+
                 var entity = _context.CMS1500Forms
                     .Include(c => c.Claimant)
                         .ThenInclude(claimant => claimant.PrimaryAddress)
                     .Include(c => c.Claimant)
                         .ThenInclude(claimant => claimant.SecondaryAddress)
-                    .FirstOrDefault(c =>
-                        (searchParams.ID.HasValue && c.ID == searchParams.ID.Value));
+                    .First(c =>
+                        searchParams.ID.HasValue && c.ID == searchParams.ID.Value);
 
-                Response.Item = ManagementParser.ParseDTO(entity);
+                Response.Item = ManagementDTOParser.ParseDTO(entity);
             }
             catch (Exception ex)
             {
@@ -72,18 +88,24 @@ namespace GenericWebApp.BLL.Management
 
             try
             {
+                if(_context == null)
+                {
+                    Response.ErrorList.Add(new Error { Code = "ContextIsNull", Message = "Context is null" });
+                    return;
+                }
+
                 var entity = await _context.CMS1500Forms
                     .Include(c => c.Claimant)
                         .ThenInclude(claimant => claimant.PrimaryAddress)
                     .Include(c => c.Claimant)
                         .ThenInclude(claimant => claimant.SecondaryAddress)
-                    .FirstOrDefaultAsync(c =>
+                    .FirstAsync(c =>
                         (searchParams.ID.HasValue && c.ID == searchParams.ID) ||
-                        (!string.IsNullOrWhiteSpace(searchParams.ClaimantName) && c.Claimant.Name.ToLower().Contains(searchParams.ClaimantName.ToLower())) ||
+                        (!string.IsNullOrWhiteSpace(searchParams.ClaimantName) && c.Claimant.Name.Contains(searchParams.ClaimantName, StringComparison.CurrentCultureIgnoreCase)) ||
                         (searchParams.CreatedDate.HasValue && c.CreatedDate >= searchParams.CreatedDate) ||
                         (searchParams.UpdatedDate.HasValue && c.UpdatedDate >= searchParams.UpdatedDate));
 
-                Response.Item = ManagementParser.ParseDTO(entity);
+                Response.Item = ManagementDTOParser.ParseDTO(entity);
             }
             catch (Exception ex)
             {
@@ -96,6 +118,12 @@ namespace GenericWebApp.BLL.Management
         {
             try
             {
+                if (_context == null)
+                {
+                    Response.ErrorList.Add(new Error { Code = "ContextIsNull", Message = "Context is null" });
+                    return;
+                }
+
                 var query = _context.CMS1500Forms
                     .Include(c => c.Claimant)
                         .ThenInclude(claimant => claimant.PrimaryAddress)
@@ -110,7 +138,7 @@ namespace GenericWebApp.BLL.Management
 
                 if (!string.IsNullOrWhiteSpace(searchParams.ClaimantName))
                 {
-                    query = query.Where(c => c.Claimant.Name.ToLower().Contains(searchParams.ClaimantName.ToLower()));
+                    query = query.Where(c => c.Claimant.Name.Contains(searchParams.ClaimantName, StringComparison.OrdinalIgnoreCase));
                 }
 
                 if (searchParams.CreatedDate.HasValue)
@@ -142,13 +170,13 @@ namespace GenericWebApp.BLL.Management
                 query = query.Skip((searchParams.PageNumber) * searchParams.PageSize).Take(searchParams.PageSize);
 
                 var entities = await query.ToListAsync();
-                Response.List = entities.Select(ManagementParser.ParseDTO).ToList();
+                Response.List = [.. entities.ConvertAll(ManagementDTOParser.ParseDTO)];
                 Response.TotalItems = totalItems;
             }
             catch (Exception ex)
             {
                 Response.ErrorList.Add(new Error { Code = ex.Source, Message = ex.Message });
-                Response.List = new List<DTO.Management.CMS1500Form>();
+                Response.List = [];
             }
         }
 
@@ -160,21 +188,33 @@ namespace GenericWebApp.BLL.Management
             {
                 try
                 {
+                    if (_context == null)
+                    {
+                        Response.ErrorList.Add(new Error { Code = "ContextIsNull", Message = "Context is null" });
+                        return;
+                    }
+
                     var entity = await _context.CMS1500Forms.FirstOrDefaultAsync(c => c.ID == dto.ID);
                     if (entity != null)
                     {
-                        var updatedEntity = ManagementParser.ParseModel(dto);
-                        entity.Claimant = updatedEntity.Claimant;
+                        ManagementModelParser.ParseModel(entity, dto);
                         entity.UpdatedDate = DateTime.UtcNow;
 
                         _context.CMS1500Forms.Update(entity);
                     }
                     else
                     {
-                        var newEntity = ManagementParser.ParseModel(dto);
-                        newEntity.CreatedDate = DateTime.UtcNow;
-                        newEntity.UpdatedDate = DateTime.UtcNow;
-                        await _context.CMS1500Forms.AddAsync(newEntity);
+                        entity ??= new Model.Management.CMS1500Form() { 
+                            Claimant = new Model.Management.Claimant() { 
+                                Name = String.Empty,
+                                PrimaryAddress = new Model.Management.Address(),
+                                SecondaryAddress = new Model.Management.Address()
+                            } };
+
+                        ManagementModelParser.ParseModel(entity, dto);
+                        entity.CreatedDate = DateTime.UtcNow;
+                        entity.UpdatedDate = DateTime.UtcNow;
+                        await _context.CMS1500Forms.AddAsync(entity);
                     }
 
                     await _context.SaveChangesAsync();
@@ -190,9 +230,9 @@ namespace GenericWebApp.BLL.Management
     public class MedicalCMS1500SeachDTO : SearchDTO
     {
         public int? ID { get; set; }
-        public string ClaimantName { get; set; }
-        public string PrimaryAddress { get; set; }
-        public string SecondaryAddress { get; set; }
+        public string? ClaimantName { get; set; }
+        public string? PrimaryAddress { get; set; }
+        public string? SecondaryAddress { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
     }

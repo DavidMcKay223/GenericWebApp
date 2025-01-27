@@ -47,7 +47,7 @@ namespace GenericWebApp.UnitTest.Music
 
             // Act
             await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
-            var initialAlbumCount = _service.Response.List.Count;
+            var initialAlbumCount = _service.Response.List!.Count;
 
             await _service.DeleteItemAsync(album);
             await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
@@ -80,7 +80,7 @@ namespace GenericWebApp.UnitTest.Music
 
             // Act
             await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
-            var initialAlbumCount = _service.Response.List.Count;
+            var initialAlbumCount = _service.Response.List!.Count;
 
             await _service.DeleteItemAsync(album);
             await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
@@ -113,7 +113,7 @@ namespace GenericWebApp.UnitTest.Music
 
             // Act
             await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
-            var initialAlbumCount = _service.Response.List.Count;
+            var initialAlbumCount = _service.Response.List!.Count;
 
             await _service.DeleteItemAsync(album);
             await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
@@ -144,12 +144,12 @@ namespace GenericWebApp.UnitTest.Music
             // Arrange
             await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
             var album = _service.Response.List.Find(a => a.ArtistName == "The Beatles");
-            var cd = album.CDList.Find(cd => cd.Name == "Abbey Road");
-            var trackToDelete = cd.TrackList.Find(track => track.Title == "Come Together");
+            var cd = album?.CDList.Find(cd => cd.Name == "Abbey Road");
+            var trackToDelete = cd?.TrackList.Find(track => track.Title == "Come Together");
 
             // Act
-            cd.TrackList.Remove(trackToDelete);
-            await _service.SaveItemAsync(album);
+            if(cd != null && trackToDelete != null) cd.TrackList.Remove(trackToDelete);
+            if(album != null) await _service.SaveItemAsync(album);
             await _service.GetListAsync(new BLL.Music.MusicSearchDTO());
 
             // Retrieve the updated list of albums
@@ -158,14 +158,14 @@ namespace GenericWebApp.UnitTest.Music
 
             // Assert
             assertCollection.Assert("Album should still exist", () => Assert.NotNull(savedAlbum));
-            var savedCD = savedAlbum.CDList.Find(cd => cd.Name == "Abbey Road");
+            var savedCD = savedAlbum?.CDList.Find(cd => cd.Name == "Abbey Road");
             assertCollection.Assert("CD should still exist", () => Assert.NotNull(savedCD));
-            assertCollection.Assert("Not Implemented on Track Delete - Track should be removed from CD", () => Assert.Contains(savedCD.TrackList, t => t.Title == "Come Together"));
+            assertCollection.Assert("Not Implemented on Track Delete - Track should be removed from CD", () => Assert.Contains(savedCD?.TrackList ?? [], t => t.Title == "Come Together"));
 
             // Additional assertions to ensure the track is deleted from the service
             await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "The Beatles", CdName = "Abbey Road" });
             var updatedCD = _service.Response.List.FirstOrDefault()?.CDList.FirstOrDefault();
-            assertCollection.Assert("Not Implemented on Track Delete - Track should be deleted from the service", () => Assert.Contains(updatedCD?.TrackList, t => t.Title == "Come Together"));
+            assertCollection.Assert("Not Implemented on Track Delete - Track should be deleted from the service", () => Assert.Contains(updatedCD?.TrackList ?? [], t => t.Title == "Come Together"));
 
             // Verify error list
             assertCollection.AssertErrorList("Error list should be empty", _service.Response.ErrorList);
@@ -186,12 +186,12 @@ namespace GenericWebApp.UnitTest.Music
 
             // Assert
             assertCollection.Assert("Album should be retrieved", () => Assert.NotNull(_service.Response.Item));
-            assertCollection.Assert("Album artist name should be 'Eminem'", () => Assert.Equal("Eminem", _service.Response.Item.ArtistName));
+            assertCollection.Assert("Album artist name should be 'Eminem'", () => Assert.Equal("Eminem", _service.Response.Item!.ArtistName));
             assertCollection.Assert("Error list should be empty", () => Assert.Empty(_service.Response.ErrorList));
 
             // Additional assertions to check if the retrieved album matches the expected album details
             await _service.GetItemAsync(new BLL.Music.MusicSearchDTO { ArtistName = "Eminem" });
-            assertCollection.Assert("Retrieved album should match the expected album", () => Assert.Equal("Eminem", _service.Response.Item.ArtistName));
+            assertCollection.Assert("Retrieved album should match the expected album", () => Assert.Equal("Eminem", _service.Response.Item!.ArtistName));
 
             // Verify error list
             assertCollection.AssertErrorList("Error list should be empty", _service.Response.ErrorList);
@@ -230,8 +230,8 @@ namespace GenericWebApp.UnitTest.Music
             await _service.GetListAsync(new BLL.Music.MusicSearchDTO { ArtistName = "Daft Punk", CdName = "Discovery" });
 
             // Assert
-            assertCollection.Assert("Should return one album", () => Assert.Single(_service.Response.List));
-            assertCollection.Assert("The album should have one CD", () => Assert.Single(_service.Response.List.First().CDList));
+            assertCollection.Assert("Should return one album", () => Assert.Single(_service.Response.List!));
+            assertCollection.Assert("The album should have one CD", () => Assert.Single(_service.Response.List!.First().CDList!));
             assertCollection.AssertErrorList("No errors should be present", _service.Response.ErrorList);
 
             assertCollection.Verify();
@@ -302,7 +302,7 @@ namespace GenericWebApp.UnitTest.Music
             var allAlbumsWithGenre = _service.Response.List;
             assertCollection.Assert("Should return all albums with the specified genre", () =>
             {
-                Assert.All(allAlbumsWithGenre, album => Assert.True(album.CDList.Any(cd => cd.Genre_ID == genreDictionary["Hip-Hop"])));
+                Assert.All(allAlbumsWithGenre, album => Assert.Contains(album.CDList, cd => cd.Genre_ID == genreDictionary["Hip-Hop"]));
             });
             assertCollection.AssertErrorList("No errors should be present", _service.Response.ErrorList);
 
@@ -332,7 +332,7 @@ namespace GenericWebApp.UnitTest.Music
             var assertCollection = new AssertCollection("Saving album with artist");
 
             // Arrange
-            var album = new DTO.Music.Album { ArtistName = "New Artist", CDList = new List<DTO.Music.CD>() };
+            var album = new DTO.Music.Album { ArtistName = "New Artist", CDList = [] };
 
             // Act
             await _service.SaveItemAsync(album);
@@ -357,18 +357,18 @@ namespace GenericWebApp.UnitTest.Music
             var album = new DTO.Music.Album
             {
                 ArtistName = "Artist with CD genre",
-                CDList = new List<DTO.Music.CD>
-                {
+                CDList =
+                [
                     new DTO.Music.CD
                     {
                         Name = "CD with Genre",
                         Genre_ID = genreDictionary["Rock"],
-                        TrackList = new List<DTO.Music.Track>
-                        {
+                        TrackList =
+                        [
                             new DTO.Music.Track { Number = 1, Title = "Track 1", Length = TimeSpan.FromMinutes(3.00) }
-                        }
+                        ]
                     }
-                }
+                ]
             };
 
             // Act
@@ -380,8 +380,8 @@ namespace GenericWebApp.UnitTest.Music
             assertCollection.Assert("Error list should be empty", () => Assert.Empty(_service.Response.ErrorList));
             var savedAlbum = _service.Response.List.Find(a => a.ArtistName == "Artist with CD genre");
             assertCollection.Assert("New album should be found", () => Assert.NotNull(savedAlbum));
-            assertCollection.Assert("New album should have one CD", () => Assert.Single(savedAlbum.CDList));
-            assertCollection.Assert("CD should have correct Genre_ID", () => Assert.Equal(genreDictionary["Rock"], savedAlbum.CDList[0].Genre_ID));
+            assertCollection.Assert("New album should have one CD", () => Assert.Single(savedAlbum?.CDList ?? []));
+            assertCollection.Assert("CD should have correct Genre_ID", () => Assert.Equal(genreDictionary["Rock"], savedAlbum?.CDList[0].Genre_ID));
             assertCollection.Verify();
         }
 
@@ -394,7 +394,7 @@ namespace GenericWebApp.UnitTest.Music
             var album = new DTO.Music.Album
             {
                 ArtistName = "Artist with CD no title",
-                CDList = new List<DTO.Music.CD> { new DTO.Music.CD { Name = "" } }
+                CDList = [new DTO.Music.CD { Name = "" }]
             };
 
             // Act
@@ -416,7 +416,7 @@ namespace GenericWebApp.UnitTest.Music
             var album = new DTO.Music.Album
             {
                 ArtistName = "Artist with CD title",
-                CDList = new List<DTO.Music.CD> { new DTO.Music.CD { Name = "CD Title" } }
+                CDList = [new DTO.Music.CD { Name = "CD Title" }]
             };
 
             // Act
@@ -428,8 +428,8 @@ namespace GenericWebApp.UnitTest.Music
             assertCollection.Assert("Error list should be empty", () => Assert.Empty(_service.Response.ErrorList));
             var savedAlbum = _service.Response.List.Find(a => a.ArtistName == "Artist with CD title");
             assertCollection.Assert("New album should be found", () => Assert.NotNull(savedAlbum));
-            assertCollection.Assert("New album should have one CD", () => Assert.Single(savedAlbum.CDList));
-            assertCollection.Assert("CD should have correct title", () => Assert.Equal("CD Title", savedAlbum.CDList[0].Name));
+            assertCollection.Assert("New album should have one CD", () => Assert.Single(savedAlbum?.CDList ?? []));
+            assertCollection.Assert("CD should have correct title", () => Assert.Equal("CD Title", savedAlbum?.CDList[0].Name));
             assertCollection.Verify();
         }
 
@@ -442,14 +442,14 @@ namespace GenericWebApp.UnitTest.Music
             var album = new DTO.Music.Album
             {
                 ArtistName = "Artist with CD Track no description",
-                CDList = new List<DTO.Music.CD>
-                {
+                CDList =
+                [
                     new DTO.Music.CD
                     {
                         Name = "CD",
-                        TrackList = new List<DTO.Music.Track> { new DTO.Music.Track { Number = 1, Title = "", Length = TimeSpan.FromMinutes(3.00) } }
+                        TrackList = [new DTO.Music.Track { Number = 1, Title = "", Length = TimeSpan.FromMinutes(3.00) }]
                     }
-                }
+                ]
             };
 
             // Act
@@ -471,27 +471,27 @@ namespace GenericWebApp.UnitTest.Music
             var album = new DTO.Music.Album
             {
                 ArtistName = "Artist with multiple CDs and genres",
-                CDList = new List<DTO.Music.CD>
-                {
+                CDList =
+                [
                     new DTO.Music.CD
                     {
                         Name = "CD1 with Genre",
                         Genre_ID = genreDictionary["Rock"],
-                        TrackList = new List<DTO.Music.Track>
-                        {
+                        TrackList =
+                        [
                             new DTO.Music.Track { Number = 1, Title = "Track 1", Length = TimeSpan.FromMinutes(3.00) }
-                        }
+                        ]
                     },
                     new DTO.Music.CD
                     {
                         Name = "CD2 with Genre",
                         Genre_ID = genreDictionary["Pop"],
-                        TrackList = new List<DTO.Music.Track>
-                        {
+                        TrackList =
+                        [
                             new DTO.Music.Track { Number = 1, Title = "Track 2", Length = TimeSpan.FromMinutes(4.00) }
-                        }
+                        ]
                     }
-                }
+                ]
             };
 
             // Act
@@ -503,9 +503,9 @@ namespace GenericWebApp.UnitTest.Music
             assertCollection.Assert("Error list should be empty", () => Assert.Empty(_service.Response.ErrorList));
             var savedAlbum = _service.Response.List.Find(a => a.ArtistName == "Artist with multiple CDs and genres");
             assertCollection.Assert("New album should be found", () => Assert.NotNull(savedAlbum));
-            assertCollection.Assert("New album should have two CDs", () => Assert.Equal(2, savedAlbum.CDList.Count));
-            assertCollection.Assert("First CD should have correct Genre_ID", () => Assert.Equal(genreDictionary["Rock"], savedAlbum.CDList[0].Genre_ID));
-            assertCollection.Assert("Second CD should have correct Genre_ID", () => Assert.Equal(genreDictionary["Pop"], savedAlbum.CDList[1].Genre_ID));
+            assertCollection.Assert("New album should have two CDs", () => Assert.Equal(2, savedAlbum?.CDList.Count));
+            assertCollection.Assert("First CD should have correct Genre_ID", () => Assert.Equal(genreDictionary["Rock"], savedAlbum?.CDList[0].Genre_ID));
+            assertCollection.Assert("Second CD should have correct Genre_ID", () => Assert.Equal(genreDictionary["Pop"], savedAlbum?.CDList[1].Genre_ID));
             assertCollection.Verify();
         }
 

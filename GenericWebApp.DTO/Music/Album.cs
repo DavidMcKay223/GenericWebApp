@@ -5,17 +5,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GenericWebApp.DTO.Music
 {
-    public class Album
+    public class Album : EntityDTO
     {
         public int? ID { get; set; }
 
         [Required(ErrorMessage = "Artist Name is required")]
         [StringLength(500, ErrorMessage = "Artist Name cannot exceed 500 characters")]
-        public string ArtistName { get; set; }
+        public required string ArtistName { get; set; } 
 
-        public List<CD> CDList { get; set; }
+        public List<CD>? CDList { get; set; }
 
-        public bool IsValid(List<Error> errorList)
+        public new bool IsValid(List<Error> errorList)
         {
             if (String.IsNullOrEmpty(ArtistName))
             {
@@ -34,19 +34,19 @@ namespace GenericWebApp.DTO.Music
         }
     }
 
-    public class CD
+    public class CD : EntityDTO
     {
         public int ID { get; set; }
 
         [Required(ErrorMessage = "CD Name is required")]
         [StringLength(500, ErrorMessage = "CD Name cannot exceed 500 characters")]
-        public string Name { get; set; }
+        public required string Name { get; set; } 
 
         public int? Album_ID { get; set; }
         public int? Genre_ID { get; set; }
-        public List<Track> TrackList { get; set; }
+        public List<Track>? TrackList { get; set; }
 
-        public bool IsValid(List<Error> errorList)
+        public new bool IsValid(List<Error> errorList)
         {
             if (String.IsNullOrEmpty(Name))
             {
@@ -65,7 +65,7 @@ namespace GenericWebApp.DTO.Music
         }
     }
 
-    public class Track
+    public class Track : EntityDTO
     {
         public int ID { get; set; }
 
@@ -74,14 +74,14 @@ namespace GenericWebApp.DTO.Music
 
         [Required(ErrorMessage = "Track Title is required")]
         [StringLength(500, ErrorMessage = "Track Title cannot exceed 500 characters")]
-        public string Title { get; set; }
+        public required string Title { get; set; } 
 
         public int CD_ID { get; set; }
 
         [Required(ErrorMessage = "Track Length is required")]
         public TimeSpan Length { get; set; }
 
-        public bool IsValid(List<Error> errorList)
+        public new bool IsValid(List<Error> errorList)
         {
             if (String.IsNullOrEmpty(Title))
             {
@@ -97,9 +97,9 @@ namespace GenericWebApp.DTO.Music
         }
     }
 
-    public class Genre
+    public class Genre : EntityDTO
     {
         public int ID { get; set; }
-        public string Description { get; set; }
+        public required string Description { get; set; }
     }
 }

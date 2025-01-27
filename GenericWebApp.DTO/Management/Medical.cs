@@ -9,21 +9,21 @@ using System.Threading.Tasks;
 namespace GenericWebApp.DTO.Management
 {
     [Serializable]
-    public class CMS1500Form
+    public class CMS1500Form : EntityDTO
     {
         public int ID { get; set; }
 
         [Required]
-        public Claimant Claimant { get; set; }
+        public required Claimant Claimant { get; set; }
 
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
 
-        public bool IsValid(List<Error> errorList)
+        public new bool IsValid(List<Error> errorList)
         {
             bool isValid = true;
 
-            if (Claimant == null || !Claimant.IsValid(errorList))
+            if (Claimant?.IsValid(errorList) != true)
             {
                 isValid = false;
             }
@@ -33,32 +33,32 @@ namespace GenericWebApp.DTO.Management
     }
 
     [Serializable]
-    public class Claimant
+    public class Claimant : EntityDTO
     {
         public int ID { get; set; }
 
         [Required(ErrorMessage = "Name is required")]
         [MaxLength(500, ErrorMessage = "Name cannot exceed 500 characters")]
-        public string Name { get; set; }
+        public required string Name { get; set; } 
 
         [MaxLength(20, ErrorMessage = "Phone cannot exceed 20 characters")]
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
 
         [MaxLength(10, ErrorMessage = "Gender cannot exceed 10 characters")]
-        public string Gender { get; set; }
+        public string? Gender { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
 
         [MaxLength(50, ErrorMessage = "Insurance Policy Number cannot exceed 50 characters")]
-        public string InsurancePolicyNumber { get; set; }
+        public string? InsurancePolicyNumber { get; set; }
 
         [Required(ErrorMessage = "Primary Address is required")]
-        public Address PrimaryAddress { get; set; }
+        public Address? PrimaryAddress { get; set; }
 
         [Required(ErrorMessage = "Secondary Address is required")]
-        public Address SecondaryAddress { get; set; }
+        public Address? SecondaryAddress { get; set; }
 
-        public bool IsValid(List<Error> errorList)
+        public new bool IsValid(List<Error> errorList)
         {
             bool isValid = true;
 
@@ -68,12 +68,12 @@ namespace GenericWebApp.DTO.Management
                 errorList.Add(new Error { Code = "InvalidName", Message = "Name is required." });
             }
 
-            if (PrimaryAddress == null || !PrimaryAddress.IsValid(errorList))
+            if (PrimaryAddress?.IsValid(errorList) != true)
             {
                 isValid = false;
             }
 
-            if (SecondaryAddress == null || !SecondaryAddress.IsValid(errorList))
+            if (SecondaryAddress?.IsValid(errorList) != true)
             {
                 isValid = false;
             }
@@ -83,7 +83,7 @@ namespace GenericWebApp.DTO.Management
     }
 
     [Serializable]
-    public class Address
+    public class Address : EntityDTO
     {
         public int ID { get; set; }
 
@@ -107,12 +107,5 @@ namespace GenericWebApp.DTO.Management
 
         [MaxLength(20, ErrorMessage = "Fax cannot exceed 20 characters")]
         public string? Fax { get; set; }
-
-        public bool IsValid(List<Error> errorList)
-        {
-            bool isValid = true;
-
-            return isValid;
-        }
     }
 }

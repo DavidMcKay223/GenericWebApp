@@ -16,9 +16,9 @@ namespace GenericWebApp.Model.Management
         public int? ID { get; set; }
 
         [MaxLength(500)]
-        public string Title { get; set; }
+        public required string Title { get; set; }
 
-        public string Description { get; set; }
+        public required string Description { get; set; }
 
         [MaxLength(10)]
         public string? TaskObjectType_Code { get; set; }
@@ -37,9 +37,9 @@ namespace GenericWebApp.Model.Management
     {
         [Key]
         [MaxLength(10)]
-        public string Code { get; set; }
+        public required string Code { get; set; }
 
-        public string Description { get; set; }
+        public required string Description { get; set; }
     }
 
     [Table("Management_TaskSubType")]
@@ -47,9 +47,9 @@ namespace GenericWebApp.Model.Management
     {
         [Key]
         [MaxLength(10)]
-        public string Code { get; set; }
+        public required string Code { get; set; }
 
-        public string Description { get; set; }
+        public required string Description { get; set; }
     }
 
     [Table("Management_TaskObjectType")]
@@ -57,9 +57,9 @@ namespace GenericWebApp.Model.Management
     {
         [Key]
         [MaxLength(10)]
-        public string Code { get; set; }
+        public required string Code { get; set; }
 
-        public string Description { get; set; }
+        public required string Description { get; set; }
     }
 
     [Table("Management_TaskActivity")]
@@ -69,9 +69,9 @@ namespace GenericWebApp.Model.Management
         public int ID { get; set; }
 
         [MaxLength(10)]
-        public string TaskType_Code { get; set; }
+        public required string TaskType_Code { get; set; }
 
         [MaxLength(10)]
-        public string TaskSubType_Code { get; set; }
+        public required string TaskSubType_Code { get; set; }
     }
 }
