@@ -22,7 +22,7 @@ jobs:
         dotnet-version: '9.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore ./GenericWebApp.sln
+      run: dotnet restore ./GenericWebApp/GenericWebApp.Blazor/GenericWebApp.Blazor.sln
 
     - name: Build
       run: dotnet build ./GenericWebApp/GenericWebApp.Blazor/GenericWebApp.Blazor.sln --no-restore --configuration Release
