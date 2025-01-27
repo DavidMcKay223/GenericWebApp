@@ -67,7 +67,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var album in albums)
+            @foreach (var album in albums ?? [])
             {
                 <tr>
                     <td>@album.ArtistName</td>
@@ -113,9 +113,9 @@ else
 <EditMusicModal @ref="editMusicModal" myGenreList="@myGenreList" OnMusicSaved="LoadMusic" />
 
 @code {
-    private List<Album> albums;
+    private List<Album>? albums;
     private bool isLoading = true;
-    private EditMusicModal editMusicModal;
+    private EditMusicModal? editMusicModal;
     private int totalItems;
     private int pageSize = 10;
     private int currentPage = 0;
@@ -147,12 +147,12 @@ else
 
     private void ShowAddMusicModal()
     {
-        editMusicModal.Show(new Album() { ArtistName = String.Empty });
+        editMusicModal!.Show(new Album() { ArtistName = String.Empty });
     }
 
     private void ShowEditMusicModal(Album album)
     {
-        editMusicModal.Show(album);
+        editMusicModal!.Show(album);
     }
 
     private async Task DeleteMusic(Album album)

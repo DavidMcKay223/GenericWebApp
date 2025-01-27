@@ -49,7 +49,7 @@
 
     private async Task OnPageSizeChanged(ChangeEventArgs e)
     {
-        PageSize = int.Parse(e.Value?.ToString());
+        PageSize = int.Parse(e.Value!.ToString()!);
         CurrentPage = 0;
         await OnPageSizeChangedCallback.InvokeAsync(PageSize);
     }

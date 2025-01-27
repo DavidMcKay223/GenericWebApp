@@ -58,7 +58,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var form in cms1500Forms)
+            @foreach (var form in cms1500Forms ?? [])
             {
                 <tr>
                     <td>@form.Claimant.Name</td>
@@ -84,9 +84,9 @@ else
 <EditCMS1500Modal @ref="editCMS1500Modal" OnCMS1500Saved="LoadCMS1500Page" />
 
 @code {
-    private List<CMS1500Form> cms1500Forms;
+    private List<CMS1500Form>? cms1500Forms;
     private bool isLoading = true;
-    private EditCMS1500Modal editCMS1500Modal;
+    private EditCMS1500Modal? editCMS1500Modal;
     private int totalItems;
     private int pageSize = 10;
     private int currentPage = 0;
@@ -109,14 +109,14 @@ else
         searchParams.SortDescending = sortDescending;
 
         await myService.GetListAsync(searchParams);
-        cms1500Forms = myService.Response.List;
+        cms1500Forms = myService.Response.List!;
         totalItems = myService.Response.TotalItems;
         isLoading = false;
     }
 
     private void ShowAddCMS1500Modal()
     {
-        editCMS1500Modal.Show(new CMS1500Form()
+        editCMS1500Modal!.Show(new CMS1500Form()
             {
                 Claimant = new Claimant()
                 {
@@ -130,7 +130,7 @@ else
 
     private void ShowEditCMS1500Modal(CMS1500Form form)
     {
-        editCMS1500Modal.Show(form);
+        editCMS1500Modal!.Show(form);
     }
 
     private async Task DeleteCMS1500(CMS1500Form form)

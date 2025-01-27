@@ -100,9 +100,9 @@
 
 @code {
     [Parameter]
-    public DTO.NPI.Provider Provider { get; set; }
+    public DTO.NPI.Provider? Provider { get; set; }
 
-    async Task ButtonClose()
+    void ButtonClose()
     {
         Provider = null;
     }

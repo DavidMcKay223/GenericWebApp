@@ -13,7 +13,7 @@
     [Parameter]
     public int? TaskObjectID { get; set; }
 
-    private TaskItem taskItem;
+    private TaskItem? taskItem;
     private bool isVisible = false;
 
     public void ShowTaskModal(TaskItem task)
@@ -60,7 +60,7 @@
                         <div class="modal-body">
                             <DataAnnotationsValidator />
                             <div class="mb-3 form-floating">
-                                <InputText id="title" class="form-control" @bind-Value="taskItem.Title" />
+                                <InputText id="title" class="form-control" @bind-Value="taskItem!.Title" />
                                 <label for="title">Title</label>
                                 <ValidationMessage For="@(() => taskItem.Title)" />
                             </div>

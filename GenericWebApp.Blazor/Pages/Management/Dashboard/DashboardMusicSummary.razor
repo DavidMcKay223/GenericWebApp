@@ -48,7 +48,7 @@
     public required BLL.Management.DashboardAlbumService Service { get; set; }
     private List<DTO.Management.Dashboard_MusicSummary>? MusicSummary;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         MusicSummary = Service.GetDashboardMusicSummary();
     }

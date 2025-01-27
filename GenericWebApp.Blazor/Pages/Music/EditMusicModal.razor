@@ -11,12 +11,7 @@
     private bool isVisible = false;
 
     [Parameter]
-    public List<DTO.Common.ValuePair> myGenreList { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-
-    }
+    public List<DTO.Common.ValuePair>? myGenreList { get; set; }
 
     public void Show(DTO.Music.Album album)
     {
@@ -97,7 +92,7 @@
                                                 <div class="mb-3 form-floating">
                                                     <InputSelect class="form-select" @bind-Value="cd.Genre_ID">
                                                         <option value="">Select Genre</option>
-                                                        @foreach (var genre in myGenreList)
+                                                        @foreach (var genre in myGenreList ?? [])
                                                         {
                                                             <option value="@genre.ID">@genre.Description</option>
                                                         }

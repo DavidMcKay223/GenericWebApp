@@ -276,7 +276,7 @@ namespace GenericWebApp.BLL.Music
                     }
                 }
 
-                Response.List = albums.ConvertAll(Model.Common.AlbumDTOParser.ParseDTO);
+                Response.List = albums.ConvertAll(Model.Common.AlbumDTOParser.ParseDTO)!;
                 Response.TotalItems = totalItems;
             }
             catch (Exception ex)

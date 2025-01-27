@@ -9,7 +9,7 @@
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <nav class="flex-column">
-        @foreach(DTO.Common.NavBarItem navBarItem in navBarItemList)
+        @foreach(DTO.Common.NavBarItem navBarItem in navBarItemList ?? [])
         {
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="@navBarItem.Href" Match="NavLinkMatch.All">
@@ -35,7 +35,7 @@
 </div>
 
 @code {
-    private List<DTO.Common.NavBarItem> navBarItemList;
+    private List<DTO.Common.NavBarItem>? navBarItemList;
 
     private bool collapseNavMenu = true;
 
