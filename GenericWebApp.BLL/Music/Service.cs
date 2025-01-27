@@ -64,27 +64,35 @@ namespace GenericWebApp.BLL.Music
             {
                 try
                 {
-                    var album = GenericWebApp.Model.Common.AlbumParser.ParseModel(dto);
+                    Model.Music.Album album;
 
-                    if (dto.ID == null)
+                    if (dto.ID == null || dto.ID == 0)
                     {
-                        var existingAlbum = await _context.Albums.Include(a => a.CDList).FirstOrDefaultAsync(a => a.ArtistName.ToLower() == dto.ArtistName.ToLower());
+                        var existingAlbum = await _context.Albums
+                            .Include(a => a.CDList)
+                            .FirstOrDefaultAsync(a => a.ArtistName.ToLower() == dto.ArtistName.ToLower());
+
                         if (existingAlbum != null)
                         {
                             Response.ErrorList.Add(new GenericWebApp.DTO.Common.Error { Code = "DuplicateAlbum", Message = "An album with the same artist name already exists." });
                             return;
                         }
 
+                        album = new Model.Music.Album();
+                        GenericWebApp.Model.Common.AlbumModelParser.ParseModel(album, dto);
                         await _context.Albums.AddAsync(album);
                     }
                     else
                     {
-                        var existingAlbum = await _context.Albums.Include(a => a.CDList).FirstOrDefaultAsync(a => a.ID == dto.ID);
-                        if (existingAlbum != null)
+                        album = await _context.Albums
+                            .Include(a => a.CDList)
+                            .ThenInclude(cd => cd.TrackList)
+                            .FirstOrDefaultAsync(a => a.ID == dto.ID);
+
+                        if (album != null)
                         {
-                            existingAlbum.ArtistName = album.ArtistName;
-                            existingAlbum.CDList = album.CDList;
-                            _context.Albums.Update(existingAlbum);
+                            GenericWebApp.Model.Common.AlbumModelParser.ParseModel(album, dto);
+                            _context.Albums.Update(album);
                         }
                         else
                         {
@@ -113,7 +121,7 @@ namespace GenericWebApp.BLL.Music
                         .ThenInclude(cd => cd.TrackList)
                     .FirstOrDefaultAsync(a => a.ArtistName.ToLower() == searchParams.ArtistName.ToLower());
 
-                Response.Item = GenericWebApp.Model.Common.AlbumParser.ParseDTO(album);
+                Response.Item = GenericWebApp.Model.Common.AlbumDTOParser.ParseDTO(album);
             }
             catch (Exception ex)
             {
@@ -207,7 +215,7 @@ namespace GenericWebApp.BLL.Music
                     }
                 }
 
-                Response.List = albums.Select(GenericWebApp.Model.Common.AlbumParser.ParseDTO).ToList();
+                Response.List = albums.Select(GenericWebApp.Model.Common.AlbumDTOParser.ParseDTO).ToList();
                 Response.TotalItems = totalItems; // Set the total items count in the response
             }
             catch (Exception ex)

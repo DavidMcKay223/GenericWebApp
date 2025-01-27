@@ -154,7 +154,7 @@ namespace GenericWebApp.UnitTest.Management
             var assertCollection = new AssertCollection("Retrieving tasks with pagination");
 
             // Act
-            await _service.GetListAsync(new TaskSeachDTO { PageNumber = 1, PageSize = 2 });
+            await _service.GetListAsync(new TaskSeachDTO { PageNumber = 0, PageSize = 2 });
 
             // Assert
             assertCollection.Assert("Two tasks should be retrieved", () => Assert.Equal(2, _service.Response.List.Count));

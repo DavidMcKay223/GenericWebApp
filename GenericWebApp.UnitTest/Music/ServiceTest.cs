@@ -403,7 +403,7 @@ namespace GenericWebApp.UnitTest.Music
 
             // Assert
             assertCollection.Assert("Album should not be added due to missing CD title", () => Assert.Equal(9, _service.Response.List.Count));
-            assertCollection.Assert("Error list should contain CDNameRequired error", () => Assert.Contains(_service.Response.ErrorList, e => e.Code == "CDNameRequired" && e.Message == "CD name is required."));
+            assertCollection.Assert("Error list should contain CDNameRequired error", () => Assert.Contains(_service.Response.ErrorList, e => e.Message == "CD Name is required"));
             assertCollection.Verify();
         }
 
@@ -630,7 +630,7 @@ namespace GenericWebApp.UnitTest.Music
             // Arrange
             var searchDTO = new MusicSearchDTO
             {
-                PageNumber = 1,
+                PageNumber = 0,
                 PageSize = 5
             };
 
