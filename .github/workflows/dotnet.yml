@@ -22,10 +22,10 @@ jobs:
         dotnet-version: '9.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore ./GenericWebApp/GenericWebApp.Blazor/GenericWebApp.Blazor.sln
+      run: dotnet restore ./GenericWebApp.Blazor/GenericWebApp.Blazor.sln
 
     - name: Build
-      run: dotnet build ./GenericWebApp/GenericWebApp.Blazor/GenericWebApp.Blazor.sln --no-restore --configuration Release
+      run: dotnet build ./GenericWebApp.Blazor/GenericWebApp.Blazor.sln --no-restore --configuration Release
 
     - name: Run tests with coverage
       run: dotnet test ./GenericWebApp/GenericWebApp.UnitTest/GenericWebApp.UnitTest.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
@@ -34,6 +34,13 @@ jobs:
       run: |
         dotnet tool install --global dotnet-reportgenerator-globaltool
         reportgenerator -reports:./TestResults/**/coverage.cobertura.xml -targetdir:./TestResults/CoverageReport -reporttypes:Html
+
+    - name: Verify code coverage report
+      run: |
+        if [ ! -f ./TestResults/CoverageReport/index.html ]; then
+          echo "Code coverage report not found!"
+          exit 1
+        fi
 
     - name: Upload code coverage report
       uses: actions/upload-artifact@v3
