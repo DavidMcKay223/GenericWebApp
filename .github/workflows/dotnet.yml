@@ -28,7 +28,7 @@ jobs:
       run: dotnet build ./GenericWebApp.Blazor/GenericWebApp.Blazor.sln --no-restore --configuration Release
 
     - name: Run tests with coverage
-      run: dotnet test ./GenericWebApp/GenericWebApp.UnitTest/GenericWebApp.UnitTest.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
+      run: dotnet test ./GenericWebApp.UnitTest/GenericWebApp.UnitTest.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
 
     - name: Report code coverage
       run: |
