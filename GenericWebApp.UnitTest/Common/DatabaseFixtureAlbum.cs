@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace GenericWebApp.UnitTest.Common
 {
-    public class AlbumDatabaseFixture : IDisposable
+    public class DatabaseFixtureAlbum : IDisposable
     {
         public Model.Music.AlbumContext Context { get; private set; }
 
-        public AlbumDatabaseFixture()
+        public DatabaseFixtureAlbum()
         {
             var options = new DbContextOptionsBuilder<Model.Music.AlbumContext>()
                 .UseSqlite("DataSource=:memory:")
@@ -28,7 +28,7 @@ namespace GenericWebApp.UnitTest.Common
             Context.Albums.RemoveRange(Context.Albums);
             await Context.SaveChangesAsync();
 
-            if (Context.Genres.Count() == 0)
+            if (!Context.Genres.Any())
             {
                 // Create and add genres
                 var genres = new List<Genre>

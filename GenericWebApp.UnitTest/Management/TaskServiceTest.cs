@@ -14,13 +14,13 @@ using GenericWebApp.Model.Music;
 
 namespace GenericWebApp.UnitTest.Management
 {
-    public class TaskServiceTest : IClassFixture<Common.ManagementDatabaseFixture>, IAsyncLifetime
+    public class TaskServiceTest : IClassFixture<Common.DatabaseFixtureManagement>, IAsyncLifetime
     {
         private readonly ManagementContext _context;
         private readonly BLL.Management.TaskService _service;
-        private readonly Common.ManagementDatabaseFixture _fixture;
+        private readonly Common.DatabaseFixtureManagement _fixture;
 
-        public TaskServiceTest(Common.ManagementDatabaseFixture fixture)
+        public TaskServiceTest(Common.DatabaseFixtureManagement fixture)
         {
             _context = fixture.Context;
             _service = new BLL.Management.TaskService(_context) { Response = new Response<DTO.Management.TaskItem>() { ErrorList = [] } };

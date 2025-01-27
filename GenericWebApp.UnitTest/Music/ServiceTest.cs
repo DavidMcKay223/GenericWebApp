@@ -13,13 +13,13 @@ using GenericWebApp.BLL.Music;
 
 namespace GenericWebApp.UnitTest.Music
 {
-    public class ServiceTest : IClassFixture<Common.AlbumDatabaseFixture>, IAsyncLifetime
+    public class ServiceTest : IClassFixture<Common.DatabaseFixtureAlbum>, IAsyncLifetime
     {
         private readonly AlbumContext _context;
         private readonly BLL.Music.Service _service;
-        private readonly Common.AlbumDatabaseFixture _fixture;
+        private readonly Common.DatabaseFixtureAlbum _fixture;
 
-        public ServiceTest(Common.AlbumDatabaseFixture fixture)
+        public ServiceTest(Common.DatabaseFixtureAlbum fixture)
         {
             _context = fixture.Context;
             _service = new BLL.Music.Service(_context) { Response = new Response<DTO.Music.Album>() { ErrorList = [] } };

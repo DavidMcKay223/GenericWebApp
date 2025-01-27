@@ -14,13 +14,13 @@ using GenericWebApp.BLL.Music;
 
 namespace GenericWebApp.UnitTest.Management
 {
-    public class DashboardAlbumServiceTest : IClassFixture<Common.AlbumDatabaseFixture>, IAsyncLifetime
+    public class DashboardAlbumServiceTest : IClassFixture<Common.DatabaseFixtureAlbum>, IAsyncLifetime
     {
         private readonly AlbumContext _context;
         private readonly BLL.Management.DashboardAlbumService _service;
-        private readonly Common.AlbumDatabaseFixture _fixture;
+        private readonly Common.DatabaseFixtureAlbum _fixture;
 
-        public DashboardAlbumServiceTest(Common.AlbumDatabaseFixture fixture)
+        public DashboardAlbumServiceTest(Common.DatabaseFixtureAlbum fixture)
         {
             _context = fixture.Context;
             _service = new BLL.Management.DashboardAlbumService(_context);

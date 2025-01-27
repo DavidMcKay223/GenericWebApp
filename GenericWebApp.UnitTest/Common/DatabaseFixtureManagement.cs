@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace GenericWebApp.UnitTest.Common
 {
-    public class ManagementDatabaseFixture : IDisposable
+    public class DatabaseFixtureManagement : IDisposable
     {
         public Model.Management.ManagementContext Context { get; private set; }
 
-        public ManagementDatabaseFixture()
+        public DatabaseFixtureManagement()
         {
             var options = new DbContextOptionsBuilder<Model.Management.ManagementContext>()
                 .UseSqlite("DataSource=:memory:")
