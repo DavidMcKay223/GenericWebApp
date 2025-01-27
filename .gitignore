@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Ensure GitHub workflow files are not ignored
+!.github/
+!.github/workflows/
