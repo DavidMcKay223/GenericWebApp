@@ -86,13 +86,7 @@
         <div class="row g-3">
             @foreach (var provider in npiReponse.List)
             {
-                <div class="col-md-6">
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <ProviderComponent Provider="@provider"></ProviderComponent>
-                        </div>
-                    </div>
-                </div>
+                <ProviderComponent Provider="@provider"></ProviderComponent>
             }
         </div>
     }
