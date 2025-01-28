@@ -5,6 +5,8 @@ using GenericWebApp.BLL.Music;
 using GenericWebApp.Model.Music;
 using GenericWebApp.Model.Management;
 using GenericWebApp.BLL.Management;
+using GenericWebApp.Model.Template;
+using GenericWebApp.BLL.Template;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,11 +40,25 @@ builder.Services.AddDbContext<ManagementContext>(options =>
         }),
         ServiceLifetime.Scoped);
 
+builder.Services.AddDbContext<TemplateContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlOptions =>
+        {
+            sqlOptions.MigrationsAssembly("GenericWebApp.Model");
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null);
+        }),
+        ServiceLifetime.Scoped);
+
 builder.Services.AddScoped<Service>();
 builder.Services.AddScoped<TaskService>();
 builder.Services.AddScoped<DashboardAlbumService>();
 builder.Services.AddScoped<DashboardManagementService>();
 builder.Services.AddScoped<MedicalCMS1500Service>();
+builder.Services.AddScoped<TemplateService>();
 
 var app = builder.Build();
 
@@ -70,6 +86,13 @@ using (var scope = app.Services.CreateScope())
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ManagementContext>();
+    dbContext.Database.Migrate();
+}
+
+// Apply pending migrations automatically
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<TemplateContext>();
     dbContext.Database.Migrate();
 }
 

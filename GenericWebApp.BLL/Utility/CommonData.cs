@@ -34,6 +34,7 @@ namespace GenericWebApp.BLL.Utility
                     ]
                 },
                 new DTO.Common.NavBarItem() { Description = "NPI Registry", Class = "oi-list-rich", Href = "npi" },
+                new DTO.Common.NavBarItem() { Description = "Template", Class = "oi-bolt", Href = "/template/template" },
             ];
 
             return myList;

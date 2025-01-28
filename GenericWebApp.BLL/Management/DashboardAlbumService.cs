@@ -9,7 +9,11 @@ namespace GenericWebApp.BLL.Management
 {
     public class DashboardAlbumService
     {
-        private readonly AlbumContext _context;
+        private readonly AlbumContext? _context;
+
+        public DashboardAlbumService()
+        {
+        }
 
         public DashboardAlbumService(AlbumContext context)
         {
@@ -18,6 +22,11 @@ namespace GenericWebApp.BLL.Management
 
         public List<GenericWebApp.DTO.Management.Dashboard_MusicSummary> GetDashboardMusicSummary()
         {
+            if(_context == null)
+            {
+                throw new ArgumentNullException(nameof(_context));
+            }
+
             var dashboardQuery = from g in _context.Genres
                                  join c in _context.CDs on g.ID equals c.Genre_ID into genreCDs
                                  from gc in genreCDs.DefaultIfEmpty()

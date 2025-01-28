@@ -11,7 +11,6 @@ using GenericWebApp.UnitTest.Common;
 using System.Linq;
 using GenericWebApp.BLL.Music;
 
-
 namespace GenericWebApp.UnitTest.Management
 {
     public class DashboardAlbumServiceTest : IClassFixture<Common.DatabaseFixtureAlbum>, IAsyncLifetime

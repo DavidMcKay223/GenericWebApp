@@ -11,6 +11,7 @@ namespace GenericWebApp.Model.Management
     {
         [Key]
         public int ID { get; set; }
+        [ForeignKey("ClaimantID")]
         public int ClaimantID { get; set; }
         public required Claimant Claimant { get; set; }
         public DateTime? CreatedDate { get; set; }
@@ -31,7 +32,9 @@ namespace GenericWebApp.Model.Management
         public DateTime? DateOfBirth { get; set; }
         [MaxLength(50)]
         public string? InsurancePolicyNumber { get; set; }
+        [ForeignKey("PrimaryAddressID")]
         public int PrimaryAddressID { get; set; }
+        [ForeignKey("SecondaryAddressID")]
         public int SecondaryAddressID { get; set; }
         public required Address PrimaryAddress { get; set; }
         public required Address SecondaryAddress { get; set; }

@@ -1,5 +1,168 @@
-﻿<h3>ListTemplate</h3>
+﻿@using GenericWebApp.DTO.Template
+@using GenericWebApp.BLL.Template
+@using GenericWebApp.Blazor.Shared.Common
+@inject TemplateService TemplateService
+
+<div class="container">
+    <h1 class="my-4 text-center">Template List</h1>
+</div>
+
+<DisplayError ErrorList="@TemplateService.Response.ErrorList" />
+
+@if (isLoading)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <div class="mb-3 form-floating">
+                <input type="text" class="form-control" @bind="searchParams.Title" />
+                <label>Search Title</label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="mb-3 form-floating">
+                <input type="text" class="form-control" @bind="searchParams.Description" />
+                <label>Search Description</label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="mb-3 form-floating">
+                <input type="date" class="form-control" @bind="searchParams.CreatedDate" />
+                <label>Search Created Date</label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="mb-3 form-floating">
+                <input type="date" class="form-control" @bind="searchParams.UpdatedDate" />
+                <label>Search Updated Date</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="ShowAddTemplateModal">Add Template</button>
+        <button class="btn btn-secondary" @onclick="SearchTemplate">Search</button>
+        <button class="btn btn-danger" @onclick="ResetSearchTemplate">Reset</button>
+    </div>
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th><button class="btn btn-link" @onclick="() => ToggleSortTemplate(taskTitle)">Title</button></th>
+                <th>Description</th>
+                <th>Created Date</th>
+                <th>Updated Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in tasks ?? [])
+            {
+                <tr>
+                    <td>@task.Title</td>
+                    <td>@task.Description</td>
+                    <td>@task.CreatedDate?.ToString("yyyy-MM-dd")</td>
+                    <td>@task.UpdatedDate?.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <button class="btn btn-secondary" @onclick="() => ShowEditModalTemplate(task)">Edit</button>
+                        <button class="btn btn-danger" @onclick="() => DeleteTemplate(task)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <Pagination TItem="TemplateItem" TotalItems="@totalItems" PageSize="@pageSize" CurrentPage="@currentPage" OnPageChanged="OnPageChangedTemplate" OnPageSizeChangedCallback="OnPageSizeChangedTemplate" />
+}
+
+<EditModalTemplate @ref="editTemplateModal" OnTemplateSaved="LoadTemplates" />
 
 @code {
+    private List<TemplateItem>? tasks;
+    private bool isLoading = true;
+    private EditModalTemplate? editTemplateModal;
+    private int totalItems;
+    private int pageSize = 10;
+    private int currentPage = 0;
+    private string sortField = "TemplateTitle";
+    private string taskTitle = "TemplateTitle";
+    private bool sortDescending = false;
+    private TemplateSeachDTO searchParams = new TemplateSeachDTO();
 
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTemplates();
+    }
+
+    private async Task LoadTemplates()
+    {
+        isLoading = true;
+        searchParams.PageNumber = currentPage;
+        searchParams.PageSize = pageSize;
+        searchParams.SortField = sortField;
+        searchParams.SortDescending = sortDescending;
+
+        await TemplateService.GetListAsync(searchParams);
+        tasks = TemplateService.Response.List ?? [];
+        totalItems = TemplateService.Response.TotalItems;
+        isLoading = false;
+    }
+
+    private void ShowAddTemplateModal()
+    {
+        editTemplateModal?.ShowTemplateModal(new TemplateItem() { Title = String.Empty, Description = String.Empty, IsCompleted = false });
+    }
+
+    private void ShowEditModalTemplate(TemplateItem task)
+    {
+        editTemplateModal?.ShowTemplateModal(task);
+    }
+
+    private async Task DeleteTemplate(TemplateItem task)
+    {
+        await TemplateService.DeleteItemAsync(task);
+        await LoadTemplates();
+    }
+
+    private async Task OnPageChangedTemplate(int page)
+    {
+        currentPage = page;
+        await LoadTemplates();
+    }
+
+    private async Task OnPageSizeChangedTemplate(int size)
+    {
+        pageSize = size;
+        currentPage = 0;
+        await LoadTemplates();
+    }
+
+    private async Task ToggleSortTemplate(string field)
+    {
+        if (sortField == field)
+        {
+            sortDescending = !sortDescending;
+        }
+        else
+        {
+            sortField = field;
+            sortDescending = false;
+        }
+        await LoadTemplates();
+    }
+
+    private async Task SearchTemplate()
+    {
+        currentPage = 0;
+        await LoadTemplates();
+    }
+
+    private async Task ResetSearchTemplate()
+    {
+        searchParams = new TemplateSeachDTO();
+        await LoadTemplates();
+    }
 }

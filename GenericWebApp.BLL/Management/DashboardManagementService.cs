@@ -9,7 +9,11 @@ namespace GenericWebApp.BLL.Management
 {
     public class DashboardManagementService
     {
-        private readonly ManagementContext _context;
+        private readonly ManagementContext? _context;
+
+        public DashboardManagementService()
+        {
+        }
 
         public DashboardManagementService(ManagementContext context)
         {

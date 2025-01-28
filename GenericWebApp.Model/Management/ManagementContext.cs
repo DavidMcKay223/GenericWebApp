@@ -42,13 +42,13 @@ namespace GenericWebApp.Model.Management
                 .HasOne(c => c.PrimaryAddress)
                 .WithMany()
                 .HasForeignKey(c => c.PrimaryAddressID)
-                .OnDelete(DeleteBehavior.Restrict); // Use Restrict to avoid multiple cascade paths
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Claimant>()
                 .HasOne(c => c.SecondaryAddress)
                 .WithMany()
                 .HasForeignKey(c => c.SecondaryAddressID)
-                .OnDelete(DeleteBehavior.Restrict); // Use Restrict to avoid multiple cascade paths
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<CMS1500Form>()
                 .HasOne(f => f.Claimant)

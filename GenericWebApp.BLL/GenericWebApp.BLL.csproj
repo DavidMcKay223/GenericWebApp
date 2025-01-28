@@ -15,8 +15,4 @@
     <ProjectReference Include="..\GenericWebApp.Model\GenericWebApp.Model.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Template\" />
-  </ItemGroup>
-
 </Project>
