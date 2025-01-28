@@ -98,7 +98,7 @@
 
     .modal-dialog-centered {
         max-width: 80%;
-        height: 80%;
+        max-height: 80%;
     }
 
     .modal-content {
@@ -111,6 +111,7 @@
     .modal-body {
         flex: 1 1 auto;
         overflow-y: auto;
+        max-height: calc(100vh - 200px);
     }
 
     .modal-footer {

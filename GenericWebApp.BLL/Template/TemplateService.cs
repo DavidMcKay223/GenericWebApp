@@ -178,7 +178,7 @@ namespace GenericWebApp.BLL.Template
                     }
                     else
                     {
-                        existingTemplateItem ??= new Model.Template.TemplateItem() { Title = String.Empty, Description = String.Empty, IsCompleted = false };
+                        existingTemplateItem ??= new Model.Template.TemplateItem() { Title = String.Empty, Description = String.Empty, TemplateStatus_ID = 1, IsCompleted = false, PrimaryAddress = new Model.Template.TemplateAddress(), SecondaryAddress = new Model.Template.TemplateAddress() };
                         GenericWebApp.Model.Common.TemplateModelParser.ParseModel(existingTemplateItem, dto);
                         existingTemplateItem.CreatedDate = DateTime.UtcNow;
                         existingTemplateItem.UpdatedDate = DateTime.UtcNow;

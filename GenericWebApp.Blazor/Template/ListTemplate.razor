@@ -113,7 +113,7 @@ else
 
     private void ShowAddTemplateModal()
     {
-        editTemplateModal?.ShowTemplateModal(new TemplateItem() { Title = String.Empty, Description = String.Empty, IsCompleted = false });
+        editTemplateModal?.ShowTemplateModal(new TemplateItem() { Title = String.Empty, Description = String.Empty, IsCompleted = false, PrimaryAddress = new TemplateAddress(), SecondaryAddress = new TemplateAddress() });
     }
 
     private void ShowEditModalTemplate(TemplateItem task)

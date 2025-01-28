@@ -1,0 +1,62 @@
+﻿@using GenericWebApp.DTO.Template
+
+@code {
+    [Parameter]
+    public required TemplateAddress Address { get; set; }
+
+    private List<DTO.Common.ValuePair>? myStateList;
+
+    protected override void OnInitialized()
+    {
+        myStateList = BLL.Utility.CommonData.GetStateList();
+    }
+}
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h5 class="card-title">Address</h5>
+    </div>
+    <div class="card-body">
+        <div class="mb-3 form-floating">
+            <InputText id="address1" class="form-control" @bind-Value="Address.Address1" />
+            <label for="address1">Address 1</label>
+            <ValidationMessage For="@(() => Address.Address1)" />
+        </div>
+        <div class="mb-3 form-floating">
+            <InputText id="address2" class="form-control" @bind-Value="Address.Address2" />
+            <label for="address2">Address 2</label>
+            <ValidationMessage For="@(() => Address.Address2)" />
+        </div>
+        <div class="mb-3 form-floating">
+            <InputText id="city" class="form-control" @bind-Value="Address.City" />
+            <label for="city">City</label>
+            <ValidationMessage For="@(() => Address.City)" />
+        </div>
+        <div class="mb-3 form-floating">
+            <InputSelect id="state" class="form-select" @bind-Value="Address.State">
+                <option value="">Select State</option>
+                @foreach (var myState in myStateList ?? [])
+                {
+                    <option value="@myState.Value">@myState.Description</option>
+                }
+            </InputSelect>
+            <label for="state">State</label>
+            <ValidationMessage For="@(() => Address.State)" />
+        </div>
+        <div class="mb-3 form-floating">
+            <InputText id="zip" class="form-control" @bind-Value="Address.Zip" />
+            <label for="zip">Zip</label>
+            <ValidationMessage For="@(() => Address.Zip)" />
+        </div>
+        <div class="mb-3 form-floating">
+            <InputText id="phone" class="form-control" @bind-Value="Address.Phone" />
+            <label for="phone">Phone</label>
+            <ValidationMessage For="@(() => Address.Phone)" />
+        </div>
+        <div class="mb-3 form-floating">
+            <InputText id="fax" class="form-control" @bind-Value="Address.Fax" />
+            <label for="fax">Fax</label>
+            <ValidationMessage For="@(() => Address.Fax)" />
+        </div>
+    </div>
+</div>

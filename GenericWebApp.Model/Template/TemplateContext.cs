@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GenericWebApp.Model.Music;
+using GenericWebApp.Model.Template;
 using Microsoft.EntityFrameworkCore;
 
 namespace GenericWebApp.Model.Template
@@ -38,6 +38,18 @@ namespace GenericWebApp.Model.Template
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<TemplateItem>()
+                .HasOne(c => c.PrimaryAddress)
+                .WithMany()
+                .HasForeignKey(c => c.PrimaryAddressID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<TemplateItem>()
+                .HasOne(c => c.SecondaryAddress)
+                .WithMany()
+                .HasForeignKey(c => c.SecondaryAddressID)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

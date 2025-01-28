@@ -18,6 +18,8 @@ namespace GenericWebApp.Model.Common
                 Title = templateItem.Title,
                 Description = templateItem.Description,
                 TemplateStatus_ID = templateItem.TemplateStatus_ID,
+                PrimaryAddress = ParseDTO(templateItem.PrimaryAddress)!,
+                SecondaryAddress = ParseDTO(templateItem.SecondaryAddress)!,
                 IsCompleted = templateItem.IsCompleted,
                 CreatedDate = templateItem.CreatedDate,
                 UpdatedDate = templateItem.UpdatedDate
@@ -31,6 +33,23 @@ namespace GenericWebApp.Model.Common
             {
                 ID = templateStatus.ID,
                 Description = templateStatus.Description
+            };
+        }
+
+        public static GenericWebApp.DTO.Template.TemplateAddress? ParseDTO(GenericWebApp.Model.Template.TemplateAddress templateAddress)
+        {
+            if (templateAddress == null) return null;
+
+            return new GenericWebApp.DTO.Template.TemplateAddress
+            {
+                ID = templateAddress.ID,
+                Address1 = templateAddress.Address1,
+                Address2 = templateAddress.Address2,
+                City = templateAddress.City,
+                State = templateAddress.State,
+                Zip = templateAddress.Zip,
+                Phone = templateAddress.Phone,
+                Fax = templateAddress.Fax
             };
         }
     }

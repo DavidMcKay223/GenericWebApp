@@ -30,9 +30,9 @@ namespace GenericWebApp.UnitTest.Common
 
             var templateItems = new List<Model.Template.TemplateItem>
             {
-                new() { Title = "Template 1", Description = "Template 1 Description", IsCompleted = false },
-                new() { Title = "Template 2", Description = "Template 2 Description", IsCompleted = false },
-                new() { Title = "Template 3", Description = "Template 3 Description", IsCompleted = true }
+                new() { Title = "Template 1", Description = "Template 1 Description", IsCompleted = false, TemplateStatus_ID = 1, PrimaryAddress = new Model.Template.TemplateAddress(), SecondaryAddress = new Model.Template.TemplateAddress() },
+                new() { Title = "Template 2", Description = "Template 2 Description", IsCompleted = false, TemplateStatus_ID = 1, PrimaryAddress = new Model.Template.TemplateAddress(), SecondaryAddress = new Model.Template.TemplateAddress() },
+                new() { Title = "Template 3", Description = "Template 3 Description", IsCompleted = true, TemplateStatus_ID = 1, PrimaryAddress = new Model.Template.TemplateAddress(), SecondaryAddress = new Model.Template.TemplateAddress() }
             };
 
             Context.TemplateItems.AddRange(templateItems);
