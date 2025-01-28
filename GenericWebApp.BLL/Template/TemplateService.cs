@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GenericWebApp.BLL.Template
 {
-    public class TemplateService : ServiceManager<DTO.Template.TemplateItem, TemplateSeachDTO>
+    public class TemplateService : ServiceManager<DTO.Template.TemplateItem, TemplateSearchDTO>
     {
         private readonly TemplateContext? _context;
 
@@ -54,7 +54,7 @@ namespace GenericWebApp.BLL.Template
             }
         }
 
-        public override async Task GetItemAsync(TemplateSeachDTO searchParams)
+        public override async Task GetItemAsync(TemplateSearchDTO searchParams)
         {
             Response.ErrorList.Clear();
 
@@ -69,7 +69,8 @@ namespace GenericWebApp.BLL.Template
                 var templateItem = await _context.TemplateItems.FirstOrDefaultAsync(t =>
                         (searchParams.ID.HasValue && t.ID == searchParams.ID) ||
                         (!string.IsNullOrWhiteSpace(searchParams.Title) && t.Title.ToLower().Contains(searchParams.Title.ToLower())) ||
-                        (!string.IsNullOrWhiteSpace(searchParams.Description) && t.Description.ToLower().Contains(searchParams.Description.ToLower()))
+                        (!string.IsNullOrWhiteSpace(searchParams.Description) && t.Description.ToLower().Contains(searchParams.Description.ToLower())) ||
+                        (searchParams.IsCompleted.HasValue && t.IsCompleted == searchParams.IsCompleted.Value)
                     );
 
 
@@ -82,7 +83,7 @@ namespace GenericWebApp.BLL.Template
             }
         }
 
-        public override async Task GetListAsync(TemplateSeachDTO searchParams)
+        public override async Task GetListAsync(TemplateSearchDTO searchParams)
         {
             try
             {
@@ -122,6 +123,11 @@ namespace GenericWebApp.BLL.Template
                 if (searchParams.UpdatedDate.HasValue)
                 {
                     query = query.Where(t => t.UpdatedDate >= searchParams.UpdatedDate);
+                }
+
+                if (searchParams.IsCompleted.HasValue)
+                {
+                    query = query.Where(t => t.IsCompleted == searchParams.IsCompleted.Value);
                 }
 
                 // Apply sorting
@@ -173,15 +179,25 @@ namespace GenericWebApp.BLL.Template
                     {
                         GenericWebApp.Model.Common.TemplateModelParser.ParseModel(existingTemplateItem, dto);
                         existingTemplateItem.UpdatedDate = DateTime.UtcNow;
+                        existingTemplateItem.IsCompleted = dto.IsCompleted; // Add this line
 
                         _context.TemplateItems.Update(existingTemplateItem);
                     }
                     else
                     {
-                        existingTemplateItem ??= new Model.Template.TemplateItem() { Title = String.Empty, Description = String.Empty, TemplateStatus_ID = 1, IsCompleted = false, PrimaryAddress = new Model.Template.TemplateAddress(), SecondaryAddress = new Model.Template.TemplateAddress() };
+                        existingTemplateItem ??= new Model.Template.TemplateItem()
+                        {
+                            Title = String.Empty,
+                            Description = String.Empty,
+                            TemplateStatus_ID = 1,
+                            IsCompleted = false,
+                            PrimaryAddress = new Model.Template.TemplateAddress(),
+                            SecondaryAddress = new Model.Template.TemplateAddress()
+                        };
                         GenericWebApp.Model.Common.TemplateModelParser.ParseModel(existingTemplateItem, dto);
                         existingTemplateItem.CreatedDate = DateTime.UtcNow;
                         existingTemplateItem.UpdatedDate = DateTime.UtcNow;
+                        existingTemplateItem.IsCompleted = dto.IsCompleted; // Add this line
                         await _context.TemplateItems.AddAsync(existingTemplateItem);
                     }
 
@@ -195,7 +211,7 @@ namespace GenericWebApp.BLL.Template
         }
     }
 
-    public class TemplateSeachDTO : SearchDTO
+    public class TemplateSearchDTO : SearchDTO
     {
         public int? ID { get; set; }
         public string? Title { get; set; }
@@ -203,5 +219,6 @@ namespace GenericWebApp.BLL.Template
         public int? TemplateStatusID { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        public Boolean? IsCompleted { get; set; }
     }
 }

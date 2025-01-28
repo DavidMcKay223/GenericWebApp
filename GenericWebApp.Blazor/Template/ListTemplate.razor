@@ -90,7 +90,7 @@ else
     private string sortField = "TemplateTitle";
     private string taskTitle = "TemplateTitle";
     private bool sortDescending = false;
-    private TemplateSeachDTO searchParams = new TemplateSeachDTO();
+    private TemplateSearchDTO searchParams = new TemplateSearchDTO();
 
     protected override async Task OnInitializedAsync()
     {
@@ -162,7 +162,7 @@ else
 
     private async Task ResetSearchTemplate()
     {
-        searchParams = new TemplateSeachDTO();
+        searchParams = new TemplateSearchDTO();
         await LoadTemplates();
     }
 }
