@@ -1,14 +1,14 @@
 # How to do DB Migrations in Entity Framework
 Go to Tools => NuGet Package Manager => Package Manager Console
 
-## Initial Database
+## Initial Migration
 ```
 Add-Migration -Name InitialCreate -Context TemplateContext
 ```
 
-## Update Database
+## Update Migration
 ```
-Update-Database -Context TemplateContext
+Add-Migration YourMigrationName -Context TemplateContext
 ```
 
 ## Update Database
