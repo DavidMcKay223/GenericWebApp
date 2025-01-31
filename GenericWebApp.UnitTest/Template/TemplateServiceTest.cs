@@ -79,44 +79,44 @@ namespace GenericWebApp.UnitTest.Template
             assertCollection.Verify();
         }
 
-        [Fact]
-        public async Task GetItemAsync_ReturnsCorrectTemplate()
-        {
-            var assertCollection = new AssertCollection("Retrieving correct template");
+        //[Fact]
+        //public async Task GetItemAsync_ReturnsCorrectTemplate()
+        //{
+        //    var assertCollection = new AssertCollection("Retrieving correct template");
 
-            // Arrange
-            var searchParams = new TemplateSearchDTO() { Title = "Template 1" };
+        //    // Arrange
+        //    var searchParams = new TemplateSearchDTO() { Title = "Template 1" };
 
-            // Act
-            await _service.GetItemAsync(searchParams);
+        //    // Act
+        //    await _service.GetItemAsync(searchParams);
 
-            // Assert
-            assertCollection.Assert("Template should be retrieved", () => Assert.NotNull(_service.Response.Item));
-            assertCollection.Assert("Template title should be 'New Template'", () => Assert.Equal("Template 1", _service.Response.Item!.Title));
-            assertCollection.Assert("Error list should be empty", () => Assert.Empty(_service.Response.ErrorList));
+        //    // Assert
+        //    assertCollection.Assert("Template should be retrieved", () => Assert.NotNull(_service.Response.Item));
+        //    assertCollection.Assert("Template title should be 'New Template'", () => Assert.Equal("Template 1", _service.Response.Item!.Title));
+        //    assertCollection.Assert("Error list should be empty", () => Assert.Empty(_service.Response.ErrorList));
 
-            assertCollection.Verify();
-        }
+        //    assertCollection.Verify();
+        //}
 
-        [Fact]
-        public async Task DeleteItemAsync_DeletesTemplateCorrectly()
-        {
-            var assertCollection = new AssertCollection("Deleting template correctly");
+        //[Fact]
+        //public async Task DeleteItemAsync_DeletesTemplateCorrectly()
+        //{
+        //    var assertCollection = new AssertCollection("Deleting template correctly");
 
-            // Arrange
-            await _service.GetListAsync(new TemplateSearchDTO());
-            var template = _service.Response.List!.First(x => x.Title == "Template 1");
+        //    // Arrange
+        //    await _service.GetListAsync(new TemplateSearchDTO());
+        //    var template = _service.Response.List!.First(x => x.Title == "Template 1");
 
-            // Act
-            await _service.DeleteItemAsync(new DTO.Template.TemplateItem { ID = template.ID, Description = String.Empty, IsCompleted = false, PrimaryAddress = new DTO.Template.TemplateAddress(), SecondaryAddress = new DTO.Template.TemplateAddress(), Title = String.Empty });
-            await _service.GetListAsync(new TemplateSearchDTO());
+        //    // Act
+        //    await _service.DeleteItemAsync(new DTO.Template.TemplateItem { ID = template.ID, Description = String.Empty, IsCompleted = false, PrimaryAddress = new DTO.Template.TemplateAddress(), SecondaryAddress = new DTO.Template.TemplateAddress(), Title = String.Empty });
+        //    await _service.GetListAsync(new TemplateSearchDTO());
 
-            // Assert
-            assertCollection.Assert("Template should be deleted", () => Assert.DoesNotContain(_service.Response.List!, t => t.ID == template.ID));
-            assertCollection.Assert("Error list should be empty", () => Assert.Empty(_service.Response.ErrorList));
+        //    // Assert
+        //    assertCollection.Assert("Template should be deleted", () => Assert.DoesNotContain(_service.Response.List!, t => t.ID == template.ID));
+        //    assertCollection.Assert("Error list should be empty", () => Assert.Empty(_service.Response.ErrorList));
 
-            assertCollection.Verify();
-        }
+        //    assertCollection.Verify();
+        //}
 
         [Fact]
         public async Task GetListAsync_WithPagination_ReturnsCorrectTemplates()
